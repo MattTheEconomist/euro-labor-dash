@@ -1,9 +1,9 @@
 import React from 'react';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
+import ControlPanel from './components/ControlPanel'
 
 // import ControlPanel from 'C:/Users/Admin/Documents/js/react/euro-labor-dash/euro-labor-dash/src/components/ControlPanel'
-import ControlPanel from './components/ControlPanel'
 
 function App() {
   return (
