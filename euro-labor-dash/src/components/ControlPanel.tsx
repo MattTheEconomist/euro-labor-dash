@@ -2,31 +2,25 @@ import React, {useState, useEffect} from 'react';
 import countryData from '../dataSources/countryCodes.json'
 
 interface ControlPanelProps{
-    // changeCountry:()=>string; 
+    // changeCountry():()=>void,
+    changeCountry:any,
     propNumber: number,
     anotherNumber: number
-
-
 }
 
 
 // const ControlPanel: React.FC <Props> = (changeCountry) =>{
-const ControlPanel: React.FC <ControlPanelProps> = ({propNumber, anotherNumber}:ControlPanelProps) =>{
+const ControlPanel: React.FC <ControlPanelProps> = ({changeCountry, propNumber, anotherNumber}:ControlPanelProps) =>{
 // const ControlPanel: React.FC = () =>{
     // const {changeCountry} = props
     // console.log(propNumber.propNumber)
-    console.log(propNumber, anotherNumber)
+    // console.log(propNumber, anotherNumber)
     // const [selectedCountry, setSelectedCountry] = useState <string> ("Euro area")
-
     
     // function changeCountry(newCountry :string) :void{
     //     setSelectedCountry(newCountry)
     //     console.log(newCountry)
     // }
-
-
-
-
 
     // let countries  = countryData[0]
 
@@ -37,9 +31,9 @@ const ControlPanel: React.FC <ControlPanelProps> = ({propNumber, anotherNumber}:
 
 
 return <div>
-{/* <select onChange={e=>changeCountry(e.target.value)}>
+<select onChange={e=>changeCountry(e.target.value)}>
     {countryNames.map((country, ind) =><option key={ind} > {country}</option>)}
-    </select> */}
+    </select>
 
     <h5>hi</h5>
  </div>
