@@ -4,11 +4,10 @@ import data from "../dataSources/countryCodes.json";
 
 const DashContainer: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>("Euro area");
-  const [unemploymentURL, setUnemploymentURL] = useState<string>("")
-  const [vacanciesURL, setVacanciesURL] = useState<string>("")
-  const [netEarningsURL, setNetEarningsURL] = useState<string>("")
-  const [grossEarningsURL, setGrossEarningsURL] = useState<string>("")
-
+  const [unemploymentURL, setUnemploymentURL] = useState<string>("");
+  const [vacanciesURL, setVacanciesURL] = useState<string>("");
+  const [netEarningsURL, setNetEarningsURL] = useState<string>("");
+  const [grossEarningsURL, setGrossEarningsURL] = useState<string>("");
 
   let countryData = data[0];
 
@@ -28,8 +27,6 @@ const DashContainer: React.FC = () => {
     return fetchURL;
   }
 
-
-  
   function generateFetchURL_vacancies(selectedCountry: string) {
     let countryCode = getKeyByValue(countryData, selectedCountry);
 
@@ -38,7 +35,6 @@ const DashContainer: React.FC = () => {
     return fetchURL;
   }
 
-    
   function generateFetchURL_net_earnings(selectedCountry: string) {
     let countryCode = getKeyByValue(countryData, selectedCountry);
 
@@ -47,8 +43,6 @@ const DashContainer: React.FC = () => {
     return fetchURL;
   }
 
-
-      
   function generateFetchURL_gross_earnings(selectedCountry: string) {
     let countryCode = getKeyByValue(countryData, selectedCountry);
 
@@ -57,18 +51,22 @@ const DashContainer: React.FC = () => {
     return fetchURL;
   }
 
+  function fetchUnemploymentData(unemploymentURL : string){
+fetch(unemploymentURL)
+.then(rez=>rez.json())
+.then(data=>console.log(data))
 
-
-
+  }
 
   useEffect(() => {
-    setUnemploymentURL(generateFetchURL_unemployemnt(selectedCountry))
-    setVacanciesURL(generateFetchURL_vacancies(selectedCountry))
-    setNetEarningsURL( generateFetchURL_net_earnings(selectedCountry))
-    setGrossEarningsURL(generateFetchURL_gross_earnings(selectedCountry))
+    setUnemploymentURL(generateFetchURL_unemployemnt(selectedCountry));
+    setVacanciesURL(generateFetchURL_vacancies(selectedCountry));
+    setNetEarningsURL(generateFetchURL_net_earnings(selectedCountry));
+    setGrossEarningsURL(generateFetchURL_gross_earnings(selectedCountry));
+    fetchUnemploymentData(unemploymentURL)
   }, [selectedCountry]);
 
-  
+
 
   return (
     <div>
