@@ -1,18 +1,31 @@
-import React from 'react';
-// import countries from './dataSources/countryCodes.json'
-import countryData from 'C:/Users/Admin/Documents/js/react/euro-labor-dash/euro-labor-dash/src/dataSources/countryCodes.json'
+import React from "react";
+import countryData from "../dataSources/countryCodes.json";
 
-const ControlPanel: React.FC = () =>{
-
-    let countries  = countryData[0]
-    console.log(Object.values(countries))
-
-console.log("hi")
-return <div>
-
-     <h5>hi</h5>
- </div>
-
+interface ControlPanelProps {
+  // changeCountry():()=>void,
+  defaultCountry: string, 
+  changeCountry: any;
+//   anotherNumber: number;
 }
 
-export default ControlPanel
+
+
+export const ControlPanel: React.FC<ControlPanelProps> = ({
+    changeCountry,
+    defaultCountry
+  }) => {
+    let countryNames = Object.values(countryData[0]);
+
+
+
+    return (<div>
+
+        <select onChange={(e) => changeCountry(e.target.value)} defaultValue={defaultCountry}>
+        {countryNames.map((country, ind)=> <option key={ind}>{country}</option> )}
+        </select>
+    </div>)  }
+
+
+
+
+export default ControlPanel;
