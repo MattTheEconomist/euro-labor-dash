@@ -5,21 +5,7 @@ import { Service } from "../types/Service";
 
 let countryData = data[0];
 
-function getKeyByValue(object: any, value: string) {
-  return Object.keys(object).find((key) => object[key] === value);
-}
 
-function generateFetchURL_unemployemnt(selectedCountry: string) {
-  let countryCode = getKeyByValue(countryData, selectedCountry);
-
-  // if (!countryCode) {
-  //   countryCode = "EA19";
-  // }
-
-  let fetchURL = `https://api.db.nomics.world/v22/series/Eurostat/une_rt_q/Q.SA.Y20-64.PC_ACT.T.${countryCode}?observations=True`;
-
-  return fetchURL;
-}
 
 export interface EconResponses {
   // results: {dataset: any },
@@ -34,12 +20,35 @@ const useFetchEconService = (selectedCountry: string) => {
     status: "loading",
   });
 
+
+
+
   useEffect(() => {
+
+    function getKeyByValue(object: any, value: string) {
+      return Object.keys(object).find((key) => object[key] === value);
+    }
+    
+    function generateFetchURL_unemployemnt(selectedCountry: string) {
+      let countryCode = getKeyByValue(countryData, selectedCountry);
+    
+      // if (!countryCode) {
+      //   countryCode = "EA19";
+      // }
+    
+      let fetchURL = `https://api.db.nomics.world/v22/series/Eurostat/une_rt_q/Q.SA.Y20-64.PC_ACT.T.${countryCode}?observations=True`;
+    
+      return fetchURL;
+    }
+
+
     const fetchURL = generateFetchURL_unemployemnt(selectedCountry);
 
     let countryCode = getKeyByValue(countryData, selectedCountry);
 
     if(countryCode){
+      setResult({status:"loading"})
+      
       fetch(fetchURL)
       .then((res) => res.json())
       .then((response) => setResult({ status: "loaded", payload: response }))
@@ -47,10 +56,6 @@ const useFetchEconService = (selectedCountry: string) => {
 
     }
 
-
-
-    // console.log(!countryCode);
-  // }, []);
   }, [selectedCountry]);
 
   return result;

@@ -2,46 +2,69 @@ import React, { useState, useEffect } from "react";
 import ControlPanel from "./ControlPanel";
 import data from "../dataSources/countryCodes.json";
 import { Service } from "../types/Service";
-import { EconResponse } from "../types/EconResponse";
+// import { EconResponse } from "../types/EconResponse";
 import useFetchEconService from "../services/useFetchEconService";
-// import fetchEconService from "../services/useFetchEconService";
 
 const DashContainer: React.FC = () => {
-  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [selectedCountry, setSelectedCountry] = useState<string>("Euro area");
   const [unemploymentData, setUnemploymentData] = useState({});
+  const [loading, setLoading] = useState(true)
 
   const service = useFetchEconService(selectedCountry);
 
-    useEffect(() => {
-    setSelectedCountry("Euro area");
+  console.log(service)
 
-    if (service.status == "loaded") {
-      setUnemploymentData(returnLabelsAndValues(service))
-      }
-     
-      console.log(unemploymentData)
+  
+  
 
 
-  }, []);
 
 
+
+
+
+  // useEffect(()=>{
+  //  if (service.status == "loaded") {
+  //   setUnemploymentData(returnLabelsAndValues(service))
+  //   console.log(unemploymentData)
+  //   }
+
+  //             },[])
+
+  // useEffect(()=>{
+  //   const service = useFetchEconService(selectedCountry);
+  //   if (service.status == "loaded") {
+  //         setUnemploymentData(returnLabelsAndValues(service))
+  //         }
+
+  // },[selectedCountry])
+
+  //   useEffect(() => {
+  //   setSelectedCountry("Euro area");
+
+  //   if (service.status == "loaded") {
+  //     setUnemploymentData(returnLabelsAndValues(service))
+  //     }
+
+  //     console.log(unemploymentData)
+
+  // }, []);
 
   function changeCountry(newCountry: string): void {
     setSelectedCountry(newCountry);
   }
 
-  function returnLabelsAndValues(obj: any) :any|null {
+  function returnLabelsAndValues(obj: any): any | null {
     interface rez {
-      labels?: any|undefined;
-      values?:any|undefined;
-      seriesName?: any|undefined;
-    } 
+      labels?: any | undefined;
+      values?: any | undefined;
+      seriesName?: any | undefined;
+    }
 
     let rez = {
       labels: null,
       values: null,
       seriesName: null,
-      
     };
 
     // if( String(obj.payload.series.docs[0].period)=='undefined'){return null}
@@ -54,35 +77,24 @@ const DashContainer: React.FC = () => {
   }
 
 
+ 
 
+  // useEffect(() => {
+  //   if (service.status == "loaded") {
+  //     setUnemploymentData(returnLabelsAndValues(service));
+  //   }
 
-  
-  useEffect(()=>{
-
-    if (service.status == "loaded") {
-    setUnemploymentData(returnLabelsAndValues(service))
-    }
-   
-    console.log(unemploymentData)
-
-
-  },[selectedCountry])
-
-
+  //   console.log(unemploymentData);
+  // }, [selectedCountry]);
 
   // if (service.status == "loaded") {
-    // setUnemploymentData(returnLabelsAndValues(service));
-    // console.log(unemploymentData);
+  // setUnemploymentData(returnLabelsAndValues(service));
+  // console.log(unemploymentData);
   // }
-
-
-
-
 
   // useEffect(() => {
   //   const service = useFetchEconService(selectedCountry);
 
-  
   // }, [selectedCountry]);
 
   // useEffect(() => {
@@ -103,6 +115,8 @@ const DashContainer: React.FC = () => {
           defaultCountry="Euro area"
         />
       </div>
+
+      {/* <UnemploymentGraph /> */}
 
       <div></div>
     </>
