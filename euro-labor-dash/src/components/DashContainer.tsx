@@ -1,111 +1,93 @@
 import React, { useState, useEffect } from "react";
 import ControlPanel from "./ControlPanel";
 import data from "../dataSources/countryCodes.json";
-import { Service } from "../types/Service";
-// import { EconResponse } from "../types/EconResponse";
-import useFetchEconService from "../services/useFetchEconService";
+import { getKeyByValue, generateFetchURL_net} from '../services/URLgenerationFunctions'
+
 
 const DashContainer: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>("Euro area");
   const [unemploymentData, setUnemploymentData] = useState({});
-  const [loading, setLoading] = useState(true)
+  const [netEarningsData, setNetEarningsData] = useState({})
 
-  const service = useFetchEconService(selectedCountry);
 
-  console.log(service)
+  let countryData = data[0];
 
+
+
+  // interface EconResponses {
+  //   dataset: any;
+  //   provider: any;
+  //   series: any;
+  //   _meta: any;
+  // }
+
+  function fetchData() {
+    // const fetchURL_unemployment: string = generateFetchURL_unemployemnt(selectedCountry);
+
+    const fetchURL_net :string = generateFetchURL_net(selectedCountry)
+
+    let countryCode = getKeyByValue(countryData, selectedCountry);
+
+    if (countryCode) {
+      // fetch(fetchURL_unemployment)
+      //   .then((res) => res.json())
+      //   .then((res) => {
+      //     setUnemploymentData(res);
+      //     console.log(unemploymentData);
+      //   })
+      //   .catch((error) => setUnemploymentData({ status: "error", error }));
+
+        fetch(fetchURL_net)
+        .then((res)=>res.json())
+        .then((res)=> setNetEarningsData(res))
+        .catch((error) => setNetEarningsData({ status: "error", error }))
+        .then(()=>console.log(netEarningsData))
+
+          
+        }
+      
+    }
   
-  
 
+  useEffect(() => {
+    fetchData();
+  }, []);
 
+  useEffect(() => {
+    fetchData();
+  }, [selectedCountry]);
 
+  // useEffect( fetchData, [])
+  // useEffect( fetchData, [selectedCountry])
 
-
-
-
-  // useEffect(()=>{
-  //  if (service.status == "loaded") {
-  //   setUnemploymentData(returnLabelsAndValues(service))
-  //   console.log(unemploymentData)
-  //   }
-
-  //             },[])
-
-  // useEffect(()=>{
-  //   const service = useFetchEconService(selectedCountry);
-  //   if (service.status == "loaded") {
-  //         setUnemploymentData(returnLabelsAndValues(service))
-  //         }
-
-  // },[selectedCountry])
-
-  //   useEffect(() => {
-  //   setSelectedCountry("Euro area");
-
-  //   if (service.status == "loaded") {
-  //     setUnemploymentData(returnLabelsAndValues(service))
-  //     }
-
-  //     console.log(unemploymentData)
-
-  // }, []);
 
   function changeCountry(newCountry: string): void {
     setSelectedCountry(newCountry);
   }
 
-  function returnLabelsAndValues(obj: any): any | null {
-    interface rez {
-      labels?: any | undefined;
-      values?: any | undefined;
-      seriesName?: any | undefined;
-    }
-
-    let rez = {
-      labels: null,
-      values: null,
-      seriesName: null,
-    };
-
-    // if( String(obj.payload.series.docs[0].period)=='undefined'){return null}
-
-    rez["labels"] = obj.payload.series.docs[0].period;
-    rez["values"] = obj.payload.series.docs[0].value;
-    rez["seriesName"] = obj.payload.series.docs[0].series_name;
-
-    return rez;
-  }
-
-
- 
-
-  // useEffect(() => {
-  //   if (service.status == "loaded") {
-  //     setUnemploymentData(returnLabelsAndValues(service));
+  // function returnLabelsAndValues(obj: any): any | null {
+  //   interface rez {
+  //     labels?: any | undefined;
+  //     values?: any | undefined;
+  //     seriesName?: any | undefined;
   //   }
 
-  //   console.log(unemploymentData);
-  // }, [selectedCountry]);
+  //   let rez = {
+  //     labels: null,
+  //     values: null,
+  //     seriesName: null,
+  //   };
 
-  // if (service.status == "loaded") {
-  // setUnemploymentData(returnLabelsAndValues(service));
-  // console.log(unemploymentData);
+  //   if (Object.keys(obj.payload).length < 3) {
+  //     return rez;
+  //   }
+
+  //   rez["labels"] = obj.payload.series.docs[0].period;
+  //   rez["values"] = obj.payload.series.docs[0].value;
+  //   rez["seriesName"] = obj.payload.series.docs[0].series_name;
+
+  //   return rez;
   // }
-
-  // useEffect(() => {
-  //   const service = useFetchEconService(selectedCountry);
-
-  // }, [selectedCountry]);
-
-  // useEffect(() => {
-
-  //   const service = fetchEconService(selectedCountry)
-
-  //   if (service.status == "loaded") {
-  //     setUnemploymentData(returnLabelsAndValues(service));
-  //     console.log(unemploymentData);
-  //   }
-  // }, []);
 
   return (
     <>
@@ -118,85 +100,18 @@ const DashContainer: React.FC = () => {
 
       {/* <UnemploymentGraph /> */}
 
-      <div></div>
+
+<div>
+
+ {JSON.stringify(netEarningsData)}
+</div>
+  {/* <div>{netEarningsData && netEarningsData.map(item=>{<li>{item}</li>})}</div> */}
     </>
   );
 };
 
 export default DashContainer;
 
-// const [unemploymentURL, setUnemploymentURL] = useState<string>("");
-// const[unemployemnetSeries, setUnemploymentSeries] = useState ([])
-// const [vacanciesURL, setVacanciesURL] = useState<string>("");
-// const [netEarningsURL, setNetEarningsURL] = useState<string>("");
-// const [grossEarningsURL, setGrossEarningsURL] = useState<string>("");
 
-// useEffect(()=>{
-//   // export default selectedCountry
-//   // export default selectedCountry
-// }, [selectedCountry])
-// export default selectedCountry
 
-// let countryData = data[0];
 
-// function getKeyByValue(object: any, value: string) {
-//   return Object.keys(object).find((key) => object[key] === value);
-// }
-
-// function generateFetchURL_unemployemnt(selectedCountry: string) {
-//   let countryCode = getKeyByValue(countryData, selectedCountry);
-
-//   let fetchURL = `https://api.db.nomics.world/v22/series/Eurostat/une_rt_q/Q.SA.Y20-64.PC_ACT.T.${countryCode}?observations=True`;
-
-//   return fetchURL;
-// }
-
-// function generateFetchURL_vacancies(selectedCountry: string) {
-//   let countryCode = getKeyByValue(countryData, selectedCountry);
-
-//   let fetchURL = `https://api.db.nomics.world/v22/series/Eurostat/tps00172/Q.NSA.B-S.TOTAL.JOBRATE.${countryCode}?observations=True`;
-
-//   return fetchURL;
-// }
-
-// function generateFetchURL_net_earnings(selectedCountry: string) {
-//   let countryCode = getKeyByValue(countryData, selectedCountry);
-
-//   let fetchURL = `https://api.db.nomics.world/v22/series/Eurostat/earn_nt_net/A.EUR.GRS.A1_80.${countryCode}?observations=True`;
-
-//   return fetchURL;
-// }
-
-// function generateFetchURL_gross_earnings(selectedCountry: string) {
-//   let countryCode = getKeyByValue(countryData, selectedCountry);
-
-//   let fetchURL = `https://api.db.nomics.world/v22/series/Eurostat/earn_nt_net/A.PPS.GRS.A1_80.${countryCode}?observations=True`;
-
-//   return fetchURL;
-// }
-
-// useEffect(() => {
-//   setUnemploymentURL(generateFetchURL_unemployemnt(selectedCountry));
-// setVacanciesURL(generateFetchURL_vacancies(selectedCountry));
-// setNetEarningsURL(generateFetchURL_net_earnings(selectedCountry));
-// setGrossEarningsURL(generateFetchURL_gross_earnings(selectedCountry));
-// fetchUnemploymentData(unemploymentURL)
-// }, [selectedCountry]);
-
-// useEffect(()=>{
-
-//   function fetchUnemploymentData(unemploymentURL : string){
-//     fetch(unemploymentURL)
-//     .then(rez=>rez.json())
-//     // .then(data=>setUnemploymentSeries(data))
-//     .then(data=>console.log(data))
-//     // .then(()=> setUnemploymentSeries(unemployemnetSeries.dataset.series.docs[0].value))
-//     // .then(()=>console.log(unemployemnetSeries))
-//     .catch(err=>{console.log(err)})
-
-//       }
-
-//   fetchUnemploymentData(unemploymentURL)
-// }, [unemploymentURL])
-
-// let dataOutput = service
