@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import ControlPanel from "./ControlPanel";
-import data from "../dataSources/countryCodes.json";
+// import data from "../dataSources/countryCodes.json";
 import {
-  getKeyByValue,
-  generateFetchURL_net,
+  generateFetchURL_net
 } from "../services/URLgenerationFunctions";
 import Earnings from './Earnings'
 
 
 const DashContainer: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>("Euro area");
-  const [unemploymentData, setUnemploymentData] = useState({});
+  // const [unemploymentData, setUnemploymentData] = useState({});
   const [netEarningsData, setNetEarningsData] = useState({});
 
-  let countryData = data[0];
 
   function fetchData() {
     // const fetchURL_unemployment: string = generateFetchURL_unemployemnt(selectedCountry);
@@ -32,7 +30,6 @@ const DashContainer: React.FC = () => {
       .then((res) => res.json())
       .then((res) => setNetEarningsData(returnLabelsAndValues(res)))
       .catch((error) => setNetEarningsData({ status: "error", error }))
-      .then(() => console.log(netEarningsData));
   }
 
   useEffect(() => {
@@ -71,6 +68,7 @@ const DashContainer: React.FC = () => {
     return rez;
   }
 
+
   return (
     <>
       <div>
@@ -80,13 +78,32 @@ const DashContainer: React.FC = () => {
         />
       </div>
 
-      <div>{JSON.stringify(netEarningsData)}</div>
 
       <div>
-        <Earnings netEarningsData={netEarningsData} selectedCountry={selectedCountry}/>
+        <Earnings
+         netEarningsData={netEarningsData}
+          selectedCountry={selectedCountry}
+            />
         </div>
+        
     </>
   );
 };
 
 export default DashContainer;
+
+
+//   interface PropsWithChildren<netEarningsData>{
+//     labels: any | undefined;
+//     values?: any | undefined;
+//     seriesName?: any | undefined;
+// }
+// interface intrinsicAttributes{
+//   netEarningsData: {lables: any, values: any }
+// }
+
+// interface netEarningsData{
+//   labels: any | undefined;
+//   values?: any | undefined;
+//   seriesName?: any | undefined;
+// }
