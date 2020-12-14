@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from "react";
 import ControlPanel from "./ControlPanel";
 // import data from "../dataSources/countryCodes.json";
-import {
-  generateFetchURL_net
-} from "../services/URLgenerationFunctions";
-import Earnings from './Earnings'
-
+import { generateFetchURL_net } from "../services/URLgenerationFunctions";
+import Earnings from "./Earnings";
 
 const DashContainer: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>("Euro area");
   // const [unemploymentData, setUnemploymentData] = useState({});
-  const [netEarningsData, setNetEarningsData] = useState({});
+  const [netEarningsData, setNetEarningsData] = useState({data: {}, isFetching:true, status: ''});
 
 
-  function fetchData() {
+  function fetchData() { 
     // const fetchURL_unemployment: string = generateFetchURL_unemployemnt(selectedCountry);
 
-    const fetchURL_net: string = generateFetchURL_net(selectedCountry);
+    const fetchURL_net: string = generateFetchURL_net(selectedCountry); 
 
     // fetch(fetchURL_unemployment)
     //   .then((res) => res.json())
@@ -26,11 +23,17 @@ const DashContainer: React.FC = () => {
     //   })
     //   .catch((error) => setUnemploymentData({ status: "error", error }));
 
+    setNetEarningsData({data: {}, isFetching: true, status:''}) 
+
     fetch(fetchURL_net)
       .then((res) => res.json())
-      .then((res) => setNetEarningsData(returnLabelsAndValues(res)))
-      .catch((error) => setNetEarningsData({ status: "error", error }))
+      .then((res) => setNetEarningsData({data:returnLabelsAndValues(res), isFetching: false, status:''}))
+      .catch((error: string) => setNetEarningsData({data:{}, isFetching: false, status: error}))
+      // .catch((error: string) => setNetEarningsData({ status: "error", error }));
   }
+      
+
+        
 
   useEffect(() => {
     fetchData();
@@ -68,7 +71,6 @@ const DashContainer: React.FC = () => {
     return rez;
   }
 
-
   return (
     <>
       <div>
@@ -78,20 +80,18 @@ const DashContainer: React.FC = () => {
         />
       </div>
 
-
       <div>
         <Earnings
-         netEarningsData={netEarningsData}
+          netEarningsData={netEarningsData.data}
           selectedCountry={selectedCountry}
-            />
-        </div>
-        
+          isFetching = {netEarningsData.isFetching}
+        />
+      </div>
     </>
   );
 };
 
 export default DashContainer;
-
 
 //   interface PropsWithChildren<netEarningsData>{
 //     labels: any | undefined;
