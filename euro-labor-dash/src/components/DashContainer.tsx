@@ -24,6 +24,7 @@ const DashContainer: React.FC = () => {
     //   .catch((error) => setUnemploymentData({ status: "error", error }));
 
     setNetEarningsData({data: {}, isFetching: true, status:''}) 
+    // setNetEarningsData.isFetching(true) 
 
     fetch(fetchURL_net)
       .then((res) => res.json())
