@@ -8,25 +8,24 @@ interface BarProps {
   barWidth: number;
   barHeight: number;
   yValue: number;
+  yearLabel:any; 
+
 }
 
-const Bar: React.FC<BarProps> = ({ x, y, barWidth, barHeight, yValue }) => {
+const Bar: React.FC<BarProps> = ({ x, y, barWidth, barHeight, yValue, yearLabel }) => {
 
-  console.log(barHeight)
+ const axisText :number=125
+
+  // console.log(barHeight)
   return (
-    <svg>
-      {/* <g> */}
+    <g>
       <rect x={x} y={y} width={barWidth} height={barHeight} fill="black"/>
-      {/* <rect x={x} y={y} width={10} height={10} fill="black"/> */}
-      {/* <rect x={10} y={10} width={10} height={10} fill="black">
-        {" "}
-      </rect> */}
-      {/* </g> */}
-    </svg>
+      <text x={x} y={y+axisText}>{yearLabel}</text>
+      </g>
+  
   );
 };
 
-//  function min<T, U extends Numeric>(array: Iterable<T>, accessor: (datum: T, index: number, array: Iterable<T>) => U | undefined | null): U | undefined;
 
 interface EarningsProps {
   children?: any;
@@ -81,58 +80,43 @@ const Earnings: React.FC<EarningsProps> = ({
       .domain([min(values) as number, max(values) as number])
       .range([0, barAreaHeight]);
 
-    netEarningsData.labels = labels;
-
-    // console.log(netEarningsData.lables);
-
-    // console.log(netEarningsData)
-  }
-
-  // let listHtml = <li>hi</li>
-  let bars :any = <rect></rect>
-
-  if(!isFetching){
-
-    values = netEarningsData.values;
+      
+      
+    }
+    
+    let bars :any = <rect></rect>
+    
+    if(!isFetching){
+      
+      values = netEarningsData.values;
+      labels = netEarningsData.labels;
 
     const yScale = scaleLinear()
       .domain([min(values) as number, max(values) as number])
       .range([barAreaHeight, 0]);
 
-
-    //  listHtml = netEarningsData.labels.map((num: number)=><rect x={num+10} y={10} width={10} height={10} fill="black"></rect>)
-    // bars = netEarningsData.labels.map((num: number, ind:number)=><rect x={ind*10} y={10} width={5} height={10} fill="black"></rect>)
-    // bars = netEarningsData.values.map((row: any, ind:number)=>(
-    bars = Object.keys(netEarningsData).map((row: any, ind:number)=>(
+    bars = values.map((row: any, ind:number)=>(
       <Bar
-      x={ind*15}
+      x={ind*25}
       y={5}
       barWidth= {10}
       // barHeight = {row/1000}
-      barHeight = {yScale(row.values)}
+      barHeight = {yScale(row)}
       yValue = {0}
+      key={ind}
+      yearLabel = {labels[ind]}
 
       />
     ))
-    // console.log(rectHtml)
+    console.log(bars)
   }
 
-// aha!
-  Object.keys(netEarningsData).map((row: any, ind:number)=>(console.log(row)))
-  console.log(netEarningsData)
 
   return (
     <>
       <div>{JSON.stringify(netEarningsData)}</div>;{/* <svg>{bars}</svg> */}
 
-      {/* <ul>
-       {!isFetching && listHtml}
-      </ul> */}
-
-      {/* <g>}</g> */}
       <svg>{bars}</svg>
-      {/* <svg>{rectHtml}</svg> */}
-      {/* <svg><rect  x={10} y={10} width={10} height={10} fill="black"></rect></svg> */}
     </>
   );
 };
