@@ -1,40 +1,58 @@
 import React, { useState, useEffect } from "react";
 import ControlPanel from "./ControlPanel";
 // import data from "../dataSources/countryCodes.json";
-import { generateFetchURL_net } from "../services/URLgenerationFunctions";
+import {
+  generateFetchURL_net,
+  generateFetchURL_gross,
+} from "../services/URLgenerationFunctions";
 import Earnings from "./Earnings";
 
 const DashContainer: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>("Euro area");
-  // const [unemploymentData, setUnemploymentData] = useState({});
-  const [netEarningsData, setNetEarningsData] = useState({data: {}, isFetching:true, status: ''});
+  const [grossEarningsData, setGrossEarningsData] = useState({
+    data: {},
+    isFetching: true,
+    status: "",
+  });
+  const [netEarningsData, setNetEarningsData] = useState({
+    data: {},
+    isFetching: true,
+    status: "",
+  });
 
+  function fetchData() {
+    const fetchURL_gross: string = generateFetchURL_gross(selectedCountry);
+    const fetchURL_net: string = generateFetchURL_net(selectedCountry);
 
-  function fetchData() { 
-    // const fetchURL_unemployment: string = generateFetchURL_unemployemnt(selectedCountry);
-
-    const fetchURL_net: string = generateFetchURL_net(selectedCountry); 
-
-    // fetch(fetchURL_unemployment)
-    //   .then((res) => res.json())
-    //   .then((res) => {
-    //     setUnemploymentData(res);
-    //     console.log(unemploymentData);
-    //   })
-    //   .catch((error) => setUnemploymentData({ status: "error", error }));
-
-    setNetEarningsData({data: {}, isFetching: true, status:''}) 
-    // setNetEarningsData.isFetching(true) 
-
+    setNetEarningsData({ data: {}, isFetching: true, status: "" });
     fetch(fetchURL_net)
       .then((res) => res.json())
-      .then((res) => setNetEarningsData({data:returnLabelsAndValues(res), isFetching: false, status:''}))
-      .catch((error: string) => setNetEarningsData({data:{}, isFetching: false, status: error}))
-      // .catch((error: string) => setNetEarningsData({ status: "error", error }));
-  }
-      
+      .then((res) =>
+        setNetEarningsData({
+          data: returnLabelsAndValues(res),
+          isFetching: false,
+          status: "",
+        })
+      )
+      .catch((error: string) =>
+        setNetEarningsData({ data: {}, isFetching: false, status: error })
+      );
 
-        
+    setGrossEarningsData({ data: {}, isFetching: true, status: "" });
+
+    fetch(fetchURL_gross)
+      .then((res) => res.json())
+      .then((res) =>
+        setGrossEarningsData({
+          data: returnLabelsAndValues(res),
+          isFetching: false,
+          status: "",
+        })
+      )
+      .catch((error: string) =>
+        setGrossEarningsData({ data: {}, isFetching: false, status: error })
+      );
+  }
 
   useEffect(() => {
     fetchData();
@@ -83,9 +101,11 @@ const DashContainer: React.FC = () => {
 
       <div>
         <Earnings
+          grossEarningsData={grossEarningsData.data}
           netEarningsData={netEarningsData.data}
           selectedCountry={selectedCountry}
-          isFetching = {netEarningsData.isFetching}
+          isFetching={grossEarningsData.isFetching}
+
         />
       </div>
     </>

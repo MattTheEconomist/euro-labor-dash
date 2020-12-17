@@ -4,23 +4,32 @@ import { create } from "domain";
 
 interface BarProps {
   x: number;
-  y: number;
+  y_gross: number;
+  y_net: number
   barWidth: number;
-  barHeight: number;
+  barHeight_net: number;
+  barHeight_gross: number;
   yValue: number;
   yearLabel:any; 
+  yearLableYPoz: number, 
 
 }
 
-const Bar: React.FC<BarProps> = ({ x, y, barWidth, barHeight, yValue, yearLabel }) => {
+const Bar: React.FC<BarProps> = ({ x, y_gross, y_net, barWidth, barHeight_net, barHeight_gross, yValue, yearLabel, yearLableYPoz }) => {
+
+  if(isNaN(y_gross)){y_gross=0}
+  if(isNaN(y_net)){y_net=0}
 
  const axisText :number=125
 
   // console.log(barHeight)
   return (
     <g>
-      <rect x={x} y={y} width={barWidth} height={barHeight} fill="black"/>
-      <text x={x} y={y+axisText}>{yearLabel}</text>
+      <rect x={x} y={ y_net} width={barWidth} height={barHeight_net} fill="black"/>
+      <rect x={x} y={y_gross} width={barWidth} height={barHeight_gross} fill="blue"/>
+      <text x={x} y={yearLableYPoz} 
+      // style={{transform:'rotate(1deg)'}}
+      >{yearLabel}</text>
       </g>
   
   );
@@ -30,93 +39,86 @@ const Bar: React.FC<BarProps> = ({ x, y, barWidth, barHeight, yValue, yearLabel 
 interface EarningsProps {
   children?: any;
   selectedCountry?: string;
-  netEarningsData: any;
+  grossEarningsData: any;
+  netEarningsData: any; 
   isFetching: boolean;
 }
 
 const Earnings: React.FC<EarningsProps> = ({
-  netEarningsData,
+  grossEarningsData: grossEarningsData,
+  netEarningsData : netEarningsData, 
   selectedCountry,
   isFetching,
 }) => {
-  const [otherBars, setOtherBars] = useState([1, 2, 3, 4]);
 
-  const barAreaHeight = 100;
-  const barAreaWidth = 500;
-  const margin = { top: 10, right: 20, bottom: 30, left: 40 };
-  const barChartHeight = barAreaHeight - margin.top - margin.bottom;
+  const barAreaHeight = 400;
+  const barAreaWidth = 700;
+  const margin = { top: 10, right: 25, bottom: 30, left: 40 };
+  const barChartHeight = barAreaHeight - margin.bottom;
 
   const barDimensions = {
-    barWidth: 7.8,
+    barWidth: 12,
     barSideMargin: 0.2,
-    centerToCenter: 8,
+    centerToCenter: 40,
     labelMarginTop: 2,
   };
 
   let labels: Array<Number> = [];
-  let values: Array<Number> = [];
-  // let dataNet = {};
-  // let bars;
-  // let otherBars =
-
-  //   netEarningsData.data
-
-  useEffect(() => {
-    if (!isFetching) {
-      createGraph();
-    }
-  }, [isFetching]);
-
-  function createGraph() {
-    labels = netEarningsData.labels.map((year: string) => parseInt(year));
-    // netEarningsData.labels = netEarningsData.labels.map((year: string) => parseInt(year));
-    values = netEarningsData.values;
-
-    const xScale = scaleLinear()
-      .domain([min(labels) as number, max(labels) as number])
-      .range([0, barAreaWidth]);
-
-    const yScale = scaleLinear()
-      .domain([min(values) as number, max(values) as number])
-      .range([0, barAreaHeight]);
-
-      
-      
-    }
+  let values_gross: Array<Number> = [];
+  let values_net: Array<Number> = [];
     
     let bars :any = <rect></rect>
     
     if(!isFetching){
       
-      values = netEarningsData.values;
-      labels = netEarningsData.labels;
+      values_gross = grossEarningsData.values;
+      values_net = netEarningsData.values
+      labels = grossEarningsData.labels;
 
-    const yScale = scaleLinear()
-      .domain([min(values) as number, max(values) as number])
-      .range([barAreaHeight, 0]);
+    const yScale_gross = scaleLinear()
+      .domain([min(values_gross) as number, max(values_gross) as number])
+      .range([5,barChartHeight]);
 
-    bars = values.map((row: any, ind:number)=>(
+      const yScale_net = scaleLinear()
+      .domain([min(values_net) as number, max(values_net) as number])
+      .range([5,barChartHeight]);
+
+
+      // console.log(values_gross, values_net)
+    
+      const xScale = scaleLinear()
+      .domain([min(labels) as number, max(labels) as number])
+      .range([0, barAreaWidth]);
+
+    bars = values_gross.map((row: any, ind:number)=>(
       <Bar
-      x={ind*25}
-      y={5}
-      barWidth= {10}
-      // barHeight = {row/1000}
-      barHeight = {yScale(row)}
+      x={(ind*barDimensions.centerToCenter)+margin.right}
+      // y={barAreaHeight}
+      y_gross={barChartHeight-yScale_gross(row)+margin.top}
+      y_net={barChartHeight-yScale_net(values_net[ind])+margin.top}
+      barWidth= {barDimensions.barWidth}
+      // barHeight_net = {yScale(values_net[ind])+220}
+      barHeight_net = {yScale_net(values_net[ind])}
+      barHeight_gross = {yScale_gross(row)}
       yValue = {0}
       key={ind}
       yearLabel = {labels[ind]}
+      yearLableYPoz = {barChartHeight+margin.bottom }
 
       />
     ))
-    console.log(bars)
   }
 
 
   return (
     <>
-      <div>{JSON.stringify(netEarningsData)}</div>;{/* <svg>{bars}</svg> */}
+      <div>{JSON.stringify(netEarningsData)}</div>
 
-      <svg>{bars}</svg>
+      <div style={{backgroundColor: "grey", height: 400, width: 700}}>
+      <svg width={barAreaWidth} height={barAreaHeight}>
+        {bars}</svg>
+      </div>
+     
     </>
   );
 };
