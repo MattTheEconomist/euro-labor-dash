@@ -28,10 +28,14 @@ const DashContainer: React.FC = () => {
 
 
 
-    setNetEarningsData({ data: {}, isFetching: true, status: "" });
+    // setNetEarningsData({ data: {}, isFetching: true, status: "" });
+    netEarningsData.isFetching=true
+
     fetch(fetchURL_net)
       .then((res) => res.json())
       .then((res) =>
+
+      // netEarningsData.data = res
         setNetEarningsData({
           data: returnLabelsAndValues(res),
           isFetching: false,
@@ -43,22 +47,24 @@ const DashContainer: React.FC = () => {
         setNetEarningsData({ data: {}, isFetching: false, status: error, })
       );
 
+      // console.log(netEarningsData)
 
-    setGrossEarningsData({ data: {}, isFetching: true, status: "" , });
 
-    fetch(fetchURL_gross)
-      .then((res) => res.json())
-      .then((res) =>
-        setGrossEarningsData({
-          data: returnLabelsAndValues(res),
-          isFetching: false,
-          status: "",
+    // setGrossEarningsData({ data: {}, isFetching: true, status: "" , });
+
+    // fetch(fetchURL_gross)
+    //   .then((res) => res.json())
+    //   .then((res) =>
+    //     setGrossEarningsData({
+    //       data: returnLabelsAndValues(res),
+    //       isFetching: false,
+    //       status: "",
       
-        })
-      )
-      .catch((error: string) =>
-        setGrossEarningsData({ data: {}, isFetching: false, status: error , })
-      );
+    //     })
+    //   )
+    //   .catch((error: string) =>
+    //     setGrossEarningsData({ data: {}, isFetching: false, status: error , })
+    //   );
   }
 
   useEffect(() => {
