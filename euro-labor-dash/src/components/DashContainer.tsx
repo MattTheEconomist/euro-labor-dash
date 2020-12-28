@@ -13,16 +13,20 @@ const DashContainer: React.FC = () => {
     data: {},
     isFetching: true,
     status: "",
+
   });
   const [netEarningsData, setNetEarningsData] = useState({
     data: {},
     isFetching: true,
     status: "",
+
   });
 
   function fetchData() {
     const fetchURL_gross: string = generateFetchURL_gross(selectedCountry);
     const fetchURL_net: string = generateFetchURL_net(selectedCountry);
+
+
 
     setNetEarningsData({ data: {}, isFetching: true, status: "" });
     fetch(fetchURL_net)
@@ -32,13 +36,15 @@ const DashContainer: React.FC = () => {
           data: returnLabelsAndValues(res),
           isFetching: false,
           status: "",
+
         })
       )
       .catch((error: string) =>
-        setNetEarningsData({ data: {}, isFetching: false, status: error })
+        setNetEarningsData({ data: {}, isFetching: false, status: error, })
       );
 
-    setGrossEarningsData({ data: {}, isFetching: true, status: "" });
+
+    setGrossEarningsData({ data: {}, isFetching: true, status: "" , });
 
     fetch(fetchURL_gross)
       .then((res) => res.json())
@@ -47,10 +53,11 @@ const DashContainer: React.FC = () => {
           data: returnLabelsAndValues(res),
           isFetching: false,
           status: "",
+      
         })
       )
       .catch((error: string) =>
-        setGrossEarningsData({ data: {}, isFetching: false, status: error })
+        setGrossEarningsData({ data: {}, isFetching: false, status: error , })
       );
   }
 

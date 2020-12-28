@@ -2,6 +2,27 @@ import React, { useEffect, useState } from "react";
 import { scaleLinear, max, min, select } from "d3";
 import { create } from "domain";
 
+
+const animateBars =(rectRef :any, y_net :number, barHeight_net :number  )=>{
+
+  const rect = select(rectRef.current)
+
+  console.log("yo")
+
+  rect
+    .transition()
+    .duration(1000)
+    .attr("height", 0)
+    .transition()
+    .duration(1000)
+    .attr("height", barHeight_net)
+    .attr("y", y_net)
+  
+
+}
+
+
+
 interface BarProps {
   x: number;
   y_gross: number;
@@ -13,20 +34,31 @@ interface BarProps {
   yearLabel:any; 
   yearLableYPoz: number, 
 
+
 }
 
-const Bar: React.FC<BarProps> = ({ x, y_gross, y_net, barWidth, barHeight_net, barHeight_gross, yValue, yearLabel, yearLableYPoz }) => {
+const Bar: React.FC<BarProps> = ({ x, y_gross, y_net, barWidth, barHeight_net, barHeight_gross, yValue, yearLabel, yearLableYPoz}) => {
 
   if(isNaN(y_gross)){y_gross=0}
   if(isNaN(y_net)){y_net=0}
 
  const axisText :number=125
+ const rectRef :any = React.createRef()
+
+
+ useEffect(()=>{
+   animateBars(rectRef,y_net, barHeight_net )
+ })
+
 
   // console.log(barHeight)
   return (
     <g>
-      <rect x={x} y={ y_net} width={barWidth} height={barHeight_net} fill="black"/>
-      <rect x={x} y={y_gross} width={barWidth} height={barHeight_gross} fill="blue"/>
+      <rect ref={rectRef} x={x} width={barWidth} 
+      //  y={y_net} 
+      // height={barHeight_net} 
+      fill="black"/>
+      {/* <rect x={x} y={y_gross} width={barWidth} height={barHeight_gross} fill="blue"/> */}
       <text x={x} y={yearLableYPoz} 
       // style={{transform:'rotate(1deg)'}}
       >{yearLabel}</text>
@@ -41,6 +73,7 @@ interface EarningsProps {
   selectedCountry?: string;
   grossEarningsData: any;
   netEarningsData: any; 
+
   isFetching: boolean;
 }
 
@@ -53,7 +86,7 @@ const Earnings: React.FC<EarningsProps> = ({
 
   const barAreaHeight = 400;
   const barAreaWidth = 700;
-  const margin = { top: 10, right: 25, bottom: 30, left: 40 };
+  const margin = { top: 10, right: 45, bottom: 30, left: 20 };
   const barChartHeight = barAreaHeight - margin.bottom;
 
   const barDimensions = {
@@ -63,28 +96,49 @@ const Earnings: React.FC<EarningsProps> = ({
     labelMarginTop: 2,
   };
 
-  let labels: Array<Number> = [];
+  let labels: Array<any> = [];
   let values_gross: Array<Number> = [];
-  let values_net: Array<Number> = [];
+  let values_net: Array<Number> = [1,2,3];
+
     
     let bars :any = <rect></rect>
     
-    if(!isFetching){
+    if(!isFetching ){
       
       values_gross = grossEarningsData.values;
       values_net = netEarningsData.values
-      labels = grossEarningsData.labels;
+      labels = grossEarningsData.labels.map((year:any)=>parseInt(year))
+
+
+      
+      if( (min(labels) < 2005)&& (values_net!==undefined) ){
+        const elementsToSlice = 2005- min(labels)
+        labels = labels.slice(elementsToSlice)
+        values_gross  = values_gross.slice(elementsToSlice)
+        values_net = values_net.slice(elementsToSlice)
+
+      }
+
+      let yScale_net : any; 
 
     const yScale_gross = scaleLinear()
       .domain([min(values_gross) as number, max(values_gross) as number])
       .range([5,barChartHeight]);
 
-      const yScale_net = scaleLinear()
-      .domain([min(values_net) as number, max(values_net) as number])
-      .range([5,barChartHeight]);
+        if(values_net.length>0){
+
+           yScale_net = scaleLinear()
+          .domain([min(values_net) as number, max(values_net) as number])
+          .range([5,barChartHeight]);
+
+        }else{
+          //used as a placeholder when waiting for values to arrive 
+           yScale_net = scaleLinear()
+          .domain([0, 100])
+          .range([5,barChartHeight]);
+        }
 
 
-      // console.log(values_gross, values_net)
     
       const xScale = scaleLinear()
       .domain([min(labels) as number, max(labels) as number])
@@ -104,6 +158,9 @@ const Earnings: React.FC<EarningsProps> = ({
       key={ind}
       yearLabel = {labels[ind]}
       yearLableYPoz = {barChartHeight+margin.bottom }
+  
+
+
 
       />
     ))
@@ -116,6 +173,8 @@ const Earnings: React.FC<EarningsProps> = ({
 
       <div style={{backgroundColor: "grey", height: 400, width: 700}}>
       <svg width={barAreaWidth} height={barAreaHeight}>
+      <line id="xAxis" x1={margin.left} y1={barChartHeight+margin.top} x2={barAreaWidth-margin.right} y2={barChartHeight+margin.top} stroke="black" />
+
         {bars}</svg>
       </div>
      
