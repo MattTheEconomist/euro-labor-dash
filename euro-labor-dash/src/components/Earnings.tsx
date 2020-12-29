@@ -49,10 +49,7 @@ const Bar: React.FC<BarProps> = ({
   const rectRef: any = React.createRef();
 
   useEffect(() => {
-    // if(typeof barHeight_net !== undefined){
     animateBars(rectRef, y_net, barHeight_net);
-    console.log('yo')
-    // }
   });
 
 
@@ -62,8 +59,6 @@ const Bar: React.FC<BarProps> = ({
         ref={rectRef}
         x={x}
         width={barWidth}
-        //  y={y_net}
-        // height={barHeight_net}
         fill="black"
       />
       {/* <rect x={x} y={y_gross} width={barWidth} height={barHeight_gross} fill="blue"/> */}
@@ -113,16 +108,18 @@ const Earnings: React.FC<EarningsProps> = ({
   let bars: any = <rect></rect>;
 
 
+  useEffect(()=>{
+    console.log(isFetching)
+  }, [isFetching])
   
   
-  // if (!isFetching) {
     // console.log(netEarningsData)
     // values_gross = grossEarningsData.values;
     values_net = netEarningsData.values;
-    // if (min(labels) < 2005 && values_net !== undefined) {
+    if ( values_net !== undefined) {
     labels = netEarningsData.labels.map((year: any) => parseInt(year));
 
-    // }
+    }
 
     if (min(labels) < 2005 && values_net !== undefined) {
       const elementsToSlice = 2005 - min(labels);
@@ -150,8 +147,8 @@ const Earnings: React.FC<EarningsProps> = ({
       .range([0, barAreaWidth]);
 
 
-      // if (min(labels) < 2005 && values_net !== undefined) {
-        // console.log(values_net)
+      if (values_net !== undefined) {
+     
     bars = values_net.map((row: any, ind: number) => (
       <Bar
         x={ind * barDimensions.centerToCenter + margin.right}
@@ -168,10 +165,9 @@ const Earnings: React.FC<EarningsProps> = ({
         yearLableYPoz={barChartHeight + margin.bottom}
       />
     ))
-    // }
+    }
 
 
-  // }
 
   return (
     <>
