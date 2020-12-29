@@ -11,13 +11,13 @@ const DashContainer: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>("Euro area");
   const [grossEarningsData, setGrossEarningsData] = useState({
     data: {},
-    isFetching: true,
+    isFetching: false,
     status: "",
 
   });
   const [netEarningsData, setNetEarningsData] = useState({
     data: {},
-    isFetching: true,
+    isFetching: false,
     status: "",
 
   });
@@ -34,8 +34,6 @@ const DashContainer: React.FC = () => {
     fetch(fetchURL_net)
       .then((res) => res.json())
       .then((res) =>
-
-      // netEarningsData.data = res
         setNetEarningsData({
           data: returnLabelsAndValues(res),
           isFetching: false,
@@ -47,7 +45,7 @@ const DashContainer: React.FC = () => {
         setNetEarningsData({ data: {}, isFetching: false, status: error, })
       );
 
-      // console.log(netEarningsData)
+
 
 
     // setGrossEarningsData({ data: {}, isFetching: true, status: "" , });
@@ -99,6 +97,8 @@ const DashContainer: React.FC = () => {
     rez["labels"] = obj.series.docs[0].period;
     rez["values"] = obj.series.docs[0].value;
     rez["seriesName"] = obj.series.docs[0].series_name;
+
+
 
     return rez;
   }

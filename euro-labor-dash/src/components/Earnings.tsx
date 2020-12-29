@@ -3,31 +3,25 @@ import { scaleLinear, max, min, select } from "d3";
 import { create } from "domain";
 
 
-
-
-
 const animateBars = (rectRef: any, y_net: number, barHeight_net: number) => {
   const rect = select(rectRef.current);
 
 
   rect
-    // .exit()
-    // .remove()
-    // .enter()
+
     .transition()
     .duration(1000)
     .attr("height", barHeight_net)
     .attr("y", y_net);
-  // .attr("y", 0)
 };
 
 interface BarProps {
   x: number;
-  y_gross: number;
+  // y_gross: number;
   y_net: number;
   barWidth: number;
   barHeight_net: number;
-  barHeight_gross: number;
+  // barHeight_gross: number;
   yValue: number;
   yearLabel: any;
   yearLableYPoz: number;
@@ -35,18 +29,18 @@ interface BarProps {
 
 const Bar: React.FC<BarProps> = ({
   x,
-  y_gross,
+  // y_gross,
   y_net,
   barWidth,
   barHeight_net,
-  barHeight_gross,
+  // barHeight_gross,
   yValue,
   yearLabel,
   yearLableYPoz,
 }) => {
-  if (isNaN(y_gross)) {
-    y_gross = 0;
-  }
+  // if (isNaN(y_gross)) {
+  //   y_gross = 0;
+  // }
   if (isNaN(y_net)) {
     y_net = 0;
   }
@@ -57,10 +51,11 @@ const Bar: React.FC<BarProps> = ({
   useEffect(() => {
     // if(typeof barHeight_net !== undefined){
     animateBars(rectRef, y_net, barHeight_net);
+    console.log('yo')
     // }
   });
 
-  // console.log(barHeight)
+
   return (
     <g>
       <rect
@@ -111,27 +106,34 @@ const Earnings: React.FC<EarningsProps> = ({
   };
 
   let labels: Array<any> = [];
-  let values_gross: Array<Number> = [];
+  // let values_gross: Array<Number> = [];
   let values_net: Array<Number> = [1, 2, 3];
   let yScale_net: any;
 
   let bars: any = <rect></rect>;
 
-  if (!isFetching) {
-    values_gross = grossEarningsData.values;
+
+  
+  
+  // if (!isFetching) {
+    // console.log(netEarningsData)
+    // values_gross = grossEarningsData.values;
     values_net = netEarningsData.values;
-    labels = grossEarningsData.labels.map((year: any) => parseInt(year));
+    // if (min(labels) < 2005 && values_net !== undefined) {
+    labels = netEarningsData.labels.map((year: any) => parseInt(year));
+
+    // }
 
     if (min(labels) < 2005 && values_net !== undefined) {
       const elementsToSlice = 2005 - min(labels);
       labels = labels.slice(elementsToSlice);
-      values_gross = values_gross.slice(elementsToSlice);
+      // values_gross = values_gross.slice(elementsToSlice);
       values_net = values_net.slice(elementsToSlice);
     }
 
-    const yScale_gross = scaleLinear()
-      .domain([min(values_gross) as number, max(values_gross) as number])
-      .range([5, barChartHeight]);
+    // const yScale_gross = scaleLinear()
+    //   .domain([min(values_gross) as number, max(values_gross) as number])
+    //   .range([5, barChartHeight]);
 
     if (values_net !== undefined) {
       yScale_net = scaleLinear()
@@ -147,26 +149,29 @@ const Earnings: React.FC<EarningsProps> = ({
       .domain([min(labels) as number, max(labels) as number])
       .range([0, barAreaWidth]);
 
-    bars = values_gross.map((row: any, ind: number) => (
+
+      // if (min(labels) < 2005 && values_net !== undefined) {
+        // console.log(values_net)
+    bars = values_net.map((row: any, ind: number) => (
       <Bar
         x={ind * barDimensions.centerToCenter + margin.right}
         // y={barAreaHeight}
-        y_gross={barChartHeight - yScale_gross(row) + margin.top}
+        // y_gross={barChartHeight - yScale_gross(row) + margin.top}
         y_net={(values_net===undefined|| values_net.length ===0)? 0: barChartHeight - yScale_net(values_net[ind]) + margin.top}
         barWidth={barDimensions.barWidth}
         // barHeight_net = {yScale(values_net[ind])+220}
         barHeight_net={(values_net===undefined|| values_net.length ===0)? 0: yScale_net(values_net[ind])}
-        barHeight_gross={yScale_gross(row)}
+        // barHeight_gross={yScale_gross(row)}
         yValue={0}
         key={ind}
         yearLabel={labels[ind]}
         yearLableYPoz={barChartHeight + margin.bottom}
       />
     ))
+    // }
 
 
-
-  }
+  // }
 
   return (
     <>
