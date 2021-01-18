@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { scaleLinear, max, min, select } from "d3";
+import { scaleLinear, max, min, mean, select } from "d3";
 import { create } from "domain";
-
 
 const animateBars = (rectRef: any, y_net: number, barHeight_net: number) => {
   const rect = select(rectRef.current);
-
 
   rect
 
@@ -17,11 +15,9 @@ const animateBars = (rectRef: any, y_net: number, barHeight_net: number) => {
 
 interface BarProps {
   x: number;
-  // y_gross: number;
   y_net: number;
   barWidth: number;
   barHeight_net: number;
-  // barHeight_gross: number;
   yValue: number;
   yearLabel: any;
   yearLableYPoz: number;
@@ -29,18 +25,13 @@ interface BarProps {
 
 const Bar: React.FC<BarProps> = ({
   x,
-  // y_gross,
   y_net,
   barWidth,
   barHeight_net,
-  // barHeight_gross,
   yValue,
   yearLabel,
   yearLableYPoz,
 }) => {
-  // if (isNaN(y_gross)) {
-  //   y_gross = 0;
-  // }
   if (isNaN(y_net)) {
     y_net = 0;
   }
@@ -52,16 +43,9 @@ const Bar: React.FC<BarProps> = ({
     animateBars(rectRef, y_net, barHeight_net);
   });
 
-
   return (
     <g>
-      <rect
-        ref={rectRef}
-        x={x}
-        width={barWidth}
-        fill="black"
-      />
-      {/* <rect x={x} y={y_gross} width={barWidth} height={barHeight_gross} fill="blue"/> */}
+      <rect ref={rectRef} x={x} width={barWidth} fill="black" />
       <text
         x={x}
         y={yearLableYPoz}
@@ -76,21 +60,19 @@ const Bar: React.FC<BarProps> = ({
 interface EarningsProps {
   children?: any;
   selectedCountry?: string;
-  grossEarningsData: any;
   netEarningsData: any;
 
   isFetching: boolean;
 }
 
 const Earnings: React.FC<EarningsProps> = ({
-  grossEarningsData: grossEarningsData,
   netEarningsData: netEarningsData,
   selectedCountry,
   isFetching,
 }) => {
   const barAreaHeight = 400;
   const barAreaWidth = 700;
-  const margin = { top: 10, right: 45, bottom: 30, left: 20 };
+  const margin = { top: 30, right: 70, bottom: 10, left: 50 };
   const barChartHeight = barAreaHeight - margin.bottom;
 
   const barDimensions = {
@@ -101,86 +83,110 @@ const Earnings: React.FC<EarningsProps> = ({
   };
 
   let labels: Array<any> = [];
-  // let values_gross: Array<Number> = [];
   let values_net: Array<Number> = [1, 2, 3];
   let yScale_net: any;
+  let yAxisValues :Array<Number> = [];
+
 
   let bars: any = <rect></rect>;
 
+  function generateYaxisValues(ar :Number[]){
+    const point1  = min(ar)
+    const point5 = max(ar)
+    const point3 = mean([point1, point5])
+    const point2 = mean([point1, point3])
+    const point4 =  mean([point5, point3])
+    let rez  = [point5, point4, point3, point2, point1]
 
-  useEffect(()=>{
-    console.log(isFetching)
-  }, [isFetching])
-  
-  
-    // console.log(netEarningsData)
-    // values_gross = grossEarningsData.values;
-    values_net = netEarningsData.values;
-    if ( values_net !== undefined) {
+    return rez.map((el :any)=>Math.round(el))
+  }
+
+
+  values_net = netEarningsData.values;
+  if (values_net !== undefined) {
     labels = netEarningsData.labels.map((year: any) => parseInt(year));
+  }
 
+  if (min(labels) < 2005 && values_net !== undefined) {
+    const elementsToSlice = 2005 - min(labels);
+    labels = labels.slice(elementsToSlice);
+    values_net = values_net.slice(elementsToSlice);
+  }
+
+  if (min(labels) > 2005 && values_net !== undefined) {
+    const minYear = min(labels);
+    const elementsToAdd: number = minYear - 2005;
+
+    for (let i = 0; i < elementsToAdd; i++) {
+      labels.unshift(labels[0] - 1);
+      values_net.unshift(0);
     }
 
-    if (min(labels) < 2005 && values_net !== undefined) {
-      const elementsToSlice = 2005 - min(labels);
-      labels = labels.slice(elementsToSlice);
-      // values_gross = values_gross.slice(elementsToSlice);
-      values_net = values_net.slice(elementsToSlice);
-    }
-
-    // const yScale_gross = scaleLinear()
-    //   .domain([min(values_gross) as number, max(values_gross) as number])
-    //   .range([5, barChartHeight]);
-
-    if (values_net !== undefined) {
-      yScale_net = scaleLinear()
-        .domain([min(values_net) as number, max(values_net) as number])
-        .range([5, barChartHeight]);
-    } else {
-      //used as a placeholder when waiting for values to arrive
-
-      yScale_net = scaleLinear().domain([0, 100]).range([5, barChartHeight]);
-    }
-
-    const xScale = scaleLinear()
-      .domain([min(labels) as number, max(labels) as number])
-      .range([0, barAreaWidth]);
+    values_net = values_net.slice(elementsToAdd);
+  }
 
 
-      if (values_net !== undefined) {
-     
+
+  if (values_net !== undefined) {
+    yScale_net = scaleLinear()
+      .domain([min(values_net) as number, max(values_net) as number])
+      .range([margin.bottom, barAreaHeight - margin.top]);
+  } else {
+    //used as a placeholder when waiting for values to arrive
+    yScale_net = scaleLinear().domain([0, 100]).range([5, barChartHeight]);
+  }
+
+  const xScale = scaleLinear()
+    .domain([min(labels) as number, max(labels) as number])
+    .range([margin.left, barAreaWidth]);
+
+  if (values_net !== undefined) {
+    values_net  =values_net.map((el :any)=>Math.round(el))
+
+    yAxisValues = generateYaxisValues(values_net)
+    console.log(yAxisValues)
+
+
+
     bars = values_net.map((row: any, ind: number) => (
       <Bar
-        x={ind * barDimensions.centerToCenter + margin.right}
-        // y={barAreaHeight}
-        // y_gross={barChartHeight - yScale_gross(row) + margin.top}
-        y_net={(values_net===undefined|| values_net.length ===0)? 0: barChartHeight - yScale_net(values_net[ind]) + margin.top}
+        x={ind * barDimensions.centerToCenter + margin.left}
+        y_net={
+          values_net === undefined || values_net.length === 0
+            ? 0
+            : barChartHeight - yScale_net(values_net[ind])-10
+        }
         barWidth={barDimensions.barWidth}
-        // barHeight_net = {yScale(values_net[ind])+220}
-        barHeight_net={(values_net===undefined|| values_net.length ===0)? 0: yScale_net(values_net[ind])}
-        // barHeight_gross={yScale_gross(row)}
+        barHeight_net={
+          values_net === undefined || values_net.length === 0
+            ? 0
+            : yScale_net(values_net[ind])
+        }
         yValue={0}
         key={ind}
         yearLabel={labels[ind]}
         yearLableYPoz={barChartHeight + margin.bottom}
       />
-    ))
-    }
-
-
+    ));
+  }
 
   return (
     <>
       <div>{JSON.stringify(netEarningsData)}</div>
 
+      <div>{`${selectedCountry} Net Earnings`}</div>
+
       <div style={{ backgroundColor: "grey", height: 400, width: 700 }}>
         <svg width={barAreaWidth} height={barAreaHeight}>
+          {yAxisValues.map(el=>(
+            <text key={`yaxis ${el}`} x={5} y={barAreaHeight-yScale_net(el)}>{el}</text>
+          ))}
           <line
             id="xAxis"
             x1={margin.left}
-            y1={barChartHeight + margin.top}
+            y1={barChartHeight - margin.bottom}
             x2={barAreaWidth - margin.right}
-            y2={barChartHeight + margin.top}
+            y2={barChartHeight - margin.bottom}
             stroke="black"
           />
 

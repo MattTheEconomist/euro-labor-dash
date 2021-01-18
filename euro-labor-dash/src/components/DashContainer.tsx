@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ControlPanel from "./ControlPanel";
-// import data from "../dataSources/countryCodes.json";
 import {
   generateFetchURL_net,
   generateFetchURL_gross,
@@ -28,7 +27,6 @@ const DashContainer: React.FC = () => {
 
 
 
-    // setNetEarningsData({ data: {}, isFetching: true, status: "" });
     netEarningsData.isFetching=true
 
     fetch(fetchURL_net)
@@ -48,21 +46,7 @@ const DashContainer: React.FC = () => {
 
 
 
-    // setGrossEarningsData({ data: {}, isFetching: true, status: "" , });
 
-    // fetch(fetchURL_gross)
-    //   .then((res) => res.json())
-    //   .then((res) =>
-    //     setGrossEarningsData({
-    //       data: returnLabelsAndValues(res),
-    //       isFetching: false,
-    //       status: "",
-      
-    //     })
-    //   )
-    //   .catch((error: string) =>
-    //     setGrossEarningsData({ data: {}, isFetching: false, status: error , })
-    //   );
   }
 
   useEffect(() => {
@@ -109,12 +93,12 @@ const DashContainer: React.FC = () => {
         <ControlPanel
           changeCountry={changeCountry}
           defaultCountry="Euro area"
+          // defaultCountry="Romania"
         />
       </div>
 
       <div>
         <Earnings
-          grossEarningsData={grossEarningsData.data}
           netEarningsData={netEarningsData.data}
           selectedCountry={selectedCountry}
           isFetching={grossEarningsData.isFetching}
