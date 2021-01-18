@@ -26,18 +26,22 @@ export function generateFetchURL_vacancies(selectedCountry: string) {
 }
 
 
-export function generateFetchURL_net(selectedCountry: string) {
+export function generateFetchURL_gross(selectedCountry: string) {
 let countryCode = getKeyByValue(countryData, selectedCountry);
+
 
 let fetchURL = `https://api.db.nomics.world/v22/series/Eurostat/earn_nt_net/A.EUR.GRS.A1_80.${countryCode}?observations=True`;
 
 return fetchURL;
 }
 
-export function generateFetchURL_gross(selectedCountry: string) {
+export function generateFetchURL_net(selectedCountry: string) {
   let countryCode = getKeyByValue(countryData, selectedCountry);
 
-  let fetchURL = `https://api.db.nomics.world/v22/series/Eurostat/earn_nt_net/A.PPS.GRS.A1_80.${countryCode}?observations=True`;
+  // let fetchURL = `https://api.db.nomics.world/v22/series/Eurostat/earn_nt_net/A.PPS.GRS.A1_80.${countryCode}?observations=True`;
+  let fetchURL = `https://api.db.nomics.world/v22/series/Eurostat/earn_nt_netft/A.VAL_A.PPS.${countryCode}?observations=true`;
+
+ 
 
   return fetchURL;
 }
