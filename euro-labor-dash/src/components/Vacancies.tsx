@@ -6,7 +6,7 @@ import { create } from "domain";
 interface VacancyProps{
 
     selectedCountry?: string;
-    netEarningsData: any;
+    vacancyData: any;
     isFetching: boolean;
 }
 
@@ -14,9 +14,15 @@ interface VacancyProps{
 
 
 const Vacancies: React.FC<VacancyProps>=({
+    vacancyData: vacancyData, 
+    selectedCountry, 
+    isFetching
 
 
 }) =>{
 
-    return null
+    return  <div>{JSON.stringify(vacancyData)}</div>
 }
+
+
+export default Vacancies

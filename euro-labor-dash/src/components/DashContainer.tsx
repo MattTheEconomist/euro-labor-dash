@@ -2,30 +2,38 @@ import React, { useState, useEffect } from "react";
 import ControlPanel from "./ControlPanel";
 import {
   generateFetchURL_net,
-  generateFetchURL_gross,
+  // generateFetchURL_gross,
+  generateFetchURL_vacancies,
 } from "../services/URLgenerationFunctions";
 import Earnings from "./Earnings";
+import Vacancies from "./Vacancies"
+
 
 const DashContainer: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>("Euro area");
-  const [grossEarningsData, setGrossEarningsData] = useState({
-    data: {},
-    isFetching: false,
-    status: "",
+  // const [grossEarningsData, setGrossEarningsData] = useState({
+  //   data: {},
+  //   isFetching: false,
+  //   status: "",
 
-  });
+  // });
   const [netEarningsData, setNetEarningsData] = useState({
     data: {},
     isFetching: false,
     status: "",
-
   });
+  const [vacancyData, setVacancyData] = useState({
+    data:{}, 
+    isFetching: false,
+    status: "",
+  })
+
+
+
 
   function fetchData() {
-    const fetchURL_gross: string = generateFetchURL_gross(selectedCountry);
+    // const fetchURL_gross: string = generateFetchURL_gross(selectedCountry);
     const fetchURL_net: string = generateFetchURL_net(selectedCountry);
-
-
 
     netEarningsData.isFetching=true
 
@@ -43,18 +51,38 @@ const DashContainer: React.FC = () => {
         setNetEarningsData({ data: {}, isFetching: false, status: error, })
       );
 
-
-
-
-
   }
+
+function fetchData_vacancies(){
+
+  const fetchURL_vac: string = generateFetchURL_vacancies(selectedCountry);
+
+  netEarningsData.isFetching=true
+
+  fetch(fetchURL_vac)
+    .then((res) => res.json())
+    .then((res) =>
+        setVacancyData({
+        data: returnLabelsAndValues(res),
+        isFetching: false,
+        status: "",
+
+      })
+    )
+    .catch((error: string) =>
+       setVacancyData({ data: {}, isFetching: false, status: error, })
+    );
+
+}
 
   useEffect(() => {
     fetchData();
+    fetchData_vacancies();
   }, []);
 
   useEffect(() => {
     fetchData();
+    fetchData_vacancies();
   }, [selectedCountry]);
 
   function changeCountry(newCountry: string): void {
@@ -96,12 +124,21 @@ const DashContainer: React.FC = () => {
           // defaultCountry="Romania"
         />
       </div>
+      <div>
+        <Vacancies 
+        selectedCountry={selectedCountry}
+        vacancyData = {vacancyData.data}
+        isFetching = {vacancyData.isFetching}
+        
+
+        />
+      </div>
 
       <div>
         <Earnings
           netEarningsData={netEarningsData.data}
           selectedCountry={selectedCountry}
-          isFetching={grossEarningsData.isFetching}
+          isFetching={netEarningsData.isFetching}
 
         />
       </div>
