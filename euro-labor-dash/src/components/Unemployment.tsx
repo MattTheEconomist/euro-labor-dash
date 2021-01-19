@@ -22,7 +22,19 @@ const Unemployment: React.FC<UnemploymentProps>=({
 
 }) =>{
 
-    console.log(unemploymentData)
+    let labels :Array<any> = unemploymentData.labels
+    labels  = labels.filter(el=>parseInt(el.split("-"))>=2005)
+    labels = labels.map(el=>{
+        const year = el.split("-")[0]
+        const qtr = el.split("-")[1]
+        const month = parseInt(qtr[1])*3
+        return new Date(`${year}-${month}-01`)
+        })
+
+
+
+
+    console.log(labels)
 
     return  <div>{JSON.stringify(unemploymentData)}</div>
 }
