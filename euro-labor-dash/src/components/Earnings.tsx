@@ -144,7 +144,6 @@ const Earnings: React.FC<EarningsProps> = ({
     values_net  =values_net.map((el :any)=>Math.round(el))
 
     yAxisValues = generateYaxisValues(values_net)
-    console.log(yAxisValues)
 
 
 
