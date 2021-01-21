@@ -88,7 +88,8 @@ const Earnings: React.FC<EarningsProps> = ({
   let yAxisValues :Array<Number> = [];
 
 
-  let bars: any = <rect></rect>;
+  // let bars: any = <rect></rect>;
+  let bars: any;
 
   function generateYaxisValues(ar :Number[]){
     const point1  = min(ar)
