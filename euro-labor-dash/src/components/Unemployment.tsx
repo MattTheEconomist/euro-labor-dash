@@ -1,6 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { scaleLinear, max, min, mean, select, lab } from "d3";
-import { create } from "domain";
+// import { create } from "domain";
+// import { BaseOptions } from "vm";
+
+const animtaeDots=(dotRef: any, dotHeight: number, x:number )=>{
+
+  const dot = select(dotRef.current)
+
+  console.log(dot)
+
+  dot 
+  .transition()
+  .duration(1000)
+  .attr("cy", dotHeight)
+  .attr("cx", x)
+
+  // console.log("yo")
+  
+}
+
 
 interface DotProps {
   x: number;
@@ -9,6 +27,7 @@ interface DotProps {
   yValue: number;
   yearLabel: any;
   yearLableYPoz: number;
+  renderYear: boolean; 
 }
 
 const Dot: React.FC<DotProps> = ({
@@ -18,17 +37,26 @@ const Dot: React.FC<DotProps> = ({
   yValue,
   yearLabel,
   yearLableYPoz,
+  renderYear
 }) => {
   if (isNaN(y_unemp)) {
     y_unemp = 0;
   }
 
-  // const axisText : number;
   const dotRef: any = React.createRef();
+
+  useEffect(()=>{
+    animtaeDots(dotRef, dotHeight, x)
+  })
+
 
   return (
     <g>
-      <circle fill="black" ref={dotRef} x={x} y={dotHeight} r={3}></circle>
+      <circle fill="black" ref={dotRef}
+      //  cx={x} 
+      //  cy={dotHeight}
+        r={3}></circle>
+      {renderYear? <text x={x} y={yearLableYPoz}>{yearLabel}</text>: <></>}
     </g>
   );
 };
@@ -60,8 +88,9 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   let yScale: any;
   let xScale: any;
   let yAxisValues: Array<Number> = [];
+  let yAxis: any; 
 
-  let dots: any ;
+  let dots: any;
 
   function generateYaxisValues(ar: Number[]) {
     const point1 = min(ar);
@@ -83,7 +112,6 @@ const Unemployment: React.FC<UnemploymentProps> = ({
       const month = parseInt(qtr[1]) * 3;
       return new Date(`${year}-${month}-01`);
     });
-    // console.log(labels)
   }
 
   values_unemp = unemploymentData.values;
@@ -108,47 +136,47 @@ const Unemployment: React.FC<UnemploymentProps> = ({
       .range([margin.bottom, lineAreaHeight - margin.top]);
   }
 
-  if(values_unemp !== undefined) {
+  if (values_unemp !== undefined) {
+    yAxisValues = generateYaxisValues(values_unemp);
 
-    yAxisValues = generateYaxisValues(values_unemp)
+    dots = values_unemp.map((row: any, ind: number) => (
+      <Dot
+        x={(ind * margin.centerToCenter) + margin.left}
+        y_unemp={
+          values_unemp === undefined || values_unemp.length === 0
+            ? 0
+            : lineAreaHeight - yScale(values_unemp[ind]) - 10
+        }
+        dotHeight={yScale(row)}
+        yValue={0}
+        yearLabel={labels[ind].getFullYear()}
+        yearLableYPoz={lineAreaHeight}
+        renderYear={
+          ind%4===0? true: false
+        }
 
-  dots = values_unemp.map((row: any, ind: number) =>( 
-  <Dot 
-  x = {ind * margin.centerToCenter + margin.left}
-  y_unemp ={ values_unemp === undefined || values_unemp.length === 0
-    ? 0
-    : lineAreaHeight - yScale(values_unemp[ind])-10}
-//   dotHeight = { values_unemp === undefined || values_unemp.length === 0
-//     ? 0
-//     : yScale(values_unemp[ind])}
+      />
+    ));
 
-dotHeight = {yScale(values_unemp[ind])}
-
-
-
-  yValue={0}
-  yearLabel = {labels[ind]}
-  yearLableYPoz= {lineAreaHeight +margin.bottom}
-  />));
+    yAxis = yAxisValues.map(el=>(
+      <text key={`yaxis ${el}`} x={5} y={lineAreaHeight-yScale(el)}>{el}</text>
+      ))
+   
 
   }
 
   return (
-      <>
-  <div>{JSON.stringify(unemploymentData)}</div>
-  
-  <div style={{ backgroundColor: "grey", height: 400, width: 700 }}>
-    <svg width={lineAreaWidth} height={lineAreaHeight}>
+    <>
+      {/* <div>{JSON.stringify(unemploymentData)}</div> */}
 
-    {dots}
-
-    </svg>
-
-
-
-  </div>
-  </>
-  )
+      <div style={{ backgroundColor: "grey", height: 400, width: 700 }}>
+        <svg width={lineAreaWidth} height={lineAreaHeight}>
+          {dots}
+          {yAxis}
+        </svg>
+      </div>
+    </>
+  );
 };
 
 export default Unemployment;

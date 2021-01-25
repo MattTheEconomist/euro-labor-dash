@@ -155,6 +155,7 @@ const DashContainer: React.FC = () => {
         />
       </div> */}
 
+
       <div>
         <Unemployment
         isFetching = {unemploymentData.isFetching}
@@ -163,6 +164,7 @@ const DashContainer: React.FC = () => {
         
         />
       </div>
+      <br style={{backgroundColor:"white"}}></br>
 
       <div>
         <Earnings

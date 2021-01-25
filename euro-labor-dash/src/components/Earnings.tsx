@@ -174,7 +174,7 @@ const Earnings: React.FC<EarningsProps> = ({
     <>
       {/* <div>{JSON.stringify(netEarningsData)}</div> */}
 
-      <div>{`${selectedCountry} Net Earnings`}</div>
+      {/* <div>{`${selectedCountry} Net Earnings`}</div> */}
 
       <div style={{ backgroundColor: "grey", height: 400, width: 700 }}>
         <svg width={barAreaWidth} height={barAreaHeight}>
