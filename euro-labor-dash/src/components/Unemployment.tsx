@@ -1,24 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { scaleLinear, max, min, mean, select, lab } from "d3";
+import { worker } from "cluster";
 // import { create } from "domain";
 // import { BaseOptions } from "vm";
 
-const animtaeDots=(dotRef: any, dotHeight: number, x:number )=>{
+const animtaeDots = (dotRef: any, dotHeight: number, x: number) => {
+  const dot = select(dotRef.current);
 
-  const dot = select(dotRef.current)
+  console.log(dot);
 
-  console.log(dot)
-
-  dot 
-  .transition()
-  .duration(1000)
-  .attr("cy", dotHeight)
-  .attr("cx", x)
+  dot.transition().duration(1000).attr("cy", dotHeight).attr("cx", x);
 
   // console.log("yo")
-  
-}
-
+};
 
 interface DotProps {
   x: number;
@@ -27,7 +21,7 @@ interface DotProps {
   yValue: number;
   yearLabel: any;
   yearLableYPoz: number;
-  renderYear: boolean; 
+  renderYear: boolean;
 }
 
 const Dot: React.FC<DotProps> = ({
@@ -37,7 +31,7 @@ const Dot: React.FC<DotProps> = ({
   yValue,
   yearLabel,
   yearLableYPoz,
-  renderYear
+  renderYear,
 }) => {
   if (isNaN(y_unemp)) {
     y_unemp = 0;
@@ -45,18 +39,20 @@ const Dot: React.FC<DotProps> = ({
 
   const dotRef: any = React.createRef();
 
-  useEffect(()=>{
-    animtaeDots(dotRef, dotHeight, x)
-  })
-
+  useEffect(() => {
+    animtaeDots(dotRef, dotHeight, x);
+  });
 
   return (
     <g>
-      <circle fill="black" ref={dotRef}
-      //  cx={x} 
-      //  cy={dotHeight}
-        r={3}></circle>
-      {renderYear? <text x={x} y={yearLableYPoz}>{yearLabel}</text>: <></>}
+      <circle fill="black" ref={dotRef} r={3}></circle>
+      {renderYear ? (
+        <text x={x} y={yearLableYPoz}>
+          {yearLabel}
+        </text>
+      ) : (
+        <></>
+      )}
     </g>
   );
 };
@@ -84,23 +80,25 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   const lineChartHeight = lineAreaHeight - margin.bottom;
 
   let labels: Array<any> = [];
-  let values_unemp: Array<Number> = [];
+  let values_unemp: Array<number> = [];
   let yScale: any;
   let xScale: any;
-  let yAxisValues: Array<Number> = [];
-  let yAxis: any; 
+  let yAxisValues: Array<number> = [];
+  let yAxis: any;
 
   let dots: any;
 
-  function generateYaxisValues(ar: Number[]) {
+  // function generateYaxisValues(ar: Array<number|undefined|any>) {
+  function generateYaxisValues(ar: Array<number>) {
     const point1 = min(ar);
     const point5 = max(ar);
     const point3 = mean([point1, point5]);
-    const point2 = mean([point1, point3]);
-    const point4 = mean([point5, point3]);
+    const point2= mean([point1, point3]);
+    const point4= mean([point5, point3]);
     let rez = [point5, point4, point3, point2, point1];
 
-    return rez.map((el: any) => Math.round(el));
+    return rez.map((el: any) => ( parseFloat(el.toFixed(2))))
+      
   }
 
   labels = unemploymentData.labels;
@@ -141,7 +139,7 @@ const Unemployment: React.FC<UnemploymentProps> = ({
 
     dots = values_unemp.map((row: any, ind: number) => (
       <Dot
-        x={(ind * margin.centerToCenter) + margin.left}
+        x={ind * margin.centerToCenter + margin.left}
         y_unemp={
           values_unemp === undefined || values_unemp.length === 0
             ? 0
@@ -151,18 +149,15 @@ const Unemployment: React.FC<UnemploymentProps> = ({
         yValue={0}
         yearLabel={labels[ind].getFullYear()}
         yearLableYPoz={lineAreaHeight}
-        renderYear={
-          ind%4===0? true: false
-        }
-
+        renderYear={ind % 4 === 0 ? true : false}
       />
     ));
 
-    yAxis = yAxisValues.map(el=>(
-      <text key={`yaxis ${el}`} x={5} y={lineAreaHeight-yScale(el)}>{el}</text>
-      ))
-   
-
+    yAxis = yAxisValues.map((el) => (
+      <text key={`yaxis ${el}`} x={5} y={lineAreaHeight - yScale(el)}>
+        {el.toFixed(2)}
+      </text>
+    ));
   }
 
   return (
