@@ -1,17 +1,94 @@
 import React, { useEffect, useState } from "react";
-import { scaleLinear, max, min, mean, select, lab } from "d3";
+import { scaleLinear, max, min, line, mean, select } from "d3";
 import { worker } from "cluster";
 // import { create } from "domain";
 // import { BaseOptions } from "vm";
 
+const animateLine = (
+  currentLine: any,
+  // yScale: any,
+  // xScale: any,
+  values_unempScaled: Array<number>,
+  // labelsScaled: Array<number>
+) => {
+
+
+  // console.log(xScale(100))
+
+
+
+  // const drawLine = line()
+  //   .x((d, i) => xScale(i))
+  //   .y((d) => yScale(d));
+
+  const drawLine = line()
+    .x((d:any, i:any) => (i*10)+50)
+    .y((d:any) => d);
+
+  // let values_unemp: Array<number>;
+  // let temp = values_unemp
+
+  // const linePath = drawLine(temp)
+  const linePath = drawLine(values_unempScaled as Array<number> | any);
+  // const linePath = drawLine(values_unempScaled as any);
+
+  // const testPath:number[]|any = [1,2,3,4,5,6,7,8,9,100]
+  // const testPath:number[]|any = [1,2,3,4,5,6,7,8,9,100]
+
+  // console.log(typeof values_unempScaled[0])
+  // console.log(values_unempScaled)
+  // const linePath = drawLine(testPath);
+
+  currentLine
+    .transition()
+    .duration(1000)
+    .attr("d", linePath)
+    .attr("fill", "none")
+    .attr("stroke", "black")
+};
+
+interface LineProps {
+  xScale: any;
+  yScale: any;
+  values_unemp: any;
+}
+
+// const Line: React.FC<LineProps> =(xScale:any, yScale:any, values_unemp: Array<number>)=>{
+// const Line: any = (xScale: any, yScale: any, values_unemp: Array<number>) => {
+// const Line: any = (  values_unempScaled: Array<number>) => {
+const Line: any = (  values_unempScaled: any, labelsScaled:any) => {
+  const [lineValues, setLineValues] = useState([1,2,3])
+
+
+  const lineRef: any = React.createRef();
+
+  // console.log(xScale(100))
+  // console.log(yScale(100))
+
+  values_unempScaled = values_unempScaled.values_unempScaled
+  labelsScaled = labelsScaled.lablesScaled
+
+  useEffect(() => {
+    if( values_unempScaled !== undefined){
+      setLineValues( values_unempScaled)
+    }
+    
+
+    const currentLine = select(lineRef.current);
+    animateLine(currentLine,   values_unempScaled);
+  });
+
+  return (
+    <g>
+      <path ref={lineRef} />
+    </g>
+  );
+};
+
 const animtaeDots = (dotRef: any, dotHeight: number, x: number) => {
   const dot = select(dotRef.current);
 
-  console.log(dot);
-
   dot.transition().duration(1000).attr("cy", dotHeight).attr("cx", x);
-
-  // console.log("yo")
 };
 
 interface DotProps {
@@ -85,6 +162,7 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   let xScale: any;
   let yAxisValues: Array<number> = [];
   let yAxis: any;
+  let lineComponent: any; 
 
   let dots: any;
 
@@ -93,12 +171,11 @@ const Unemployment: React.FC<UnemploymentProps> = ({
     const point1 = min(ar);
     const point5 = max(ar);
     const point3 = mean([point1, point5]);
-    const point2= mean([point1, point3]);
-    const point4= mean([point5, point3]);
+    const point2 = mean([point1, point3]);
+    const point4 = mean([point5, point3]);
     let rez = [point5, point4, point3, point2, point1];
 
-    return rez.map((el: any) => ( parseFloat(el.toFixed(2))))
-      
+    return rez.map((el: any) => parseFloat(el.toFixed(2)));
   }
 
   labels = unemploymentData.labels;
@@ -132,7 +209,14 @@ const Unemployment: React.FC<UnemploymentProps> = ({
     yScale = scaleLinear()
       .domain([0, 100])
       .range([margin.bottom, lineAreaHeight - margin.top]);
+
+     xScale = scaleLinear()
+      .domain([0, 100])
+      .range([margin.bottom, lineAreaHeight - margin.top]);
+
+    
   }
+  
 
   if (values_unemp !== undefined) {
     yAxisValues = generateYaxisValues(values_unemp);
@@ -158,6 +242,20 @@ const Unemployment: React.FC<UnemploymentProps> = ({
         {el.toFixed(2)}
       </text>
     ));
+
+    const values_unempScaled = values_unemp.map(el=>yScale(el))
+    console.log(values_unempScaled)
+
+    const labelsScaled = values_unemp.map((el, ind)=>ind * margin.centerToCenter + margin.left)
+
+
+    lineComponent= <Line  values_unempScaled={values_unempScaled} labelsScaled={labelsScaled} />
+    // lineComponent= <Line  values_unempScaled={values_unemp.map(el=>yScale(el)) } />
+    // console.log(xScale(100))
+
+
+      
+
   }
 
   return (
@@ -168,6 +266,9 @@ const Unemployment: React.FC<UnemploymentProps> = ({
         <svg width={lineAreaWidth} height={lineAreaHeight}>
           {dots}
           {yAxis}
+          {lineComponent}
+
+          
         </svg>
       </div>
     </>
