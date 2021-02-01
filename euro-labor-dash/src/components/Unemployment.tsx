@@ -1,142 +1,128 @@
 import React, { useEffect, useState } from "react";
-import { scaleLinear, max, min, line, mean, select, geoConicConformalRaw } from "d3";
-import { worker } from "cluster";
+// import Dotz from "C:/Users/Admin/Documents/js/react/euro-labor-dash/euro-labor-dash/src/components/graphComponents/Dotz"
+import Dotz from "../components/graphComponents/Dotz"
+import Linez from "../components/graphComponents/Line"
+import {
+  scaleLinear,
+  max,
+  min,
+  line,
+  mean,
+  select,
+} from "d3";
+
+
+// import { worker } from "cluster";
 // import { create } from "domain";
 // import { BaseOptions } from "vm";
 
-const animateLine = (
-  currentLine: any,
-  xScale: any,
-  values_unempScaled: Array<number>,
- 
-) => {
+// const animateLine = (
+//   currentLine: any,
+//   xScale: any,
+//   values_unempScaled: Array<number>
+// ) => {
 
-console.log('ANIMATE', xScale)
-// values_unempScaled BECOMES undefined after its passed through 
-  // console.log('ANIMATE', values_unempScaled)
+//   // does not work
+//   // console.log("ANIMATE", xScale);
 
+//   if (Array.isArray(values_unempScaled)) {
+//     const drawLine = line()
+//       .x((d: any, i: any) => i * 10 + 50)
+//       //Passing function does not work :(
+//       // .x((d: any, i: any) => xScale(i))
+//       .y((d: any) => d);
 
-  // if (values_unempScaled[1] === undefined) {
-  // if (typeof values_unempScaled[1] === undefined) {
-  if (Array.isArray(values_unempScaled)) {
-    // values_unempScaled=[]
+//     const linePath = drawLine(values_unempScaled as Array<number> | any);
 
+//     currentLine
+//       .transition()
+//       .duration(1000)
+//       .attr("d", linePath)
+//       .attr("fill", "none")
+//       .attr("stroke", "black");
+//   }
+// };
 
-    // console.log("hi")
+// interface LineProps {
+//   xScale: any; 
+//   yScale: any;
+//   values_unemp: any;
+// }
 
+// const Line: any = (values_unempScaled: any, labelsScaled: any, xScale: any) => {
+//   const [lineValues, setLineValues] = useState([1, 2, 3]);
 
- 
+//   const lineRef: any = React.createRef();
 
-  // console.log(values_unempScaled)
-  const drawLine = line()
-    .x((d: any, i: any) => i * 10 + 50)
-    // .x((d: any, i: any) => xScale(i))
-    .y((d: any) => d);
+//   values_unempScaled = values_unempScaled.values_unempScaled;
 
-  const linePath = drawLine(values_unempScaled as Array<number> | any);
+//   // starting point for not working
+//   // console.log('WITHIN LINE', xScale)
+//   // console.log('WITHIN LINE', xScale())
 
-  currentLine
-    .transition()
-    .duration(1000)
-    .attr("d", linePath)
-    .attr("fill", "none")
-    .attr("stroke", "black");
+//   labelsScaled = labelsScaled.lablesScaled;
 
-  }
-  
-};
+//   useEffect(() => {
+//     if (values_unempScaled.length > 1) {
+//       // console.log("BEFORE ANIMATE", xScale);
+//       setLineValues(values_unempScaled);
 
-interface LineProps {
-  xScale: any;
-  yScale: any;
-  values_unemp: any;
-}
+//       const currentLine = select(lineRef.current);
+//       animateLine(currentLine, xScale, values_unempScaled);
+//     }
+//   });
 
-const Line: any = (values_unempScaled: any, labelsScaled: any, xScale: any) => {
-  const [lineValues, setLineValues] = useState([1, 2, 3]);
+//   return (
+//     <g>
+//       <path ref={lineRef} />
+//     </g>
+//   );
+// };
 
-  const lineRef: any = React.createRef();
+// const animtaeDots = (dotRef: any, dotHeight: number, x: number) => {
+//   const dot = select(dotRef.current);
 
-  // console.log( "BEFORE ANIMATE",xScale)
+//   dot.transition().duration(1000).attr("cy", dotHeight).attr("cx", x);
+// };
 
-  values_unempScaled = values_unempScaled.values_unempScaled;
+// interface DotProps {
+//   x: number;
+//   y_unemp: number;
+//   dotHeight: number;
+//   yValue: number;
+//   yearLabel: any;
+//   yearLableYPoz: number;
+//   renderYear: boolean;
+// }
 
-  // defined here
-  // console.log(values_unempScaled)
+// const Dot: React.FC<DotProps> = ({
+//   x,
+//   y_unemp,
+//   dotHeight,
+//   yValue,
+//   yearLabel,
+//   yearLableYPoz,
+//   renderYear,
+// }) => {
+//   const dotRef: any = React.createRef();
 
-  // values_unempScaled = values_unempScaled;
-  labelsScaled = labelsScaled.lablesScaled;
+//   useEffect(() => {
+//     animtaeDots(dotRef, dotHeight, x);
+//   });
 
-  const fakeProp = [4,5,6]
-
-  useEffect(() => {
-    // if (Array.isArray(values_unempScaled)) {
-    if (values_unempScaled.length>1) {
-      // console.log( "BEFORE ANIMATE",values_unempScaled)
-      console.log( "BEFORE ANIMATE",xScale)
-      setLineValues(values_unempScaled);
-
-      const currentLine = select(lineRef.current);
-      // animateLine(currentLine, lineValues, xScale);
-      animateLine(currentLine, xScale, values_unempScaled);
-    }
-  });
-
-  return (
-    <g>
-      <path ref={lineRef} />
-    </g>
-  );
-};
-
-const animtaeDots = (dotRef: any, dotHeight: number, x: number) => {
-  const dot = select(dotRef.current);
-
-  dot.transition().duration(1000).attr("cy", dotHeight).attr("cx", x);
-};
-
-interface DotProps {
-  x: number;
-  y_unemp: number;
-  dotHeight: number;
-  yValue: number;
-  yearLabel: any;
-  yearLableYPoz: number;
-  renderYear: boolean;
-}
-
-const Dot: React.FC<DotProps> = ({
-  x,
-  y_unemp,
-  dotHeight,
-  yValue,
-  yearLabel,
-  yearLableYPoz,
-  renderYear,
-}) => {
-  // if (isNaN(y_unemp)) {
-  //   y_unemp = 0;
-  // }
-
-  const dotRef: any = React.createRef();
-
-  useEffect(() => {
-    animtaeDots(dotRef, dotHeight, x);
-  });
-
-  return (
-    <g>
-      <circle fill="black" ref={dotRef} r={3}></circle>
-      {renderYear ? (
-        <text x={x} y={yearLableYPoz}>
-          {yearLabel}
-        </text>
-      ) : (
-        <></>
-      )}
-    </g>
-  );
-};
+//   return (
+//     <g>
+//       <circle fill="black" ref={dotRef} r={3}></circle>
+//       {renderYear ? (
+//         <text x={x} y={yearLableYPoz}>
+//           {yearLabel}
+//         </text>
+//       ) : (
+//         <></>
+//       )}
+//     </g>
+//   );
+// };
 
 interface UnemploymentProps {
   selectedCountry?: string;
@@ -167,7 +153,7 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   let yAxisValues: Array<number> = [];
   let yAxis: any;
   let lineComponent: any;
-  let values_unempScaled: Array<any>=[1,2,3]
+  let values_unempScaled: Array<any> = [1, 2, 3];
 
   let dots: any;
 
@@ -195,9 +181,12 @@ const Unemployment: React.FC<UnemploymentProps> = ({
 
   values_unemp = unemploymentData.values;
 
-  xScale = (index: number) => {
+  xScale = function(index: number)  {
     return index * margin.centerToCenter + margin.left;
   };
+
+  // works here
+  // console.log('AFTER CREATION', xScale)
 
   if (values_unemp !== undefined) {
     const elementsToSlice = values_unemp.length - labels.length;
@@ -215,14 +204,24 @@ const Unemployment: React.FC<UnemploymentProps> = ({
 
   if (values_unemp !== undefined) {
     values_unempScaled = values_unemp.map((el) => yScale(el));
-    // console.log(values_unempScaled);
 
     const labelsScaled = values_unemp.map((el, ind) => xScale(ind));
 
     yAxisValues = generateYaxisValues(values_unemp);
 
     dots = values_unempScaled.map((row: any, ind: number) => (
-      <Dot
+      // <Dot
+      //   x={xScale(ind)}
+      //   //use for tooltip later
+      //   y_unemp={values_unemp[ind]}
+      //   dotHeight={row}
+      //   yValue={0}
+      //   yearLabel={labels[ind].getFullYear()}
+      //   yearLableYPoz={lineAreaHeight}
+      //   renderYear={ind % 4 === 0 ? true : false}
+      // />
+      <Dotz
+        key={Math.random()}
         x={xScale(ind)}
         //use for tooltip later
         y_unemp={values_unemp[ind]}
@@ -232,6 +231,8 @@ const Unemployment: React.FC<UnemploymentProps> = ({
         yearLableYPoz={lineAreaHeight}
         renderYear={ind % 4 === 0 ? true : false}
       />
+
+
     ));
 
     yAxis = yAxisValues.map((el) => (
@@ -240,12 +241,12 @@ const Unemployment: React.FC<UnemploymentProps> = ({
       </text>
     ));
 
-    console.log('BEFORE LINE', xScale)
+    // works here
+    // console.log("BEFORE LINE", xScale);
 
     lineComponent = (
-      <Line
+      <Linez
         values_unempScaled={values_unempScaled}
-        // values_unempScaled={values_unemp.length>1?values_unempScaled:[2,3,4]}
         labelsScaled={labelsScaled}
         xScale={xScale}
       />
