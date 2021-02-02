@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { scaleLinear, max, min, mean, select } from "d3";
-import { create } from "domain";
+// import { create } from "domain";
 
 const animateBars = (rectRef: any, y_net: number, barHeight_net: number) => {
   const rect = select(rectRef.current);

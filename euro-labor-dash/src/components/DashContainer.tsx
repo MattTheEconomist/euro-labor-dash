@@ -96,14 +96,15 @@ const DashContainer: React.FC = () => {
 
 // }
 
-  useEffect(() => {
-    fetchData_net();
-    // fetchData_vacancies();
-    fetchData_unemployemnt()
-  }, []);
+  // useEffect(() => {
+  //   fetchData_net();
+  //   // fetchData_vacancies();
+  //   fetchData_unemployemnt()
+  // }, [selectedCountry]);
 
   useEffect(() => {
     fetchData_net();
+    console.log('fetched')
     // fetchData_vacancies();
     fetchData_unemployemnt()
   }, [selectedCountry]);

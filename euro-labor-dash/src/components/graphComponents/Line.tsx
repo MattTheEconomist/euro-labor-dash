@@ -37,7 +37,7 @@ import {
         const currentLine = select(lineRef.current);
         animateLine(currentLine, xScale, values_unempScaled);
       }
-    });
+    },[values_unempScaled]);
   
     return (
       <g>
@@ -52,8 +52,6 @@ import {
     values_unempScaled: Array<number>
   ) => {
   
-    // does not work
-    // console.log("ANIMATE", xScale);
   
     if (Array.isArray(values_unempScaled)) {
       const drawLine = line()
