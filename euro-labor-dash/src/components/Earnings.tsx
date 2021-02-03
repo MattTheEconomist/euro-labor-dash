@@ -1,61 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { scaleLinear, max, min, mean, select } from "d3";
-// import { create } from "domain";
+import Bar from "../components/graphComponents/Barz";
+import {
+  generateXaxisValues,
+  generateYaxisValues,
+} from "../services/graphUtilityFunctions";
 
-const animateBars = (rectRef: any, y_net: number, barHeight_net: number) => {
-  const rect = select(rectRef.current);
-
-  rect
-
-    .transition()
-    .duration(1000)
-    .attr("height", barHeight_net)
-    .attr("y", y_net);
-};
-
-interface BarProps {
-  x: number;
-  y_net: number;
-  barWidth: number;
-  barHeight_net: number;
-  yValue: number;
-  yearLabel: any;
-  yearLableYPoz: number;
-}
-
-const Bar: React.FC<BarProps> = ({
-  x,
-  y_net,
-  barWidth,
-  barHeight_net,
-  yValue,
-  yearLabel,
-  yearLableYPoz,
-}) => {
-  if (isNaN(y_net)) {
-    y_net = 0;
-  }
-
-  const axisText: number = 125;
-  const rectRef: any = React.createRef();
-
-  useEffect(() => {
-    animateBars(rectRef, y_net, barHeight_net);
-  });
-
-  return (
-    <g>
-      <rect ref={rectRef} x={x} width={barWidth} fill="black" />
-      <text
-        x={x}
-        y={yearLableYPoz}
-        // style={{transform:'rotate(1deg)'}}
-      >
-        {yearLabel}
-      </text>
-    </g>
-  );
-};
 
 interface EarningsProps {
   children?: any;
@@ -83,24 +33,24 @@ const Earnings: React.FC<EarningsProps> = ({
   };
 
   let labels: Array<any> = [];
-  let values_net: Array<Number> = [1, 2, 3];
+  let values_net: Array<number> = [1, 2, 3];
   let yScale_net: any;
-  let yAxisValues :Array<Number> = [];
+  let yAxisValues :Array<number> = [];
 
 
   // let bars: any = <rect></rect>;
   let bars: any;
 
-  function generateYaxisValues(ar :Number[]){
-    const point1  = min(ar)
-    const point5 = max(ar)
-    const point3 = mean([point1, point5])
-    const point2 = mean([point1, point3])
-    const point4 =  mean([point5, point3])
-    let rez  = [point5, point4, point3, point2, point1]
+  // function generateYaxisValues(ar :Number[]){
+  //   const point1  = min(ar)
+  //   const point5 = max(ar)
+  //   const point3 = mean([point1, point5])
+  //   const point2 = mean([point1, point3])
+  //   const point4 =  mean([point5, point3])
+  //   let rez  = [point5, point4, point3, point2, point1]
 
-    return rez.map((el :any)=>Math.round(el))
-  }
+  //   return rez.map((el :any)=>Math.round(el))
+  // }
 
 
   values_net = netEarningsData.values;
@@ -124,8 +74,15 @@ const Earnings: React.FC<EarningsProps> = ({
     }
 
     values_net = values_net.slice(elementsToAdd);
+    
   }
 
+  if(Array.isArray(values_net)){
+
+
+    values_net = values_net.map((el)=>Math.round(el/1000))
+  }
+  
 
 
   if (values_net !== undefined) {
@@ -145,6 +102,7 @@ const Earnings: React.FC<EarningsProps> = ({
     values_net  =values_net.map((el :any)=>Math.round(el))
 
     yAxisValues = generateYaxisValues(values_net)
+    // yAxisValues = yAxisValues.map((el)=>Math.round(el/1000))
 
 
 

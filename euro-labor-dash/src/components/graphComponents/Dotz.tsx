@@ -62,20 +62,28 @@ const Dot: React.FC<DotProps> = ({
 }) => {
   const dotRef: any = React.createRef();
 
-  useEffect(() => {
-    animtaeDots(dotRef, dotHeight, x);
-  },);
+  // useEffect(() => {
+  //   animtaeDots(dotRef, dotHeight, x);
+  // },);
 
   return (
     <g>
-      <circle fill="black" ref={dotRef} r={3}></circle>
-      {renderYear ? (
+
+      {/* <filter id={`dot_${x}_filter`}> */}
+      <filter id={`dot_filter`}>
+        <feFlood  floodOpacity="0.3"  />
+      </filter>
+
+      {/* <circle fill="black" ref={dotRef} r={3}  cx={x} cy={dotHeight} style={{filter: url(`#dot_filter`)}} ></circle> */}
+      {/* <circle fill="black" ref={dotRef} r={3}  cx={x} cy={dotHeight} style={{filter:`#dot_filter`}} ></circle> */}
+      <circle fill="black" ref={dotRef} r={3}  cx={x} cy={dotHeight} fillOpacity="0.5" ></circle>
+      {/* {renderYear ? (
         <text x={x} y={yearLableYPoz}>
           {yearLabel}
         </text>
       ) : (
         <></>
-      )}
+      )} */}
     </g>
   );
 };

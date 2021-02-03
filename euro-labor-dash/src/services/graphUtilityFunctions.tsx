@@ -3,9 +3,7 @@ import {
     scaleLinear,
     max,
     min,
-    line,
     mean,
-    select,
   } from "d3";
 
 
@@ -20,11 +18,15 @@ export function generateYaxisValues(ar: Array<number>) {
     return rez.map((el: any) => parseFloat(el.toFixed(2)));
   }
 
-  export function generateXaxisValues(labelsFormatted:Array<number>, isQuarterly: boolean){
-    if(!isQuarterly){
-        return labelsFormatted.map((year:any)=>parseInt(year))
+  export function generateXaxisValues(labels:Array<any>){
+    const isQuarterly = String(labels[1]).length>5
+
+    if (isQuarterly){
+      
+      return labels.filter((el:any, ind:number)=>ind%4==0).map((el:any)=>el.getFullYear())
     }else{
-        return labelsFormatted.filter((el:any, ind:number)=>ind%4==0).map((el:any)=>el.getFullYear())
+      return labels.map((year:any)=>parseInt(year))
+
     }
 
   }

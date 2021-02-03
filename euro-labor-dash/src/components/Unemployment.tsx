@@ -23,10 +23,10 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   const lineAreaHeight = 400;
   const lineAreaWidth = 700;
   const margin = {
-    top: 30,
-    right: 70,
-    bottom: 10,
-    left: 50,
+    top: 20,
+    right: 10,
+    bottom: 15,
+    left: 40,
     centerToCenter: 40,
   };
   const lineChartHeight = lineAreaHeight - margin.bottom;
@@ -39,6 +39,8 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   let xAxisValues: Array<number> = [];
   let yAxis: any;
   let xAxis: any;
+  let xAxisLine: any;
+  let yAxisLine: any;
   let lineComponent: any;
   let values_unempScaled: Array<any> = [1, 2, 3];
   let renderYear: boolean[];
@@ -50,7 +52,7 @@ const Unemployment: React.FC<UnemploymentProps> = ({
 
   if (Array.isArray(labels)) {
     labels = formatQuarterlyData(labels);
-    xAxisValues = generateXaxisValues(labels, true);
+    xAxisValues = generateXaxisValues(labels);
   }
 
   xScale = function (index: number) {
@@ -63,7 +65,7 @@ const Unemployment: React.FC<UnemploymentProps> = ({
 
     yScale = scaleLinear()
       .domain([min(values_unemp) as number, max(values_unemp) as number])
-      .range([margin.bottom, lineAreaHeight - margin.top]);
+      .range([margin.bottom + 50, lineAreaHeight - margin.top - 50]);
   } else {
     //used as a placeholder when waiting for values to arrive
     yScale = scaleLinear()
@@ -74,14 +76,16 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   if (values_unemp !== undefined) {
     values_unempScaled = values_unemp.map((el) => yScale(el));
     const labelsScaled = values_unemp.map((el, ind) => xScale(ind));
-    const renderYear = values_unemp.map((el, ind) =>
-      ind % 4 === 0 ? true : false
-    );
 
     yAxisValues = generateYaxisValues(values_unemp);
 
     yAxis = yAxisValues.map((el) => (
-      <text key={`yaxis ${el}`} x={5} y={lineAreaHeight - yScale(el)}>
+      <text
+        fontSize="small"
+        key={`yaxis ${el}`}
+        x={5}
+        y={lineAreaHeight - yScale(el)}
+      >
         {el.toFixed(2)}
       </text>
     ));
@@ -91,13 +95,33 @@ const Unemployment: React.FC<UnemploymentProps> = ({
         key={`xAxis ${el}`}
         x={xScale(ind)}
         y={lineAreaHeight - margin.bottom}
+        fontSize="small"
       >
         {el}
       </text>
     ));
 
-    console.log(xAxis);
+    xAxisLine = (
+      <line
+        id="xAxis_unemp"
+        x1={margin.left}
+        y1={lineChartHeight - margin.bottom}
+        x2={lineAreaWidth - margin.right}
+        y2={lineChartHeight - margin.bottom}
+        stroke="black"
+      />
+    );
 
+    yAxisLine = (
+      <line
+        id="xAxis_unemp"
+        x1={margin.left}
+        y1={lineChartHeight - margin.bottom}
+        x2={margin.left}
+        y2={margin.top}
+        stroke="black"
+      />
+    );
     lineComponent = (
       <Linez
         values_unempScaled={values_unempScaled}
@@ -106,18 +130,18 @@ const Unemployment: React.FC<UnemploymentProps> = ({
       />
     );
 
-    // dots  = (
-    //   <Dotz
-    //   values_unemp={values_unemp}
-    //   values_unempScaled={values_unempScaled}
-    //   yearLabelYPoz={lineAreaHeight - margin.bottom}
-    //   labels={labels}
-    //   centerToCenter={margin.centerToCenter}
-    //   marginLeft = {margin.left}
+    dots  = (
+      <Dotz
+      values_unemp={values_unemp}
+      values_unempScaled={values_unempScaled}
+      yearLabelYPoz={lineAreaHeight - margin.bottom}
+      labels={labels}
+      centerToCenter={margin.centerToCenter/4}
+      marginLeft = {margin.left+margin.right}
 
-    //   />
+      />
 
-    // )
+    )
   }
 
   return (
@@ -127,9 +151,11 @@ const Unemployment: React.FC<UnemploymentProps> = ({
       <div style={{ backgroundColor: "grey", height: 400, width: 700 }}>
         <svg width={lineAreaWidth} height={lineAreaHeight}>
           {dots}
-          {yAxis}
           {lineComponent}
+          {yAxis}
           {xAxis}
+          {xAxisLine}
+          {yAxisLine}
         </svg>
       </div>
     </>
