@@ -22,16 +22,12 @@ import {
     const lineRef: any = React.createRef();
   
     values_unempScaled = values_unempScaled.values_unempScaled;
-  
-    // starting point for not working
-    // console.log('WITHIN LINE', xScale)
-    // console.log('WITHIN LINE', xScale())
+
   
     labelsScaled = labelsScaled.lablesScaled;
   
     useEffect(() => {
       if (values_unempScaled.length > 1) {
-        // console.log("BEFORE ANIMATE", xScale);
         setLineValues(values_unempScaled);
   
         const currentLine = select(lineRef.current);
