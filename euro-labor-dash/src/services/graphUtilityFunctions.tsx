@@ -24,6 +24,27 @@ export function generateXaxisValues(labels: Array<any>) {
   }
 }
 
+export function yScale_imported(allValues: Array<number>, currentValue: number){
+
+  const currentScale = (
+    scaleLinear()
+    .domain([min(allValues) as number, max(allValues) as number])
+    .range([chartDimensions.margin.bottom + 50, chartDimensions.chartAreaHeight - chartDimensions.margin.top - 50])
+  )
+  
+  return currentScale(currentValue)
+
+  }
+
+  export function xScale_imported(index:number){
+
+    return index * chartDimensions.dataPoints.centerToCenter + chartDimensions.margin.left;
+  }
+
+
+
+
+
 export function formatQuarterlyData(ar: Array<any>) {
   ar = ar.filter((el) => parseInt(el.split("-")) >= 2005);
   ar = ar.map((el) => {
