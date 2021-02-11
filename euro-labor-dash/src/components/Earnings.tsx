@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { scaleLinear, max, min, mean, select } from "d3";
 import Bar from "../components/graphComponents/Barz";
-import {
+import 
+{
+  formatQuarterlyData,
   generateXaxisValues,
   generateYaxisValues,
-  chartDimensions,
-} from "../services/graphUtilityFunctions";
+  chartDimensions, 
+  yScale_imported,
+  xScale_imported,
+  generateYAxisFull, 
+  generateXaxisFull, 
 
+}
+from "../services/graphUtilityFunctions";
 
 interface EarningsProps {
   children?: any;
@@ -21,38 +28,25 @@ const Earnings: React.FC<EarningsProps> = ({
   selectedCountry,
   isFetching,
 }) => {
-
-  // const chartDimensions={
-  //   chartAreaHeight: 400, 
-  //   chartAreaWidth: 700,
-  //   margin: { top: 20, right: 10, bottom:10, left: 40,  },
-  //   dataPoints: {centerToCenter: 40, barWidth: 12},
-  //   //is there a way to call within the object? 
-  //   // should be chartAreaHeight - margin.bottom
-  //   chartHeightInner : 390
-  // }
-
-
   let labels: Array<any> = [];
   let values_net: Array<number> = [1, 2, 3];
   let yScale_net: any;
-  let yAxisValues :Array<number> = [];
-  let xAxisLine: any; 
-  let xAxisText: any; 
-
-
+  let yAxisValues: Array<number> = [];
+  let yAxisText: any;
+  let xAxisLine: any;
+  let xAxisText: any;
+  let yAxis: any; 
+  let xAxis: any; 
 
   let bars: any;
 
-
   values_net = netEarningsData.values;
   // labels = netEarningsData.labels
-  
+
   if (Array.isArray(values_net)) {
-    labels =netEarningsData.labels.map((year: any) => parseInt(year));
+    labels = netEarningsData.labels.map((year: any) => parseInt(year));
     // labels = labels.map((year: any) => parseInt(year));
     // labels =netEarningsData.labels.map((year: any) => parseInt(year));
-
   }
 
   if (min(labels) < 2005 && Array.isArray(values_net)) {
@@ -71,43 +65,46 @@ const Earnings: React.FC<EarningsProps> = ({
     }
 
     values_net = values_net.slice(elementsToAdd);
-    
   }
 
-  if(Array.isArray(values_net)){
-    values_net = values_net.map((el)=>Math.round(el/1000))
+  if (Array.isArray(values_net)) {
+    values_net = values_net.map((el) => Math.round(el / 1000));
   }
-  
-
 
   if (values_net !== undefined) {
     yScale_net = scaleLinear()
       .domain([min(values_net) as number, max(values_net) as number])
-      .range([chartDimensions.margin.bottom, chartDimensions.chartAreaHeight - chartDimensions.margin.top]);
+      .range([
+        chartDimensions.margin.bottom,
+        chartDimensions.chartAreaHeight - chartDimensions.margin.top,
+      ]);
   } else {
     //used as a placeholder when waiting for values to arrive
-    yScale_net = scaleLinear().domain([0, 100]).range([5, chartDimensions.chartHeightInner]);
+    yScale_net = scaleLinear()
+      .domain([0, 100])
+      .range([5, chartDimensions.chartHeightInner]);
   }
 
-  const xScale = scaleLinear()
-    .domain([min(labels) as number, max(labels) as number])
-    .range([chartDimensions.margin.left, chartDimensions.chartAreaWidth]);
 
-  if (values_net !== undefined) {
-    values_net  =values_net.map((el :any)=>Math.round(el))
+  if (Array.isArray(values_net)) {
+    values_net = values_net.map((el: any) => Math.round(el));
 
-    yAxisValues = generateYaxisValues(values_net)
-    // yAxisValues = yAxisValues.map((el)=>Math.round(el/1000))
-
+    yAxis = generateYAxisFull(values_net)
+    xAxis = generateXaxisFull(labels)
 
 
     bars = values_net.map((row: any, ind: number) => (
       <Bar
-        x={ind * chartDimensions.dataPoints.centerToCenter + chartDimensions.margin.left}
+        x={
+          ind * chartDimensions.dataPoints.centerToCenter +
+          chartDimensions.margin.left
+        }
         y_net={
           values_net === undefined || values_net.length === 0
             ? 0
-            : chartDimensions.chartHeightInner - yScale_net(values_net[ind])-10
+            : chartDimensions.chartHeightInner -
+              yScale_net(values_net[ind]) -
+              10
         }
         barWidth={chartDimensions.dataPoints.barWidth}
         barHeight_net={
@@ -118,18 +115,13 @@ const Earnings: React.FC<EarningsProps> = ({
         yValue={0}
         key={ind}
         yearLabel={labels[ind]}
-        yearLableYPoz={chartDimensions.chartHeightInner + chartDimensions.margin.bottom}
+        yearLableYPoz={
+          chartDimensions.chartHeightInner + chartDimensions.margin.bottom
+        }
       />
     ));
   }
 
-  // xAxisLine=(
-
-  // )
-
-  // xAxisText= (
-
-  // )
 
   return (
     <>
@@ -138,18 +130,13 @@ const Earnings: React.FC<EarningsProps> = ({
       {/* <div>{`${selectedCountry} Net Earnings`}</div> */}
 
       <div style={{ backgroundColor: "grey", height: 400, width: 700 }}>
-        <svg width={chartDimensions.chartAreaWidth} height={chartDimensions.chartAreaHeight}>
-          {yAxisValues.map(el=>(
-            <text key={`yaxis ${el}`} x={5} y={chartDimensions.chartAreaHeight-yScale_net(el)}>{el}</text>
-          ))}
-          <line
-            id="xAxis"
-            x1={chartDimensions.margin.left}
-            y1={chartDimensions.chartHeightInner - chartDimensions.margin.bottom}
-            x2={chartDimensions.chartAreaWidth - chartDimensions.margin.right}
-            y2={chartDimensions.chartHeightInner - chartDimensions.margin.bottom}
-            stroke="black"
-          />
+        <svg
+          width={chartDimensions.chartAreaWidth}
+          height={chartDimensions.chartAreaHeight}
+        >
+
+          {yAxis}
+          {xAxis}
 
           {bars}
         </svg>

@@ -35,13 +35,6 @@ const Bar: React.FC<BarProps> = ({
     return (
       <g>
         <rect ref={rectRef} x={x} width={barWidth} fill="black" />
-        <text
-          x={x}
-          y={yearLableYPoz}
-          // style={{transform:'rotate(1deg)'}}
-        >
-          {yearLabel}
-        </text>
       </g>
     );
   };

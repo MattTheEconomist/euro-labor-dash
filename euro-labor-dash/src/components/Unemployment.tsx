@@ -9,7 +9,9 @@ import {
   generateYaxisValues,
   chartDimensions, 
   yScale_imported,
-  xScale_imported, 
+  xScale_imported,
+  generateYAxisFull, 
+  generateXaxisFull, 
 
 } from "../services/graphUtilityFunctions";
 
@@ -30,6 +32,7 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   let values_unemp: Array<number> = [];
   let yScale: any;
   let xScale: any;
+  let yAxis: any; 
   let yAxisValues: Array<number> = [];
   let xAxisValues: Array<number> = [];
   let yAxisText: any;
@@ -45,32 +48,15 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   labels = unemploymentData.labels;
   values_unemp = unemploymentData.values;
 
-  if (Array.isArray(labels)) {
-    labels = formatQuarterlyData(labels);
-    xAxisValues = generateXaxisValues(labels);
-  }
 
-  // xScale = function (index: number) {
-  //   return index * chartDimensions.dataPoints.centerToCenter + chartDimensions.margin.left;
-  // };
 
   if (Array.isArray(values_unemp) && Array.isArray(labels)) {
     const elementsToSlice = values_unemp.length - labels.length;
     values_unemp = values_unemp.slice(elementsToSlice);
 
-    // yScale = scaleLinear()
-    //   .domain([min(values_unemp) as number, max(values_unemp) as number])
-    //   .range([chartDimensions.margin.bottom + 50, chartDimensions.chartAreaHeight - chartDimensions.margin.top - 50]);
+
 
   } 
-  // else {
-  //   //used as a placeholder when waiting for values to arrive
-  //   yScale = scaleLinear()
-  //     .domain([0, 100])
-  //     .range([chartDimensions.margin.bottom, chartDimensions.chartAreaHeight - chartDimensions.margin.top]);
-  // }
-
-  // console.log(yScale_imported([1,2,3,4,5],6))
 
 
 
@@ -81,49 +67,10 @@ const Unemployment: React.FC<UnemploymentProps> = ({
 
     yAxisValues = generateYaxisValues(values_unemp);
 
-    yAxisText = yAxisValues.map((el) => (
-      <text
-        fontSize="small"
-        key={`yaxis ${el}`}
-        x={5}
-        y={chartDimensions.chartAreaHeight - yScale_imported(values_unemp ,el)}
-      >
-        {el.toFixed(2)}
-      </text>
-    ));
+    yAxis = generateYAxisFull(values_unempScaled)
+    xAxis = generateXaxisFull(labels)
 
-    xAxis = xAxisValues.map((el, ind) => (
-      <text
-        key={`xAxis ${el}`}
-        x={xScale_imported(ind)}
-        y={chartDimensions.chartAreaHeight - chartDimensions.margin.bottom}
-        fontSize="small"
-      >
-        {el}
-      </text>
-    ));
 
-    xAxisLine = (
-      <line
-        id="xAxis_unemp"
-        x1={chartDimensions.margin.left}
-        y1={chartDimensions.chartHeightInner - chartDimensions.margin.bottom}
-        x2={chartDimensions.chartAreaWidth - chartDimensions.margin.right}
-        y2={chartDimensions.chartHeightInner - chartDimensions.margin.bottom}
-        stroke="black"
-      />
-    );
-
-    yAxisLine = (
-      <line
-        id="xAxis_unemp"
-        x1={chartDimensions.margin.left}
-        y1={chartDimensions.chartHeightInner - chartDimensions.margin.bottom}
-        x2={chartDimensions.margin.left}
-        y2={chartDimensions.margin.top}
-        stroke="black"
-      />
-    );
     lineComponent = (
       <Linez
         values_unempScaled={values_unempScaled}
@@ -154,10 +101,10 @@ const Unemployment: React.FC<UnemploymentProps> = ({
         <svg width={chartDimensions.chartAreaWidth} height={chartDimensions.chartAreaHeight}>
           {dots}
           {lineComponent}
-          {yAxisText}
+          {yAxis}
           {xAxis}
           {xAxisLine}
-          {yAxisLine}
+
         </svg>
       </div>
     </>
