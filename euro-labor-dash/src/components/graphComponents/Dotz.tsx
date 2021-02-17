@@ -8,6 +8,8 @@ interface DotzProps {
   labels: Array<any>;
   centerToCenter: number;
   marginLeft: number;
+  mouseX: number|null; 
+  mouseY:number|null; 
 }
 
 const Dotz: React.FC<DotzProps> = ({
@@ -17,6 +19,8 @@ const Dotz: React.FC<DotzProps> = ({
   labels,
   centerToCenter,
   marginLeft,
+  mouseX, 
+  mouseY
 }) => {
   const xScale = function (index: number) {
     return index * centerToCenter + marginLeft;
@@ -35,6 +39,8 @@ const Dotz: React.FC<DotzProps> = ({
       yearLabel={labels[ind]}
       yearLableYPoz={yearLabelYPoz}
       renderYear={ind % 4 === 0 ? true : false}
+      mouseX = {mouseX}
+      mouseY={mouseY}
     />
   ));
 
@@ -49,6 +55,9 @@ interface DotProps {
   yearLabel: any;
   yearLableYPoz: number;
   renderYear: boolean;
+  mouseX: number|null; 
+  mouseY:number|null; 
+
 }
 
 const Dot: React.FC<DotProps> = ({
@@ -59,6 +68,8 @@ const Dot: React.FC<DotProps> = ({
   yearLabel,
   yearLableYPoz,
   renderYear,
+  mouseX, 
+  mouseY
 }) => {
   const dotRef: any = React.createRef();
 
@@ -66,9 +77,25 @@ const Dot: React.FC<DotProps> = ({
   //   animtaeDots(dotRef, dotHeight, x);
   // },);
 
+  let opacity =0; 
+  let mouseDistance = 600
+
+  if (mouseX!==null && mouseY!==null){
+
+    mouseDistance= Math.sqrt(Math.pow((mouseX-x),2) + Math.pow((mouseY-dotHeight),2))
+  }
+
+  if(mouseDistance>200){
+    opacity=0
+  }else{
+    opacity=100/Math.pow(mouseDistance,1.4)
+  }
+
+
+
   return (
     <g>
-      <circle fill="black" ref={dotRef} r={3}  cx={x} cy={dotHeight} fillOpacity="0.5" ></circle>
+      <circle fill="black" ref={dotRef} r={3}  cx={x} cy={dotHeight} fillOpacity={`${opacity}`} ></circle>
 
     </g>
   );

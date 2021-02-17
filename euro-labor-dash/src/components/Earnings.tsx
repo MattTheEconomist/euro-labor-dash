@@ -19,7 +19,6 @@ interface EarningsProps {
   children?: any;
   selectedCountry?: string;
   netEarningsData: any;
-
   isFetching: boolean;
 }
 
@@ -45,8 +44,7 @@ const Earnings: React.FC<EarningsProps> = ({
 
   if (Array.isArray(values_net)) {
     labels = netEarningsData.labels.map((year: any) => parseInt(year));
-    // labels = labels.map((year: any) => parseInt(year));
-    // labels =netEarningsData.labels.map((year: any) => parseInt(year));
+
   }
 
   if (min(labels) < 2005 && Array.isArray(values_net)) {
@@ -137,7 +135,6 @@ const Earnings: React.FC<EarningsProps> = ({
 
           {yAxis}
           {xAxis}
-
           {bars}
         </svg>
       </div>

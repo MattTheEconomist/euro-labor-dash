@@ -28,6 +28,7 @@ const Unemployment: React.FC<UnemploymentProps> = ({
 }) => {
 
 
+  
   let labels: Array<any> | any = [1, 2, 3];
   let values_unemp: Array<number> = [];
   let yScale: any;
@@ -41,9 +42,38 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   let yAxisLine: any;
   let lineComponent: any;
   let values_unempScaled: Array<any> = [1, 2, 3];
-
-
   let dots: any;
+  let ecks: any; 
+  let why: any; 
+  // let ev: any;
+
+
+
+
+  const useMousePoz = ()=>{ 
+    const [mousePoz, setMousePoz] = useState({mouseX:0, mouseY:0})
+
+    const updateMousePoz = (ev:any )=>{
+      setMousePoz({mouseX: ev.clientX, mouseY: ev.clientY})
+      // setMousePoz({x: 6, y: ev.clientY})
+    }
+  
+
+
+  useEffect(()=>{
+    window.addEventListener("mousemove", updateMousePoz)
+
+    // console.log(mousePoz)
+
+    return ()=> window.removeEventListener("mousemove", updateMousePoz)
+  },[])
+    return mousePoz
+  }
+
+  // const {x , y} = useMousePoz()
+  const {mouseX, mouseY} = useMousePoz()
+  console.log(mouseX, mouseY)
+
 
   labels = unemploymentData.labels;
   values_unemp = unemploymentData.values;
@@ -87,6 +117,8 @@ const Unemployment: React.FC<UnemploymentProps> = ({
       labels={labels}
       centerToCenter={chartDimensions.dataPoints.centerToCenter/4}
       marginLeft = {chartDimensions.margin.left+chartDimensions.margin.right}
+      mouseX = {mouseX}
+      mouseY={mouseY}
 
       />
 
