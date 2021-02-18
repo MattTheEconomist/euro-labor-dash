@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+// import React, { useEffect, useState } from "react";
 import { scaleLinear, max, min, mean } from "d3";
 
 export function generateYAxisFull(ar: Array<number>) {
@@ -44,7 +44,7 @@ export function generateXaxisFull(labels: Array<any>) {
   const xAxisText = xAxisValues.map((el, ind) => (
     <text
       key={`xAxis ${el}`}
-      x={xScale_imported(ind)}
+      x={xScaleAnnual(ind)}
       y={chartDimensions.chartAreaHeight - chartDimensions.margin.bottom}
       fontSize="small"
     >
@@ -108,11 +108,36 @@ export function yScale_imported(
   return currentScale(currentValue);
 }
 
-export function xScale_imported(index: number) {
+export function yScale_bars(
+  allValues: Array<number>,
+  currentValue: number
+){
+  const currentScale = scaleLinear()
+  .domain([min(allValues) as number, max(allValues) as number])
+  .range([
+    // chartDimensions.margin.bottom,
+   
+    chartDimensions.chartAreaHeight - chartDimensions.margin.top,
+    // chartDimensions.margin.,
+    0
+  ]);
+  return currentScale(currentValue)
+}
+
+// export function yScale_bars(){
+
+
+// }
+
+export function xScaleAnnual(index: number) {
   return (
     index * chartDimensions.dataPoints.centerToCenter +
     chartDimensions.margin.left
   );
+}
+
+export function xScaleQuarterly(index: number) {
+  return xScaleAnnual(index)/4
 }
 
 export function formatQuarterlyData(ar: Array<any>) {

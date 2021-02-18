@@ -1,49 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { scaleLinear, max, min, line, mean, select } from "d3";
+import {xScaleQuarterly} from "../../services/graphUtilityFunctions";
+
 
 interface DotzProps {
-  values_unemp: number[];
-  values_unempScaled: number[];
-  yearLabelYPoz: number;
+  valuesRaw: number[];
+  valuesScaled: number[];
   labels: Array<any>;
-  centerToCenter: number;
-  marginLeft: number;
+  // centerToCenter: number;
+  // marginLeft: number;
   mouseX: number|null; 
   mouseY:number|null; 
   isFetching: boolean; 
 }
 
 const Dotz: React.FC<DotzProps> = ({
-  values_unemp,
-  values_unempScaled,
-  yearLabelYPoz,
-  labels,
-  centerToCenter,
-  marginLeft,
+  valuesRaw,
+  valuesScaled,
   mouseX, 
   mouseY, 
   isFetching
 }) => {
-  const xScale = function (index: number) {
-    return index * centerToCenter + marginLeft;
-  };
+  // const xScale = function (index: number) {
+  //   return index * centerToCenter + marginLeft;
+  // };
 
-  const dotRef: any = React.createRef();
 
-  const dots = !isFetching ? values_unempScaled.map((row: any, ind: number) => (
+
+  const dots = !isFetching ? valuesScaled.map((row: any, ind: number) => (
     <Dot
       key={Math.random()}
-      x={xScale(ind)}
+      x={xScaleQuarterly(ind)}
       //use for tooltip later
-      y_unemp={values_unemp[ind]}
+      y_raw={valuesRaw[ind]}
       dotHeight={row}
-      yValue={0}
-      yearLabel={labels[ind]}
-      yearLableYPoz={yearLabelYPoz}
-      renderYear={ind % 4 === 0 ? true : false}
       mouseX = {mouseX}
       mouseY={mouseY}
-      isFetching={isFetching}
     />
   )): null
 
@@ -52,35 +44,21 @@ const Dotz: React.FC<DotzProps> = ({
 
 interface DotProps {
   x: number;
-  y_unemp: number;
+  y_raw: number;
   dotHeight: number;
-  yValue: number;
-  yearLabel: any;
-  yearLableYPoz: number;
-  renderYear: boolean;
   mouseX: number|null; 
   mouseY:number|null; 
-  isFetching: boolean; 
 
 }
 
 const Dot: React.FC<DotProps> = ({
   x,
-  y_unemp,
   dotHeight,
-  yValue,
-  yearLabel,
-  yearLableYPoz,
-  renderYear,
   mouseX, 
   mouseY, 
-  isFetching
 }) => {
   const dotRef: any = React.createRef();
 
-  // useEffect(() => {
-  //   animtaeDots(dotRef, dotHeight, x);
-  // },);
 
   let opacity =0; 
   let mouseDistance = 600
@@ -90,7 +68,6 @@ const Dot: React.FC<DotProps> = ({
     mouseDistance= Math.sqrt(Math.pow((mouseX-x),2) + Math.pow((mouseY-dotHeight),2))
   }
 
-  // if(mouseDistance>150 || isFetching){
   if(mouseDistance>150){
     opacity=0
   }else{
@@ -108,10 +85,10 @@ const Dot: React.FC<DotProps> = ({
   );
 };
 
-const animtaeDots = (dotRef: any, dotHeight: number, x: number) => {
-  const dot = select(dotRef.current);
+// const animtaeDots = (dotRef: any, dotHeight: number, x: number) => {
+//   const dot = select(dotRef.current);
 
-  dot.transition().duration(1000).attr("cy", dotHeight).attr("cx", x);
-};
+//   dot.transition().duration(1000).attr("cy", dotHeight).attr("cx", x);
+// };
 
 export default Dotz;

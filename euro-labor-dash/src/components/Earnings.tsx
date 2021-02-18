@@ -7,8 +7,8 @@ import
   generateXaxisValues,
   generateYaxisValues,
   chartDimensions, 
-  yScale_imported,
-  xScale_imported,
+  yScale_bars,
+  xScaleAnnual,
   generateYAxisFull, 
   generateXaxisFull, 
 
@@ -30,10 +30,10 @@ const Earnings: React.FC<EarningsProps> = ({
   let labels: Array<any> = [];
   let values_net: Array<number> = [1, 2, 3];
   let yScale_net: any;
-  let yAxisValues: Array<number> = [];
-  let yAxisText: any;
-  let xAxisLine: any;
-  let xAxisText: any;
+  // let yAxisValues: Array<number> = [];
+  // let yAxisText: any;
+  // let xAxisLine: any;
+  // let xAxisText: any;
   let yAxis: any; 
   let xAxis: any; 
 
@@ -93,32 +93,23 @@ const Earnings: React.FC<EarningsProps> = ({
 
     bars = values_net.map((row: any, ind: number) => (
       <Bar
-        x={
-          ind * chartDimensions.dataPoints.centerToCenter +
-          chartDimensions.margin.left
-        }
-        y_net={
-          values_net === undefined || values_net.length === 0
-            ? 0
-            : chartDimensions.chartHeightInner -
-              yScale_net(values_net[ind]) -
-              10
-        }
+      labelScaled={xScaleAnnual(ind)}
+        valueScaled= {yScale_bars(values_net, row)-chartDimensions.margin.bottom}
         barWidth={chartDimensions.dataPoints.barWidth}
+        // barHeight_net={yScale_bars(values_net, row)-chartDimensions.margin.bottom}
         barHeight_net={
           values_net === undefined || values_net.length === 0
             ? 0
             : yScale_net(values_net[ind])
+            // : yScale_bars(values_net, row)
         }
-        yValue={0}
         key={ind}
-        yearLabel={labels[ind]}
-        yearLableYPoz={
-          chartDimensions.chartHeightInner + chartDimensions.margin.bottom
-        }
+
       />
     ));
   }
+
+
 
 
   return (

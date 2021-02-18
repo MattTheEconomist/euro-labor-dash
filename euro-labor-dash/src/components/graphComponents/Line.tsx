@@ -1,39 +1,39 @@
 import React, { useEffect, useState } from "react";
 import {
-    scaleLinear,
-    max,
-    min,
     line,
-    mean,
     select,
   } from "d3";
 
+  import {xScaleQuarterly} from "../../services/graphUtilityFunctions";
+
 
   interface LineProps {
-    xScale: any; 
-    yScale: any;
-    values_unemp: any;
+
+    valuesScaled:any; 
+    labelsScaled:any; 
   }
 
-  
-  const Linez: any = (values_unempScaled: any, labelsScaled: any, xScale: any) => {
+
+  const Linez: React.FC<LineProps>= (valuesScaled: any, labelsScaled: any) => {
+
+    valuesScaled = valuesScaled.valuesScaled
+    labelsScaled = labelsScaled.lablesScaled;
+
+
     const [lineValues, setLineValues] = useState([1, 2, 3]);
   
     const lineRef: any = React.createRef();
-  
-    values_unempScaled = values_unempScaled.values_unempScaled;
 
-  
-    labelsScaled = labelsScaled.lablesScaled;
+ 
   
     useEffect(() => {
-      if (values_unempScaled.length > 1) {
-        setLineValues(values_unempScaled);
+      if (Array.isArray(valuesScaled)) {
+        setLineValues(valuesScaled);
   
         const currentLine = select(lineRef.current);
-        animateLine(currentLine, xScale, values_unempScaled);
+        animateLine(currentLine, valuesScaled);
       }
-    },[values_unempScaled]);
+    },[valuesScaled]);
   
     return (
       <g>
@@ -44,19 +44,19 @@ import {
   
   const animateLine = (
     currentLine: any,
-    xScale: any,
-    values_unempScaled: Array<number>
+    valuesScaled: Array<number>
   ) => {
   
   
-    if (Array.isArray(values_unempScaled)) {
+    if (Array.isArray(valuesScaled)) {
       const drawLine = line()
-        .x((d: any, i: any) => i * 10 + 50)
+        // .x((d: any, i: any) => i * 10 + 50)
+        .x((d: any, i: any) => xScaleQuarterly(i))
         //Passing function does not work :(
         // .x((d: any, i: any) => xScale(i))
         .y((d: any) => d);
   
-      const linePath = drawLine(values_unempScaled as Array<number> | any);
+      const linePath = drawLine(valuesScaled as Array<number> | any);
   
       currentLine
         .transition()

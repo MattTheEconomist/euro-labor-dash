@@ -1,40 +1,38 @@
 import React, { useEffect, useState } from "react";
 import {select} from "d3";
+import {chartDimensions} from "../../services/graphUtilityFunctions"
 
 interface BarProps {
-    x: number;
-    y_net: number;
+  labelScaled: number;
+    valueScaled: number;
     barWidth: number;
     barHeight_net: number;
-    yValue: number;
-    yearLabel: any;
-    yearLableYPoz: number;
   }
 
 
 const Bar: React.FC<BarProps> = ({
-    x,
-    y_net,
+    labelScaled,
+    valueScaled,
     barWidth,
     barHeight_net,
-    yValue,
-    yearLabel,
-    yearLableYPoz,
+
   }) => {
-    if (isNaN(y_net)) {
-      y_net = 0;
+    if (isNaN(valueScaled)) {
+      valueScaled = 0;
     }
   
-    const axisText: number = 125;
     const rectRef: any = React.createRef();
   
     useEffect(() => {
-      animateBars(rectRef, y_net, barHeight_net);
+      animateBars(rectRef, valueScaled, barHeight_net);
     });
   
     return (
       <g>
-        <rect ref={rectRef} x={x} width={barWidth} fill="black" />
+        <rect ref={rectRef} 
+        x={labelScaled}
+        
+        width={barWidth} fill="black" />
       </g>
     );
   };
@@ -43,6 +41,9 @@ const Bar: React.FC<BarProps> = ({
   
 const animateBars = (rectRef: any, y_net: number, barHeight_net: number) => {
     const rect = select(rectRef.current);
+
+    y_net = chartDimensions.chartHeightInner - barHeight_net- chartDimensions.margin.bottom
+
   
     rect
   
@@ -50,6 +51,7 @@ const animateBars = (rectRef: any, y_net: number, barHeight_net: number) => {
       .duration(1000)
       .attr("height", barHeight_net)
       .attr("y", y_net);
+      // .attr("y", 0);
   };
 
 export default Bar

@@ -4,12 +4,10 @@ import Linez from "../components/graphComponents/Line";
 import { scaleLinear, max, min, line, mean, select } from "d3";
 
 import {
-  formatQuarterlyData,
-  generateXaxisValues,
   generateYaxisValues,
   chartDimensions,
   yScale_imported,
-  xScale_imported,
+  xScaleAnnual,
   generateYAxisFull,
   generateXaxisFull,
 } from "../services/graphUtilityFunctions";
@@ -27,17 +25,13 @@ const Unemployment: React.FC<UnemploymentProps> = ({
 }) => {
   let labels: Array<any> | any = [1, 2, 3];
   let values_unemp: Array<number> = [];
-  let yScale: any;
-  let xScale: any;
   let yAxis: any;
   let yAxisValues: Array<number> = [];
-  let xAxisValues: Array<number> = [];
-  let yAxisText: any;
   let xAxis: any;
   let xAxisLine: any;
-  let yAxisLine: any;
   let lineComponent: any;
-  let values_unempScaled: Array<any> = [1, 2, 3];
+  // let values_unempScaled: Array<any> = [1, 2, 3];
+  let values_unempScaled: any;
   let dots: any;
 
   const useMousePoz = () => {
@@ -70,31 +64,31 @@ const Unemployment: React.FC<UnemploymentProps> = ({
     values_unempScaled = values_unemp.map((el) =>
       yScale_imported(values_unemp, el)
     );
-    const labelsScaled = values_unemp.map((el, ind) => xScale_imported(ind));
+    const labelsScaled = values_unemp.map((el, ind) => xScaleAnnual(ind));
 
     yAxisValues = generateYaxisValues(values_unemp);
 
     yAxis = generateYAxisFull(values_unempScaled);
     xAxis = generateXaxisFull(labels);
 
+
+
     lineComponent = (
       <Linez
-        values_unempScaled={values_unempScaled}
+        // values_unempScaled={values_unempScaled.values_unempScaled}
+        // values_unempScaled={values_unempScaled}
+        valuesScaled={values_unempScaled}
         labelsScaled={labelsScaled}
-        xScale={xScale_imported}
       />
     );
 
     dots = (
       <Dotz
-        values_unemp={values_unemp}
-        values_unempScaled={values_unempScaled}
-        yearLabelYPoz={
-          chartDimensions.chartAreaHeight - chartDimensions.margin.bottom
-        }
+        valuesRaw={values_unemp}
+        valuesScaled={values_unempScaled}
         labels={labels}
-        centerToCenter={chartDimensions.dataPoints.centerToCenter / 4}
-        marginLeft={chartDimensions.margin.left + chartDimensions.margin.right}
+        // centerToCenter={chartDimensions.dataPoints.centerToCenter / 4}
+        // marginLeft={chartDimensions.margin.left + chartDimensions.margin.right}
         mouseX={mouseX}
         mouseY={mouseY}
         isFetching={isFetching}
