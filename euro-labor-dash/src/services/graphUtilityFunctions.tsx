@@ -33,50 +33,42 @@ export function generateYAxisFull(ar: Array<number>) {
   );
 }
 
+export function generateXaxisFull(labels: Array<any>) {
+  const isQuarterly = String(labels[1]).length > 5;
+  if (isQuarterly) {
+    labels = formatQuarterlyData(labels);
+  }
 
+  const xAxisValues = generateXaxisValues(labels);
 
-export function generateXaxisFull(labels: Array<any>){
+  const xAxisText = xAxisValues.map((el, ind) => (
+    <text
+      key={`xAxis ${el}`}
+      x={xScale_imported(ind)}
+      y={chartDimensions.chartAreaHeight - chartDimensions.margin.bottom}
+      fontSize="small"
+    >
+      {el}
+    </text>
+  ));
 
-  const isQuarterly = String(labels[1]).length > 5
-   if (isQuarterly){
-     
-     labels = formatQuarterlyData(labels)
-   }
-
-  const xAxisValues = generateXaxisValues(labels)
-
-    const xAxisText = xAxisValues.map((el, ind) => (
-      <text
-        key={`xAxis ${el}`}
-        x={xScale_imported(ind)}
-        y={chartDimensions.chartAreaHeight - chartDimensions.margin.bottom}
-        fontSize="small"
-      >
-        {el}
-      </text>
-    ));
-
-
-    const xAxisLine = (
-      <line
-        id="xAxis_unemp"
-        x1={chartDimensions.margin.left}
-        y1={chartDimensions.chartHeightInner - chartDimensions.margin.bottom}
-        x2={chartDimensions.chartAreaWidth - chartDimensions.margin.right}
-        y2={chartDimensions.chartHeightInner - chartDimensions.margin.bottom}
-        stroke="black"
-      />
-    )
+  const xAxisLine = (
+    <line
+      id="xAxis_unemp"
+      x1={chartDimensions.margin.left}
+      y1={chartDimensions.chartHeightInner - chartDimensions.margin.bottom}
+      x2={chartDimensions.chartAreaWidth - chartDimensions.margin.right}
+      y2={chartDimensions.chartHeightInner - chartDimensions.margin.bottom}
+      stroke="black"
+    />
+  );
 
   return (
     <svg>
       {xAxisText}
       {xAxisLine}
     </svg>
-  )
-
-
-
+  );
 }
 
 export function generateYaxisValues(ar: Array<number>) {

@@ -30,8 +30,9 @@ export function generateFetchURL_gross(selectedCountry: string) {
 let countryCode = getKeyByValue(countryData, selectedCountry);
 
 
-let fetchURL = `https://api.db.nomics.world/v22/series/Eurostat/earn_nt_net/A.EUR.GRS.A1_80.${countryCode}?observations=True`;
 
+// let fetchURL = `https://api.db.nomics.world/v22/series/Eurostat/earn_nt_net/A.EUR.GRS.A1_80.li?observations=True`;
+let fetchURL = `https://api.db.nomics.world/v22/series/Eurostat/earn_nt_net/A.EUR.GRS.A1_80.${countryCode}?observations=True`;
 return fetchURL;
 }
 

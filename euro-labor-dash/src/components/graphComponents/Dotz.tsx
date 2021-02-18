@@ -10,6 +10,7 @@ interface DotzProps {
   marginLeft: number;
   mouseX: number|null; 
   mouseY:number|null; 
+  isFetching: boolean; 
 }
 
 const Dotz: React.FC<DotzProps> = ({
@@ -20,7 +21,8 @@ const Dotz: React.FC<DotzProps> = ({
   centerToCenter,
   marginLeft,
   mouseX, 
-  mouseY
+  mouseY, 
+  isFetching
 }) => {
   const xScale = function (index: number) {
     return index * centerToCenter + marginLeft;
@@ -28,7 +30,7 @@ const Dotz: React.FC<DotzProps> = ({
 
   const dotRef: any = React.createRef();
 
-  const dots = values_unempScaled.map((row: any, ind: number) => (
+  const dots = !isFetching ? values_unempScaled.map((row: any, ind: number) => (
     <Dot
       key={Math.random()}
       x={xScale(ind)}
@@ -41,8 +43,9 @@ const Dotz: React.FC<DotzProps> = ({
       renderYear={ind % 4 === 0 ? true : false}
       mouseX = {mouseX}
       mouseY={mouseY}
+      isFetching={isFetching}
     />
-  ));
+  )): null
 
   return <g>{dots}</g>;
 };
@@ -57,6 +60,7 @@ interface DotProps {
   renderYear: boolean;
   mouseX: number|null; 
   mouseY:number|null; 
+  isFetching: boolean; 
 
 }
 
@@ -69,7 +73,8 @@ const Dot: React.FC<DotProps> = ({
   yearLableYPoz,
   renderYear,
   mouseX, 
-  mouseY
+  mouseY, 
+  isFetching
 }) => {
   const dotRef: any = React.createRef();
 
@@ -85,15 +90,17 @@ const Dot: React.FC<DotProps> = ({
     mouseDistance= Math.sqrt(Math.pow((mouseX-x),2) + Math.pow((mouseY-dotHeight),2))
   }
 
-  if(mouseDistance>200){
+  // if(mouseDistance>150 || isFetching){
+  if(mouseDistance>150){
     opacity=0
   }else{
-    opacity=100/Math.pow(mouseDistance,1.4)
+    opacity=100/Math.pow(mouseDistance,1.3)
   }
 
 
 
   return (
+    
     <g>
       <circle fill="black" ref={dotRef} r={3}  cx={x} cy={dotHeight} fillOpacity={`${opacity}`} ></circle>
 
