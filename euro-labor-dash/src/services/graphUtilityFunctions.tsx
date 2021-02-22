@@ -1,5 +1,5 @@
-// import React, { useEffect, useState } from "react";
 import { scaleLinear, max, min, mean } from "d3";
+import { isLabeledStatement } from "typescript";
 
 export function generateYAxisFull(ar: Array<number>) {
   const yAxisValues = generateYaxisValues(ar);
@@ -19,8 +19,10 @@ export function generateYAxisFull(ar: Array<number>) {
       id="xAxis_unemp"
       x1={chartDimensions.margin.left}
       y1={chartDimensions.chartHeightInner - chartDimensions.margin.bottom}
+      // y1={chartDimensions.chartHeightInner - chartDimensions.margin.bottom}
       x2={chartDimensions.margin.left}
       y2={chartDimensions.margin.top}
+      // y2={chartDimensions.margin.axisTop}
       stroke="black"
     />
   );
@@ -87,7 +89,7 @@ export function generateXaxisValues(labels: Array<any>) {
 
   if (isQuarterly) {
     return labels
-      .filter((el: any, ind: number) => ind % 4 == 0)
+      .filter((el: any, ind: number) => ind % 4 === 0)
       .map((el: any) => el.getFullYear());
   } else {
     return labels.map((year: any) => parseInt(year));
@@ -108,26 +110,7 @@ export function yScale_imported(
   return currentScale(currentValue);
 }
 
-export function yScale_bars(
-  allValues: Array<number>,
-  currentValue: number
-){
-  const currentScale = scaleLinear()
-  .domain([min(allValues) as number, max(allValues) as number])
-  .range([
-    // chartDimensions.margin.bottom,
-   
-    chartDimensions.chartAreaHeight - chartDimensions.margin.top,
-    // chartDimensions.margin.,
-    0
-  ]);
-  return currentScale(currentValue)
-}
 
-// export function yScale_bars(){
-
-
-// }
 
 export function xScaleAnnual(index: number) {
   return (
@@ -137,7 +120,9 @@ export function xScaleAnnual(index: number) {
 }
 
 export function xScaleQuarterly(index: number) {
-  return xScaleAnnual(index)/4
+
+  return ((index *chartDimensions.dataPoints.centerToCenter)/4+ chartDimensions.margin.left)
+  
 }
 
 export function formatQuarterlyData(ar: Array<any>) {
@@ -151,10 +136,35 @@ export function formatQuarterlyData(ar: Array<any>) {
   return ar;
 }
 
+
+export function consistentArrayLengths(labels: Array<any>, values:Array<any>){
+  labels = labels.map((year: any) => parseInt(year))
+  if(min(labels) < 2005 ){
+    const elementsToSlice = 2005 - min(labels);
+    labels = labels.slice(elementsToSlice)
+    values= values.slice(elementsToSlice)
+  }
+  if(min(labels) > 2005){
+    const minYear = min(labels);
+    const elementsToAdd: number = minYear - 2005;
+
+    for (let i = 0; i < elementsToAdd; i++) {
+      labels.unshift(labels[0] - 1);
+      values.unshift(0);
+    }
+
+    values = values.slice(elementsToAdd);
+  }
+
+  return [labels, values]
+}
+
+
 export const chartDimensions = {
   chartAreaHeight: 400,
   chartAreaWidth: 700,
-  margin: { top: 20, right: 10, bottom: 10, left: 40 },
+  margin: { top: 50, right: 10, bottom: 10, left: 50, axisTop: 20 },
   dataPoints: { centerToCenter: 40, barWidth: 12 },
-  chartHeightInner: 390,
+  chartHeightInner: 380,
+
 };

@@ -10,6 +10,7 @@ import {
   xScaleAnnual,
   generateYAxisFull,
   generateXaxisFull,
+  consistentArrayLengths
 } from "../services/graphUtilityFunctions";
 
 interface UnemploymentProps {
@@ -30,7 +31,6 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   let xAxis: any;
   let xAxisLine: any;
   let lineComponent: any;
-  // let values_unempScaled: Array<any> = [1, 2, 3];
   let values_unempScaled: any;
   let dots: any;
 
@@ -51,16 +51,17 @@ const Unemployment: React.FC<UnemploymentProps> = ({
 
   const { mouseX, mouseY } = useMousePoz();
 
+  
   labels = unemploymentData.labels;
   values_unemp = unemploymentData.values;
-
-  if (Array.isArray(values_unemp) && Array.isArray(labels)) {
-    const elementsToSlice = values_unemp.length - labels.length;
-    values_unemp = values_unemp.slice(elementsToSlice);
-  }
+  
+  console.log(labels)
+//   if(Array.isArray(values_unemp)) {
+// labels = consistentArrayLengths(labels, values_unemp)[0]
+// values_unemp = consistentArrayLengths(labels, values_unemp)[1]
+//   }
 
   if (Array.isArray(values_unemp)) {
-    // values_unempScaled = values_unemp.map((el) => yScale(el));
     values_unempScaled = values_unemp.map((el) =>
       yScale_imported(values_unemp, el)
     );
@@ -71,15 +72,8 @@ const Unemployment: React.FC<UnemploymentProps> = ({
     yAxis = generateYAxisFull(values_unempScaled);
     xAxis = generateXaxisFull(labels);
 
-
-
     lineComponent = (
-      <Linez
-        // values_unempScaled={values_unempScaled.values_unempScaled}
-        // values_unempScaled={values_unempScaled}
-        valuesScaled={values_unempScaled}
-        labelsScaled={labelsScaled}
-      />
+      <Linez valuesScaled={values_unempScaled} labelsScaled={labelsScaled} />
     );
 
     dots = (
@@ -87,8 +81,6 @@ const Unemployment: React.FC<UnemploymentProps> = ({
         valuesRaw={values_unemp}
         valuesScaled={values_unempScaled}
         labels={labels}
-        // centerToCenter={chartDimensions.dataPoints.centerToCenter / 4}
-        // marginLeft={chartDimensions.margin.left + chartDimensions.margin.right}
         mouseX={mouseX}
         mouseY={mouseY}
         isFetching={isFetching}
