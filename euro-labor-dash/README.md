@@ -1,1 +1,1 @@
-This project lets users pick a country in Europe and displays unemployment, job vacancies, net earnings, and gross earnings in various graphs. It would have been nice to complete, but the servers went down just as I finished creating the fetch functions. Maybe this will be complete once the servers come back up 
+This project lets users pick a country in Europe and displays unemployment, job vacancies, net earnings, and gross earnings in various graphs.
