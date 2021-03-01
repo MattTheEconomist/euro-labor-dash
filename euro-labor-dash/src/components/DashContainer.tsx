@@ -2,37 +2,37 @@ import React, { useState, useEffect } from "react";
 import ControlPanel from "./ControlPanel";
 import {
   generateFetchURL_net,
-  // generateFetchURL_gross,
-  generateFetchURL_vacancies,
+  // generateFetchURL_vacancies,
+  generateFetchURL_unemployemnt,
 } from "../services/URLgenerationFunctions";
 import Earnings from "./Earnings";
-import Vacancies from "./Vacancies"
+import Unemployment from "./Unemployment"
+// import Vacancies from "./Vacancies"
 
 
 const DashContainer: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>("Euro area");
-  // const [grossEarningsData, setGrossEarningsData] = useState({
-  //   data: {},
-  //   isFetching: false,
-  //   status: "",
-
-  // });
   const [netEarningsData, setNetEarningsData] = useState({
     data: {},
     isFetching: false,
     status: "",
   });
-  const [vacancyData, setVacancyData] = useState({
-    data:{}, 
+  // const [vacancyData, setVacancyData] = useState({
+  //   data:{}, 
+  //   isFetching: false,
+  //   status: "",
+  // })
+  const [unemploymentData, setUnemploymentData] = useState({
+    data: {},
     isFetching: false,
     status: "",
-  })
+  });
 
 
 
 
-  function fetchData() {
-    // const fetchURL_gross: string = generateFetchURL_gross(selectedCountry);
+
+  function fetchData_net() {
     const fetchURL_net: string = generateFetchURL_net(selectedCountry);
 
     netEarningsData.isFetching=true
@@ -52,17 +52,16 @@ const DashContainer: React.FC = () => {
       );
 
   }
+  function fetchData_unemployemnt(){
 
-function fetchData_vacancies(){
-
-  const fetchURL_vac: string = generateFetchURL_vacancies(selectedCountry);
+  const fetchURL_unemployment: string = generateFetchURL_unemployemnt(selectedCountry);
 
   netEarningsData.isFetching=true
 
-  fetch(fetchURL_vac)
+  fetch(fetchURL_unemployment)
     .then((res) => res.json())
     .then((res) =>
-        setVacancyData({
+      setUnemploymentData({
         data: returnLabelsAndValues(res),
         isFetching: false,
         status: "",
@@ -70,19 +69,44 @@ function fetchData_vacancies(){
       })
     )
     .catch((error: string) =>
-       setVacancyData({ data: {}, isFetching: false, status: error, })
+       setUnemploymentData({ data: {}, isFetching: false, status: error, })
     );
 
 }
 
-  useEffect(() => {
-    fetchData();
-    fetchData_vacancies();
-  }, []);
+// function fetchData_vacancies(){
+
+//   const fetchURL_vac: string = generateFetchURL_vacancies(selectedCountry);
+
+//   netEarningsData.isFetching=true
+
+//   fetch(fetchURL_vac)
+//     .then((res) => res.json())
+//     .then((res) =>
+//         setVacancyData({
+//         data: returnLabelsAndValues(res),
+//         isFetching: false,
+//         status: "",
+
+//       })
+//     )
+//     .catch((error: string) =>
+//        setVacancyData({ data: {}, isFetching: false, status: error, })
+//     );
+
+// }
+
+  // useEffect(() => {
+  //   fetchData_net();
+  //   // fetchData_vacancies();
+  //   fetchData_unemployemnt()
+  // }, [selectedCountry]);
 
   useEffect(() => {
-    fetchData();
-    fetchData_vacancies();
+    fetchData_net();
+    console.log('fetched')
+    // fetchData_vacancies();
+    fetchData_unemployemnt()
   }, [selectedCountry]);
 
   function changeCountry(newCountry: string): void {
@@ -124,15 +148,24 @@ function fetchData_vacancies(){
           // defaultCountry="Romania"
         />
       </div>
-      <div>
+      {/* <div>
         <Vacancies 
         selectedCountry={selectedCountry}
         vacancyData = {vacancyData.data}
         isFetching = {vacancyData.isFetching}
-        
+        />
+      </div> */}
 
+
+      <div>
+        <Unemployment
+        isFetching = {unemploymentData.isFetching}
+        selectedCountry={selectedCountry}
+        unemploymentData = {unemploymentData.data}
+        
         />
       </div>
+      <br style={{backgroundColor:"white"}}></br>
 
       <div>
         <Earnings
