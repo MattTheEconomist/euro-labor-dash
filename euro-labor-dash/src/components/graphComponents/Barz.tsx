@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {select} from "d3";
 import {chartDimensions} from "../../services/graphUtilityFunctions"
 
@@ -29,7 +29,7 @@ const Bar: React.FC<BarProps> = ({
   
     return (
       <g>
-        <rect ref={rectRef} 
+        <rect ref={rectRef} id={`${valueScaled}`}
         x={labelScaled}
         
         width={barWidth} fill="black" />

@@ -1,5 +1,5 @@
 import { scaleLinear, max, min, mean } from "d3";
-import { isLabeledStatement } from "typescript";
+// import { isLabeledStatement } from "typescript";
 
 export function generateYAxisFull(ar: Array<number>) {
   const yAxisValues = generateYaxisValues(ar);
@@ -45,7 +45,7 @@ export function generateXaxisFull(labels: Array<any>) {
 
   const xAxisText = xAxisValues.map((el, ind) => (
     <text
-      key={`xAxis ${el}`}
+      key={`xAxis ${el} ${Math.random()}`}
       x={xScaleAnnual(ind)}
       y={chartDimensions.chartAreaHeight - chartDimensions.margin.bottom}
       fontSize="small"
@@ -56,7 +56,7 @@ export function generateXaxisFull(labels: Array<any>) {
 
   const xAxisLine = (
     <line
-      id="xAxis_unemp"
+      id={`xAxisLine`}
       x1={chartDimensions.margin.left}
       y1={chartDimensions.chartHeightInner - chartDimensions.margin.bottom}
       x2={chartDimensions.chartAreaWidth - chartDimensions.margin.right}
@@ -85,12 +85,12 @@ export function generateYaxisValues(ar: Array<number>) {
 }
 
 export function generateXaxisValues(labels: Array<any>) {
-  const isQuarterly = String(labels[1]).length > 5;
+  const isQuarterly = String(labels[1]) === String(labels[0])
 
   if (isQuarterly) {
     return labels
       .filter((el: any, ind: number) => ind % 4 === 0)
-      .map((el: any) => el.getFullYear());
+      // .map((el: any) => el.getFullYear());
   } else {
     return labels.map((year: any) => parseInt(year));
   }
@@ -137,26 +137,52 @@ export function formatQuarterlyData(ar: Array<any>) {
 }
 
 
+
+
 export function consistentArrayLengths(labels: Array<any>, values:Array<any>){
-  labels = labels.map((year: any) => parseInt(year))
-  if(min(labels) < 2005 ){
-    const elementsToSlice = 2005 - min(labels);
-    labels = labels.slice(elementsToSlice)
-    values= values.slice(elementsToSlice)
+
+  const isQuarterly = String(labels[1]).length > 5;
+  let years = labels 
+  if(isQuarterly){
+    years = labels.map(el=>el.split("-")[0])
   }
-  if(min(labels) > 2005){
-    const minYear = min(labels);
-    const elementsToAdd: number = minYear - 2005;
+   years = years.map((year: any) => parseInt(year))
 
-    for (let i = 0; i < elementsToAdd; i++) {
-      labels.unshift(labels[0] - 1);
-      values.unshift(0);
-    }
 
-    values = values.slice(elementsToAdd);
+ if(min(years) < 2005 ){
+  //  return 5
+   let elementsToSlice = 2005 - min(years);
+
+   if(isQuarterly){
+     elementsToSlice=elementsToSlice*4
+   }
+   years = years.slice(elementsToSlice)
+   values= values.slice(elementsToSlice)
   }
 
-  return [labels, values]
+  if(years.length !== values.length){
+    const lengthDiff = values.length-years.length
+    values = values.slice(lengthDiff)
+  }
+
+  return [years, values]
+
+  
+  // return min(years)
+
+  // if(min(years) > 2005){
+  //   const minYear = min(years);
+  //   const elementsToAdd: number = minYear - 2005;
+
+  //   for (let i = 0; i < elementsToAdd; i++) {
+  //     years.unshift(years[0] - 1);
+  //     values.unshift(0);
+  //   }
+
+  //   values = values.slice(elementsToAdd);
+  // }
+
+  // return [years, values]
 }
 
 
@@ -165,6 +191,6 @@ export const chartDimensions = {
   chartAreaWidth: 700,
   margin: { top: 50, right: 10, bottom: 10, left: 50, axisTop: 20 },
   dataPoints: { centerToCenter: 40, barWidth: 12 },
-  chartHeightInner: 380,
+  chartHeightInner: 380
 
 };

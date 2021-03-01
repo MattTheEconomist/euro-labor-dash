@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Dotz from "../components/graphComponents/Dotz";
 import Linez from "../components/graphComponents/Line";
-import { scaleLinear, max, min, line, mean, select } from "d3";
 
 import {
-  generateYaxisValues,
   chartDimensions,
   yScale_imported,
   xScaleAnnual,
   generateYAxisFull,
   generateXaxisFull,
-  consistentArrayLengths
+  consistentArrayLengths,
 } from "../services/graphUtilityFunctions";
 
 interface UnemploymentProps {
@@ -21,13 +19,11 @@ interface UnemploymentProps {
 
 const Unemployment: React.FC<UnemploymentProps> = ({
   unemploymentData: unemploymentData,
-  selectedCountry,
   isFetching,
 }) => {
   let labels: Array<any> | any = [1, 2, 3];
   let values_unemp: Array<number> = [];
   let yAxis: any;
-  let yAxisValues: Array<number> = [];
   let xAxis: any;
   let xAxisLine: any;
   let lineComponent: any;
@@ -55,19 +51,21 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   labels = unemploymentData.labels;
   values_unemp = unemploymentData.values;
   
-  console.log(labels)
-//   if(Array.isArray(values_unemp)) {
-// labels = consistentArrayLengths(labels, values_unemp)[0]
-// values_unemp = consistentArrayLengths(labels, values_unemp)[1]
-//   }
+
+  if(Array.isArray(values_unemp)) {
+
+labels = consistentArrayLengths(labels, values_unemp)[0]
+values_unemp = consistentArrayLengths(labels, values_unemp)[1]
+  }
 
   if (Array.isArray(values_unemp)) {
+
+
     values_unempScaled = values_unemp.map((el) =>
       yScale_imported(values_unemp, el)
     );
     const labelsScaled = values_unemp.map((el, ind) => xScaleAnnual(ind));
 
-    yAxisValues = generateYaxisValues(values_unemp);
 
     yAxis = generateYAxisFull(values_unempScaled);
     xAxis = generateXaxisFull(labels);

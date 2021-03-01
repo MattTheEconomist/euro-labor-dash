@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { scaleLinear, max, min, mean, select } from "d3";
+import React from "react";
+// import { scaleLinear, max, min, mean, select } from "d3";
 import Bar from "../components/graphComponents/Barz";
 import {
-  formatQuarterlyData,
-  generateXaxisValues,
-  generateYaxisValues,
   chartDimensions,
   xScaleAnnual,
   generateYAxisFull,
@@ -27,7 +24,7 @@ const Earnings: React.FC<EarningsProps> = ({
 }) => {
   let labels: Array<any> = [];
   let values_net: Array<number> = [1, 2, 3];
-  let yScale_net: any;
+  // let yScale_net: any;
   let yAxis: any;
   let xAxis: any;
 
@@ -35,11 +32,18 @@ const Earnings: React.FC<EarningsProps> = ({
 
   values_net = netEarningsData.values;
   labels = netEarningsData.labels
+  
+  
+  
+  if (Array.isArray(values_net)) {
 
-// labels = consistentArrayLengths(labels, values_net)[0]
-// values_net = consistentArrayLengths(labels, values_net)[1]
+    labels = consistentArrayLengths(labels, values_net)[0]
+    values_net = consistentArrayLengths(labels, values_net)[1]
 
 
+  }
+  
+  
 
   if (Array.isArray(values_net)) {
     values_net = values_net.map((el) => Math.round(el / 1000));
@@ -47,12 +51,15 @@ const Earnings: React.FC<EarningsProps> = ({
 
 
   if (Array.isArray(values_net)) {
-    values_net = values_net.map((el: any) => Math.round(el));
+    // values_net = values_net.map((el: any) => Math.round(el));
+
 
     yAxis = generateYAxisFull(values_net);
     xAxis = generateXaxisFull(labels);
 
+
     bars = values_net.map((row: any, ind: number) => (
+
       <Bar
         labelScaled={xScaleAnnual(ind)}
         valueScaled={yScale_imported(values_net, row)}
