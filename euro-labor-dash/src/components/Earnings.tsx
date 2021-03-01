@@ -81,7 +81,7 @@ const Earnings: React.FC<EarningsProps> = ({
 
       {/* <div>{`${selectedCountry} Net Earnings`}</div> */}
 
-      <div style={{ backgroundColor: "grey", height: 400, width: 700 }}>
+      <div className='graphContainer'>
         <svg
           width={chartDimensions.chartAreaWidth}
           height={chartDimensions.chartAreaHeight}

@@ -56,6 +56,8 @@ const Unemployment: React.FC<UnemploymentProps> = ({
 
 labels = consistentArrayLengths(labels, values_unemp)[0]
 values_unemp = consistentArrayLengths(labels, values_unemp)[1]
+// console.log(labels)
+// console.log(values_unemp)
   }
 
   if (Array.isArray(values_unemp)) {
@@ -67,7 +69,7 @@ values_unemp = consistentArrayLengths(labels, values_unemp)[1]
     const labelsScaled = values_unemp.map((el, ind) => xScaleAnnual(ind));
 
 
-    yAxis = generateYAxisFull(values_unempScaled);
+    yAxis = generateYAxisFull(values_unemp);
     xAxis = generateXaxisFull(labels);
 
     lineComponent = (
@@ -90,7 +92,7 @@ values_unemp = consistentArrayLengths(labels, values_unemp)[1]
     <>
       {/* <div>{JSON.stringify(unemploymentData)}</div> */}
 
-      <div style={{ backgroundColor: "grey", height: 400, width: 700 }}>
+      <div className='graphContainer'>
         <svg
           width={chartDimensions.chartAreaWidth}
           height={chartDimensions.chartAreaHeight}

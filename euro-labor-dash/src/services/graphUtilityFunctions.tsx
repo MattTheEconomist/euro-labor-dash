@@ -8,7 +8,7 @@ export function generateYAxisFull(ar: Array<number>) {
     <text
       key={`yaxis ${el}`}
       x={5}
-      y={chartDimensions.chartAreaHeight - yScale_imported(yAxisValues, el)}
+      y={chartDimensions.chartAreaHeight - yScale_imported(yAxisValues, el)- chartDimensions.margin.bottom-10 }
     >
       {el}
     </text>
@@ -103,8 +103,8 @@ export function yScale_imported(
   const currentScale = scaleLinear()
     .domain([min(allValues) as number, max(allValues) as number])
     .range([
-      chartDimensions.margin.bottom + 50,
-      chartDimensions.chartAreaHeight - chartDimensions.margin.top - 50,
+      chartDimensions.margin.bottom + 25,
+      chartDimensions.chartAreaHeight - chartDimensions.margin.top - 25,
     ]);
 
   return currentScale(currentValue);
@@ -165,32 +165,32 @@ export function consistentArrayLengths(labels: Array<any>, values:Array<any>){
     values = values.slice(lengthDiff)
   }
 
-  return [years, values]
+  // return [years, values]
 
   
   // return min(years)
 
-  // if(min(years) > 2005){
-  //   const minYear = min(years);
-  //   const elementsToAdd: number = minYear - 2005;
+  if(min(years) > 2005){
+    const minYear = min(years);
+    const elementsToAdd: number = minYear - 2005;
 
-  //   for (let i = 0; i < elementsToAdd; i++) {
-  //     years.unshift(years[0] - 1);
-  //     values.unshift(0);
-  //   }
+    for (let i = 0; i < elementsToAdd; i++) {
+      years.unshift(years[0] - 1);
+      values.unshift(0);
+    }
 
-  //   values = values.slice(elementsToAdd);
-  // }
+    values = values.slice(elementsToAdd);
+  }
 
-  // return [years, values]
+  return [years, values]
 }
 
 
 export const chartDimensions = {
-  chartAreaHeight: 400,
+  chartAreaHeight: 300,
   chartAreaWidth: 700,
-  margin: { top: 50, right: 10, bottom: 10, left: 50, axisTop: 20 },
+  margin: { top: 10, right: 10, bottom: 0, left: 50, axisTop: 10 },
   dataPoints: { centerToCenter: 40, barWidth: 12 },
-  chartHeightInner: 380
+  chartHeightInner: 280
 
 };

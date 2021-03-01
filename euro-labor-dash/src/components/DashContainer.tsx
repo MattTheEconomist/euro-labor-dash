@@ -154,7 +154,7 @@ const DashContainer: React.FC = () => {
           unemploymentData={unemploymentData.data}
         />
       </div>
-      <br style={{ backgroundColor: "white" }}></br>
+      {/* <br style={{ backgroundColor: "white" }}></br> */}
 
       <div>
         <Earnings
@@ -169,17 +169,3 @@ const DashContainer: React.FC = () => {
 
 export default DashContainer;
 
-//   interface PropsWithChildren<netEarningsData>{
-//     labels: any | undefined;
-//     values?: any | undefined;
-//     seriesName?: any | undefined;
-// }
-// interface intrinsicAttributes{
-//   netEarningsData: {lables: any, values: any }
-// }
-
-// interface netEarningsData{
-//   labels: any | undefined;
-//   values?: any | undefined;
-//   seriesName?: any | undefined;
-// }
