@@ -77,7 +77,7 @@ const Earnings: React.FC<EarningsProps> = ({
 
   return (
     <>
-      <div>{JSON.stringify(netEarningsData)}</div>
+      {/* <div>{JSON.stringify(netEarningsData)}</div> */}
 
       {/* <div>{`${selectedCountry} Net Earnings`}</div> */}
 

@@ -6,7 +6,7 @@ import { create } from "domain";
 interface VacancyProps{
 
     selectedCountry?: string;
-    vacancyData: any;
+    vacanciesData: any;
     isFetching: boolean;
 }
 
@@ -14,14 +14,14 @@ interface VacancyProps{
 
 
 const Vacancies: React.FC<VacancyProps>=({
-    vacancyData: vacancyData, 
+    vacanciesData: vacanciesData, 
     selectedCountry, 
     isFetching
 
 
 }) =>{
 
-    return  <div>{JSON.stringify(vacancyData)}</div>
+    return  <div>{JSON.stringify(vacanciesData)}</div>
 }
 
 
