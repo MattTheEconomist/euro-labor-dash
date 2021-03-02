@@ -1,5 +1,5 @@
 import React from "react";
-import Bar from "../components/graphComponents/Barz";
+import Bar from "./graphComponents/Bar";
 // import Bar from "C:/Users/Admin/Documents/js/react/euro-labor-dash/euro-labor-dash/src/components/Barz";
 
 import {
@@ -9,18 +9,20 @@ import {
   generateXaxisFull,
   yScale_imported,
   consistentArrayLengths,
+  missingDataMessage,
 } from "../services/graphUtilityFunctions";
 
 
 interface EarningsProps {
   children?: any;
-  selectedCountry?: string;
+  selectedCountry: string;
   netEarningsData: any;
   isFetching: boolean;
 }
 
 const Earnings: React.FC<EarningsProps> = ({
-  netEarningsData: netEarningsData,
+  // netEarningsData: netEarningsData,
+  netEarningsData,
   selectedCountry,
   isFetching,
 }) => {
@@ -28,11 +30,21 @@ const Earnings: React.FC<EarningsProps> = ({
   let values_net: Array<number> = [1, 2, 3];
   let yAxis: any;
   let xAxis: any;
+  let fetchError : boolean = false; 
+  let errorMessage: any; 
+  const seriesName: string = 'Earnings'
 
   let bars: any;
 
   values_net = netEarningsData.values;
   labels = netEarningsData.labels
+
+  
+  if(values_net=== null){
+    fetchError=true 
+  }else{
+    fetchError=false
+  }
   
   
   
@@ -64,28 +76,36 @@ const Earnings: React.FC<EarningsProps> = ({
       <Bar
         labelScaled={xScaleAnnual(ind)}
         valueScaled={yScale_imported(values_net, row)}
+        valueRaw = {row}
         barWidth={chartDimensions.dataPoints.barWidth}
-        barHeight_net={
-          values_net === undefined || values_net.length === 0
-            ? 0
-            :yScale_imported(values_net, row)
-        }
         key={ind}
       />
     ));
   }
 
+  if(values_net=== null){
+    
+    errorMessage = missingDataMessage(seriesName, selectedCountry)
+
+    let fakeLabels = []
+    for(let i=0; i<16; i++){fakeLabels.push(2005+i)}
+    xAxis = generateXaxisFull(fakeLabels)
+
+
+  }
+
   return (
     <>
-      <div>{JSON.stringify(netEarningsData)}</div>
+      {/* <div>{JSON.stringify(netEarningsData)}</div> */}
 
       {/* <div>{`${selectedCountry} Net Earnings`}</div> */}
 
-      <div style={{ backgroundColor: "grey", height: 400, width: 700 }}>
+      <div className='graphContainer'>
         <svg
           width={chartDimensions.chartAreaWidth}
           height={chartDimensions.chartAreaHeight}
         >
+          {errorMessage}
           {yAxis}
           {xAxis}
           {bars}

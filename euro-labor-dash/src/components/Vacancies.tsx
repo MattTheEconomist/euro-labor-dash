@@ -1,28 +1,107 @@
-import React, { useEffect, useState } from "react";
-import { scaleLinear, max, min, mean, select } from "d3";
-import { create } from "domain";
+import React from "react";
+import Bar from "./graphComponents/Bar";
+// import Bar from "C:/Users/Admin/Documents/js/react/euro-labor-dash/euro-labor-dash/src/components/Barz";
+// import styles from './App.css'
+import  '../App.css'
 
+import {
+  chartDimensions,
+  xScaleAnnual,
+  generateYAxisFull,
+  generateXaxisFull,
+  yScale_imported,
+  consistentArrayLengths,
+  missingDataMessage, 
+} from "../services/graphUtilityFunctions";
+import "../App.css";
+// import { geoConicConformalRaw } from "d3";
+// import { error } from "console";
 
-interface VacancyProps{
-
-    selectedCountry?: string;
-    vacancyData: any;
-    isFetching: boolean;
+interface VacancyProps {
+  children?: any;
+  selectedCountry: string;
+  vacanciesData: any;
+  isFetching: boolean;
+  // status:string; 
 }
 
+const Vacancies: React.FC<VacancyProps> = ({
+  vacanciesData,
+  selectedCountry,
+  isFetching,
+}) => {
+  let labels: Array<any> = [];
+  let values_vac: Array<number> = [1, 2, 3];
+  let yAxis: any;
+  let xAxis: any;
+  let fetchError : boolean = false; 
+  let errorMessage: any; 
+  const seriesName: string = 'Vacancies'
+
+  let bars: any;
+
+  
+
+  values_vac = vacanciesData.values;
+  labels = vacanciesData.labels;
+
+  if(values_vac=== null){
+    fetchError=true 
+  }else{
+    fetchError=false
+  }
 
 
 
-const Vacancies: React.FC<VacancyProps>=({
-    vacancyData: vacancyData, 
-    selectedCountry, 
-    isFetching
+  if (Array.isArray(values_vac)) {
+    labels = consistentArrayLengths(labels, values_vac)[0];
+    values_vac = consistentArrayLengths(labels, values_vac)[1];
+
+    yAxis = generateYAxisFull(values_vac);
+    xAxis = generateXaxisFull(labels);
 
 
-}) =>{
+    bars =  values_vac.map((row: any, ind: number) => (
 
-    return  <div>{JSON.stringify(vacancyData)}</div>
-}
+        <Bar
+          labelScaled={xScaleAnnual(ind)}
+          valueScaled={yScale_imported( values_vac, row)}
+          barWidth={chartDimensions.dataPoints.barWidth}
+          key={`${ind} vac`}
+          valueRaw = {row}
+        />
+      ))
+
+  }
 
 
-export default Vacancies
+  
+  if(fetchError){
+    errorMessage = missingDataMessage(seriesName, selectedCountry)
+  }
+
+
+
+  return(<>
+  {/* <div>{JSON.stringify(vacanciesData)}</div> */}
+
+  {/* <div style={{ backgroundColor: "grey", height: 350, width: 700 }}> */}
+  <div className='graphContainer'>
+        <svg
+          width={chartDimensions.chartAreaWidth}
+          height={chartDimensions.chartAreaHeight}
+        > 
+          {errorMessage}
+          {yAxis}
+          {xAxis}
+          {bars}
+        </svg>
+      </div>
+  </>
+
+
+
+  ) ;
+};
+
+export default Vacancies;

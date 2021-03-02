@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Dotz from "../components/graphComponents/Dotz";
+import Dotz from "./graphComponents/Dot";
 import Linez from "../components/graphComponents/Line";
 
 import {
@@ -9,16 +9,18 @@ import {
   generateYAxisFull,
   generateXaxisFull,
   consistentArrayLengths,
+  missingDataMessage,
 } from "../services/graphUtilityFunctions";
 
 interface UnemploymentProps {
-  selectedCountry?: string;
+  selectedCountry: string;
   unemploymentData: any;
   isFetching: boolean;
 }
 
 const Unemployment: React.FC<UnemploymentProps> = ({
-  unemploymentData: unemploymentData,
+  selectedCountry,
+  unemploymentData,
   isFetching,
 }) => {
   let labels: Array<any> | any = [1, 2, 3];
@@ -29,12 +31,20 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   let lineComponent: any;
   let values_unempScaled: any;
   let dots: any;
+  let fetchError : boolean = false; 
+  let errorMessage: any; 
+  const seriesName: string = 'Unemployment'
+
+
+
+
 
   const useMousePoz = () => {
     const [mousePoz, setMousePoz] = useState({ mouseX: 0, mouseY: 0 });
 
     const updateMousePoz = (ev: any) => {
-      setMousePoz({ mouseX: ev.clientX, mouseY: ev.clientY });
+      setMousePoz({ mouseX: ev.clientX-window.scrollX, 
+        mouseY: ev.clientY-window.scrollY-chartDimensions.chartAreaHeight-chartDimensions.upwardAdjust });
     };
 
     useEffect(() => {
@@ -50,12 +60,20 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   
   labels = unemploymentData.labels;
   values_unemp = unemploymentData.values;
+
+
+  if(values_unemp=== null){
+    fetchError=true 
+  }else{
+    fetchError=false
+  }
   
 
   if(Array.isArray(values_unemp)) {
 
 labels = consistentArrayLengths(labels, values_unemp)[0]
 values_unemp = consistentArrayLengths(labels, values_unemp)[1]
+
   }
 
   if (Array.isArray(values_unemp)) {
@@ -67,7 +85,7 @@ values_unemp = consistentArrayLengths(labels, values_unemp)[1]
     const labelsScaled = values_unemp.map((el, ind) => xScaleAnnual(ind));
 
 
-    yAxis = generateYAxisFull(values_unempScaled);
+    yAxis = generateYAxisFull(values_unemp);
     xAxis = generateXaxisFull(labels);
 
     lineComponent = (
@@ -86,15 +104,21 @@ values_unemp = consistentArrayLengths(labels, values_unemp)[1]
     );
   }
 
+  if(fetchError){
+    errorMessage = missingDataMessage(seriesName, selectedCountry)
+  }
+
+
   return (
     <>
       {/* <div>{JSON.stringify(unemploymentData)}</div> */}
 
-      <div style={{ backgroundColor: "grey", height: 400, width: 700 }}>
+      <div className='graphContainer'>
         <svg
           width={chartDimensions.chartAreaWidth}
           height={chartDimensions.chartAreaHeight}
         >
+          {errorMessage}
           {dots}
           {lineComponent}
           {yAxis}
