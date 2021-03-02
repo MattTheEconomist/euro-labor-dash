@@ -78,12 +78,12 @@ const DashContainer: React.FC = () => {
           setVacanciesData({
           data: returnLabelsAndValues(res),
           isFetching: false,
-          status: "",
+          status: "found",
 
         })
       )
       .catch((error: string) =>
-         setVacanciesData({ data: {}, isFetching: false, status: error, })
+         setVacanciesData({ data: {}, isFetching: false, status: "error", })
       );
 
   }
@@ -135,6 +135,7 @@ const DashContainer: React.FC = () => {
         selectedCountry={selectedCountry}
         vacanciesData = {vacanciesData.data}
         isFetching = {vacanciesData.isFetching}
+        // status = {vacanciesData.status}
         />
       </div>
 

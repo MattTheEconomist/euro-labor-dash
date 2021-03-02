@@ -19,10 +19,8 @@ export function generateYAxisFull(ar: Array<number>) {
       id="xAxis_unemp"
       x1={chartDimensions.margin.left}
       y1={chartDimensions.chartHeightInner - chartDimensions.margin.bottom}
-      // y1={chartDimensions.chartHeightInner - chartDimensions.margin.bottom}
       x2={chartDimensions.margin.left}
       y2={chartDimensions.margin.top}
-      // y2={chartDimensions.margin.axisTop}
       stroke="black"
     />
   );
@@ -41,7 +39,18 @@ export function generateXaxisFull(labels: Array<any>) {
     labels = formatQuarterlyData(labels);
   }
 
-  const xAxisValues = generateXaxisValues(labels);
+
+   let xAxisValues = generateXaxisValues(labels);
+  //  console.log(labels)
+
+
+  //  if(!Array.isArray(labels)){
+  //   let fakeLabels = []
+  //   for(let i=0; i<16; i++){fakeLabels.push(2005+i)}
+  //   xAxisValues = fakeLabels
+
+  //   console.log("hi")
+  // }
 
   const xAxisText = xAxisValues.map((el, ind) => (
     <text
@@ -165,11 +174,6 @@ export function consistentArrayLengths(labels: Array<any>, values:Array<any>){
     values = values.slice(lengthDiff)
   }
 
-  // return [years, values]
-
-  
-  // return min(years)
-
   if(min(years) > 2005){
     const minYear = min(years);
     const elementsToAdd: number = minYear - 2005;
@@ -183,6 +187,41 @@ export function consistentArrayLengths(labels: Array<any>, values:Array<any>){
   }
 
   return [years, values]
+}
+
+
+export function missingDataMessage(seriesName :string, selectedCountry:string){
+return (
+  <>
+<text
+    x={chartDimensions.chartAreaWidth/2}
+    y={chartDimensions.chartAreaHeight/2}
+    >{`No ${seriesName} data for ${selectedCountry}`}
+    </text>
+
+
+     <line 
+       id={`xAxisLine`}
+       x1={chartDimensions.margin.left}
+       y1={chartDimensions.chartHeightInner - chartDimensions.margin.bottom}
+       x2={chartDimensions.chartAreaWidth - chartDimensions.margin.right}
+       y2={chartDimensions.chartHeightInner - chartDimensions.margin.bottom}
+       stroke="black"
+     />
+
+<line
+      id="xAxis_unemp"
+      x1={chartDimensions.margin.left}
+      y1={chartDimensions.chartHeightInner - chartDimensions.margin.bottom}
+      x2={chartDimensions.margin.left}
+      y2={chartDimensions.margin.top}
+      stroke="black"
+    />
+
+    </>
+)
+  
+
 }
 
 

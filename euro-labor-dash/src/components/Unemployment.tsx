@@ -9,15 +9,17 @@ import {
   generateYAxisFull,
   generateXaxisFull,
   consistentArrayLengths,
+  missingDataMessage,
 } from "../services/graphUtilityFunctions";
 
 interface UnemploymentProps {
-  selectedCountry?: string;
+  selectedCountry: string;
   unemploymentData: any;
   isFetching: boolean;
 }
 
 const Unemployment: React.FC<UnemploymentProps> = ({
+  selectedCountry,
   unemploymentData,
   isFetching,
 }) => {
@@ -29,6 +31,13 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   let lineComponent: any;
   let values_unempScaled: any;
   let dots: any;
+  let fetchError : boolean = false; 
+  let errorMessage: any; 
+  const seriesName: string = 'Unemployment'
+
+
+
+
 
   const useMousePoz = () => {
     const [mousePoz, setMousePoz] = useState({ mouseX: 0, mouseY: 0 });
@@ -50,14 +59,20 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   
   labels = unemploymentData.labels;
   values_unemp = unemploymentData.values;
+
+
+  if(values_unemp=== null){
+    fetchError=true 
+  }else{
+    fetchError=false
+  }
   
 
   if(Array.isArray(values_unemp)) {
 
 labels = consistentArrayLengths(labels, values_unemp)[0]
 values_unemp = consistentArrayLengths(labels, values_unemp)[1]
-// console.log(labels)
-// console.log(values_unemp)
+
   }
 
   if (Array.isArray(values_unemp)) {
@@ -88,6 +103,11 @@ values_unemp = consistentArrayLengths(labels, values_unemp)[1]
     );
   }
 
+  if(fetchError){
+    errorMessage = missingDataMessage(seriesName, selectedCountry)
+  }
+
+
   return (
     <>
       {/* <div>{JSON.stringify(unemploymentData)}</div> */}
@@ -97,6 +117,7 @@ values_unemp = consistentArrayLengths(labels, values_unemp)[1]
           width={chartDimensions.chartAreaWidth}
           height={chartDimensions.chartAreaHeight}
         >
+          {errorMessage}
           {dots}
           {lineComponent}
           {yAxis}

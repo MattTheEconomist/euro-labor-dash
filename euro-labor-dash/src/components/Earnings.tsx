@@ -9,12 +9,13 @@ import {
   generateXaxisFull,
   yScale_imported,
   consistentArrayLengths,
+  missingDataMessage,
 } from "../services/graphUtilityFunctions";
 
 
 interface EarningsProps {
   children?: any;
-  selectedCountry?: string;
+  selectedCountry: string;
   netEarningsData: any;
   isFetching: boolean;
 }
@@ -29,11 +30,21 @@ const Earnings: React.FC<EarningsProps> = ({
   let values_net: Array<number> = [1, 2, 3];
   let yAxis: any;
   let xAxis: any;
+  let fetchError : boolean = false; 
+  let errorMessage: any; 
+  const seriesName: string = 'Earnings'
 
   let bars: any;
 
   values_net = netEarningsData.values;
   labels = netEarningsData.labels
+
+  
+  if(values_net=== null){
+    fetchError=true 
+  }else{
+    fetchError=false
+  }
   
   
   
@@ -72,6 +83,17 @@ const Earnings: React.FC<EarningsProps> = ({
     ));
   }
 
+  if(values_net=== null){
+    
+    errorMessage = missingDataMessage(seriesName, selectedCountry)
+
+    let fakeLabels = []
+    for(let i=0; i<16; i++){fakeLabels.push(2005+i)}
+    xAxis = generateXaxisFull(fakeLabels)
+
+
+  }
+
   return (
     <>
       {/* <div>{JSON.stringify(netEarningsData)}</div> */}
@@ -83,6 +105,7 @@ const Earnings: React.FC<EarningsProps> = ({
           width={chartDimensions.chartAreaWidth}
           height={chartDimensions.chartAreaHeight}
         >
+          {errorMessage}
           {yAxis}
           {xAxis}
           {bars}
