@@ -6,7 +6,7 @@ interface BarProps {
   labelScaled: number;
     valueScaled: number;
     barWidth: number;
-    barHeight_net: number;
+    valueRaw:number; 
   }
 
 
@@ -14,17 +14,17 @@ const Bar: React.FC<BarProps> = ({
     labelScaled,
     valueScaled,
     barWidth,
-    barHeight_net,
+    valueRaw, 
 
   }) => {
-    if (isNaN(valueScaled)) {
+    if (isNaN(valueScaled) || valueRaw===0) {
       valueScaled = 0;
     }
   
     const rectRef: any = React.createRef();
   
     useEffect(() => {
-      animateBars(rectRef, valueScaled, barHeight_net);
+      animateBars(rectRef, valueScaled);
     });
   
     return (
@@ -39,17 +39,16 @@ const Bar: React.FC<BarProps> = ({
 
 
   
-const animateBars = (rectRef: any, y_net: number, barHeight_net: number) => {
+const animateBars = (rectRef: any, valueScaled: number) => {
     const rect = select(rectRef.current);
 
-    y_net = chartDimensions.chartHeightInner - barHeight_net- chartDimensions.margin.bottom
-
+    const y_net = chartDimensions.chartHeightInner - valueScaled- chartDimensions.margin.bottom
   
     rect
   
       .transition()
       .duration(1000)
-      .attr("height", barHeight_net)
+      .attr("height", valueScaled)
       .attr("y", y_net);
       // .attr("y", 0);
   };

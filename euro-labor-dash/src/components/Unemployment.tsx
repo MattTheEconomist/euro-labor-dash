@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Dotz from "../components/graphComponents/Dotz";
+import Dotz from "./graphComponents/Dot";
 import Linez from "../components/graphComponents/Line";
 
 import {
@@ -18,7 +18,7 @@ interface UnemploymentProps {
 }
 
 const Unemployment: React.FC<UnemploymentProps> = ({
-  unemploymentData: unemploymentData,
+  unemploymentData,
   isFetching,
 }) => {
   let labels: Array<any> | any = [1, 2, 3];

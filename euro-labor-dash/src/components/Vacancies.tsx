@@ -1,5 +1,5 @@
 import React from "react";
-import Bar from "../components/graphComponents/Barz";
+import Bar from "./graphComponents/Bar";
 // import Bar from "C:/Users/Admin/Documents/js/react/euro-labor-dash/euro-labor-dash/src/components/Barz";
 // import styles from './App.css'
 import  '../App.css'
@@ -22,7 +22,7 @@ interface VacancyProps {
 }
 
 const Vacancies: React.FC<VacancyProps> = ({
-  vacanciesData: vacanciesData,
+  vacanciesData,
   selectedCountry,
   isFetching,
 }) => {
@@ -50,12 +50,8 @@ const Vacancies: React.FC<VacancyProps> = ({
           labelScaled={xScaleAnnual(ind)}
           valueScaled={yScale_imported( values_vac, row)}
           barWidth={chartDimensions.dataPoints.barWidth}
-          barHeight_net={
-            values_vac === undefined ||  values_vac.length === 0
-              ? 0
-              :yScale_imported( values_vac, row)
-          }
           key={`${ind} vac`}
+          valueRaw = {row}
         />
       ))
 

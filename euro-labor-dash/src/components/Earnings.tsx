@@ -1,5 +1,5 @@
 import React from "react";
-import Bar from "../components/graphComponents/Barz";
+import Bar from "./graphComponents/Bar";
 // import Bar from "C:/Users/Admin/Documents/js/react/euro-labor-dash/euro-labor-dash/src/components/Barz";
 
 import {
@@ -20,7 +20,8 @@ interface EarningsProps {
 }
 
 const Earnings: React.FC<EarningsProps> = ({
-  netEarningsData: netEarningsData,
+  // netEarningsData: netEarningsData,
+  netEarningsData,
   selectedCountry,
   isFetching,
 }) => {
@@ -64,12 +65,8 @@ const Earnings: React.FC<EarningsProps> = ({
       <Bar
         labelScaled={xScaleAnnual(ind)}
         valueScaled={yScale_imported(values_net, row)}
+        valueRaw = {row}
         barWidth={chartDimensions.dataPoints.barWidth}
-        barHeight_net={
-          values_net === undefined || values_net.length === 0
-            ? 0
-            :yScale_imported(values_net, row)
-        }
         key={ind}
       />
     ));
