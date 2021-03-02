@@ -11,6 +11,7 @@ import {
   generateXaxisFull,
   yScale_imported,
   consistentArrayLengths,
+  generateGraphTitle,
   missingDataMessage, 
 } from "../services/graphUtilityFunctions";
 import "../App.css";
@@ -36,7 +37,8 @@ const Vacancies: React.FC<VacancyProps> = ({
   let xAxis: any;
   let fetchError : boolean = false; 
   let errorMessage: any; 
-  const seriesName: string = 'Vacancies'
+  const seriesName: string = 'Vacancy Rate'
+  let graphTitle:any; 
 
   let bars: any;
 
@@ -80,6 +82,8 @@ const Vacancies: React.FC<VacancyProps> = ({
     errorMessage = missingDataMessage(seriesName, selectedCountry)
   }
 
+  graphTitle = generateGraphTitle(seriesName, selectedCountry)
+
 
 
   return(<>
@@ -91,6 +95,7 @@ const Vacancies: React.FC<VacancyProps> = ({
           width={chartDimensions.chartAreaWidth}
           height={chartDimensions.chartAreaHeight}
         > 
+        {graphTitle}
           {errorMessage}
           {yAxis}
           {xAxis}

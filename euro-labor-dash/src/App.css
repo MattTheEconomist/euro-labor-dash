@@ -17,13 +17,13 @@
 
 
 
-/* body{ */
-  /* background-color:dodgerblue */
-/* } */
-
 .graphContainer{
   /* height: 350; */
-  height: 350px;
+  height: 280px;
   background-color: rgb(153, 190, 226);
   width: 700px;
+}
+
+.missingDataMessage{
+  fill: rgb(83, 83, 83)
 }

@@ -1,6 +1,5 @@
 import React from "react";
 import Bar from "./graphComponents/Bar";
-// import Bar from "C:/Users/Admin/Documents/js/react/euro-labor-dash/euro-labor-dash/src/components/Barz";
 
 import {
   chartDimensions,
@@ -10,6 +9,7 @@ import {
   yScale_imported,
   consistentArrayLengths,
   missingDataMessage,
+  generateGraphTitle,
 } from "../services/graphUtilityFunctions";
 
 
@@ -32,7 +32,8 @@ const Earnings: React.FC<EarningsProps> = ({
   let xAxis: any;
   let fetchError : boolean = false; 
   let errorMessage: any; 
-  const seriesName: string = 'Earnings'
+  const seriesName: string = 'Earnings';
+  let graphTitle:any; 
 
   let bars: any;
 
@@ -86,13 +87,9 @@ const Earnings: React.FC<EarningsProps> = ({
   if(values_net=== null){
     
     errorMessage = missingDataMessage(seriesName, selectedCountry)
-
-    let fakeLabels = []
-    for(let i=0; i<16; i++){fakeLabels.push(2005+i)}
-    xAxis = generateXaxisFull(fakeLabels)
-
-
   }
+
+  graphTitle = generateGraphTitle(seriesName, selectedCountry)
 
   return (
     <>
@@ -105,6 +102,7 @@ const Earnings: React.FC<EarningsProps> = ({
           width={chartDimensions.chartAreaWidth}
           height={chartDimensions.chartAreaHeight}
         >
+          {graphTitle}
           {errorMessage}
           {yAxis}
           {xAxis}

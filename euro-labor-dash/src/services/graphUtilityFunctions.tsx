@@ -41,16 +41,6 @@ export function generateXaxisFull(labels: Array<any>) {
 
 
    let xAxisValues = generateXaxisValues(labels);
-  //  console.log(labels)
-
-
-  //  if(!Array.isArray(labels)){
-  //   let fakeLabels = []
-  //   for(let i=0; i<16; i++){fakeLabels.push(2005+i)}
-  //   xAxisValues = fakeLabels
-
-  //   console.log("hi")
-  // }
 
   const xAxisText = xAxisValues.map((el, ind) => (
     <text
@@ -104,6 +94,9 @@ export function generateXaxisValues(labels: Array<any>) {
     return labels.map((year: any) => parseInt(year));
   }
 }
+
+
+
 
 export function yScale_imported(
   allValues: Array<number>,
@@ -189,12 +182,20 @@ export function consistentArrayLengths(labels: Array<any>, values:Array<any>){
   return [years, values]
 }
 
+export function generateGraphTitle(seriesName :string, selectedCountry:string){
+
+  return <text
+  x={chartDimensions.title.titleX}
+  y={chartDimensions.title.titleY}
+  
+  >{`${selectedCountry} ${seriesName}`}</text>
+}
 
 export function missingDataMessage(seriesName :string, selectedCountry:string){
 return (
   <>
-<text
-    x={chartDimensions.chartAreaWidth/2}
+<text className="missingDataMessage"
+    x={chartDimensions.title.titleX-30}
     y={chartDimensions.chartAreaHeight/2}
     >{`No ${seriesName} data for ${selectedCountry}`}
     </text>
@@ -226,12 +227,13 @@ return (
 
 
 export const chartDimensions = {
-  chartAreaHeight: 300,
+  chartAreaHeight: 250,
   chartAreaWidth: 700,
   margin: { top: 10, right: 10, bottom: 0, left: 50, axisTop: 10 },
   dataPoints: { centerToCenter: 40, barWidth: 12 },
-  chartHeightInner: 280, 
+  chartHeightInner: 230, 
   upwardAdjust:50, 
+  title:{titleX: 320, titleY: 20}
 
 
 };

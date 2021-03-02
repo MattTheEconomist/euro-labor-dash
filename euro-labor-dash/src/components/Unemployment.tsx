@@ -9,6 +9,7 @@ import {
   generateYAxisFull,
   generateXaxisFull,
   consistentArrayLengths,
+  generateGraphTitle,
   missingDataMessage,
 } from "../services/graphUtilityFunctions";
 
@@ -33,7 +34,8 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   let dots: any;
   let fetchError : boolean = false; 
   let errorMessage: any; 
-  const seriesName: string = 'Unemployment'
+  const seriesName: string = 'Unemployment';
+  let graphTitle:any; 
 
 
 
@@ -108,6 +110,8 @@ values_unemp = consistentArrayLengths(labels, values_unemp)[1]
     errorMessage = missingDataMessage(seriesName, selectedCountry)
   }
 
+  graphTitle = generateGraphTitle(seriesName, selectedCountry)
+
 
   return (
     <>
@@ -118,6 +122,7 @@ values_unemp = consistentArrayLengths(labels, values_unemp)[1]
           width={chartDimensions.chartAreaWidth}
           height={chartDimensions.chartAreaHeight}
         >
+            {graphTitle}
           {errorMessage}
           {dots}
           {lineComponent}
