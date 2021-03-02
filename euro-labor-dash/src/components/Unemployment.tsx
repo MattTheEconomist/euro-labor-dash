@@ -43,7 +43,8 @@ const Unemployment: React.FC<UnemploymentProps> = ({
     const [mousePoz, setMousePoz] = useState({ mouseX: 0, mouseY: 0 });
 
     const updateMousePoz = (ev: any) => {
-      setMousePoz({ mouseX: ev.clientX, mouseY: ev.clientY });
+      setMousePoz({ mouseX: ev.clientX-window.scrollX, 
+        mouseY: ev.clientY-window.scrollY-chartDimensions.chartAreaHeight-chartDimensions.upwardAdjust });
     };
 
     useEffect(() => {

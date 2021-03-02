@@ -230,6 +230,8 @@ export const chartDimensions = {
   chartAreaWidth: 700,
   margin: { top: 10, right: 10, bottom: 0, left: 50, axisTop: 10 },
   dataPoints: { centerToCenter: 40, barWidth: 12 },
-  chartHeightInner: 280
+  chartHeightInner: 280, 
+  upwardAdjust:50, 
+
 
 };
