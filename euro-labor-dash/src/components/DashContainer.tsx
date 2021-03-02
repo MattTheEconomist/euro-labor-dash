@@ -7,7 +7,12 @@ import {
 } from "../services/URLgenerationFunctions";
 import Earnings from "./Earnings";
 import Unemployment from "./Unemployment";
-import Vacancies from "./Vacancies"
+import Vacancies from "./Vacancies";
+// import HoverTable from "./HoverTable"
+import HoverTable from "./HoverTable";
+import {chartDimensions} from "../services/graphUtilityFunctions"
+
+// import HoverTable from 'c:/Users/Admin/Documents/js/react/euro-labor-dash/euro-labor-dash/src/components/HoverTable'
 
 const DashContainer: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>("Euro area");
@@ -66,36 +71,54 @@ const DashContainer: React.FC = () => {
       );
   }
 
-  function fetchData_vacancies(){
-
+  function fetchData_vacancies() {
     const fetchURL_vac: string = generateFetchURL_vacancies(selectedCountry);
 
-    netEarningsData.isFetching=true
+    netEarningsData.isFetching = true;
 
     fetch(fetchURL_vac)
       .then((res) => res.json())
       .then((res) =>
-          setVacanciesData({
+        setVacanciesData({
           data: returnLabelsAndValues(res),
           isFetching: false,
           status: "found",
-
         })
       )
       .catch((error: string) =>
-         setVacanciesData({ data: {}, isFetching: false, status: "error", })
+        setVacanciesData({ data: {}, isFetching: false, status: "error" })
       );
-
   }
 
-
-  useEffect(fetchData_net, [selectedCountry])
-  useEffect(fetchData_vacancies, [selectedCountry])
-  useEffect(fetchData_unemployemnt, [selectedCountry])
+  useEffect(fetchData_net, [selectedCountry]);
+  useEffect(fetchData_vacancies, [selectedCountry]);
+  useEffect(fetchData_unemployemnt, [selectedCountry]);
 
   function changeCountry(newCountry: string): void {
     setSelectedCountry(newCountry);
   }
+
+
+  const useMousePoz = () => {
+    const [mousePoz, setMousePoz] = useState({ mouseX: 0, mouseY: 0 });
+
+    const updateMousePoz = (ev: any) => {
+      setMousePoz({ mouseX: ev.clientX-window.scrollX, 
+        mouseY: ev.clientY-window.scrollY-chartDimensions.chartAreaHeight-chartDimensions.upwardAdjust });
+    };
+
+    useEffect(() => {
+      window.addEventListener("mousemove", updateMousePoz);
+
+      return () => window.removeEventListener("mousemove", updateMousePoz);
+    }, []);
+    return mousePoz;
+  };
+
+  const { mouseX, mouseY } = useMousePoz();
+
+
+
 
   function returnLabelsAndValues(obj: any): any | null {
     interface rez {
@@ -127,27 +150,8 @@ const DashContainer: React.FC = () => {
         <ControlPanel
           changeCountry={changeCountry}
           defaultCountry="Euro area"
-          // defaultCountry="Romania"
         />
       </div>
-      <div>
-        <Vacancies 
-        selectedCountry={selectedCountry}
-        vacanciesData = {vacanciesData.data}
-        isFetching = {vacanciesData.isFetching}
-        // status = {vacanciesData.status}
-        />
-      </div>
-
-      <div>
-        <Unemployment
-          isFetching={unemploymentData.isFetching}
-          selectedCountry={selectedCountry}
-          unemploymentData={unemploymentData.data}
-        />
-      </div>
-      {/* <br style={{ backgroundColor: "white" }}></br> */}
-
       <div>
         <Earnings
           netEarningsData={netEarningsData.data}
@@ -155,9 +159,35 @@ const DashContainer: React.FC = () => {
           isFetching={netEarningsData.isFetching}
         />
       </div>
+      <div className="float-container">
+        <div className="float-child">
+          <Unemployment
+            isFetching={unemploymentData.isFetching}
+            selectedCountry={selectedCountry}
+            unemploymentData={unemploymentData.data}
+            mouseX = {mouseX}
+            mouseY = {mouseY}
+          />
+        </div>
+        <div className="float-child">
+          <HoverTable 
+          selectedCountry={selectedCountry}
+          mouseX = {mouseX}
+          mouseY = {mouseY}
+          
+          />
+        </div>
+      </div>
+
+      <div>
+        <Vacancies
+          selectedCountry={selectedCountry}
+          vacanciesData={vacanciesData.data}
+          isFetching={vacanciesData.isFetching}
+        />
+      </div>
     </>
   );
 };
 
 export default DashContainer;
-

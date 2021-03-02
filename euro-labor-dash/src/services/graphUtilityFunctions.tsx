@@ -105,8 +105,8 @@ export function yScale_imported(
   const currentScale = scaleLinear()
     .domain([min(allValues) as number, max(allValues) as number])
     .range([
-      chartDimensions.margin.bottom + 25,
-      chartDimensions.chartAreaHeight - chartDimensions.margin.top - 25,
+      chartDimensions.margin.bottom + 35,
+      chartDimensions.chartAreaHeight - chartDimensions.margin.top -40,
     ]);
 
   return currentScale(currentValue);

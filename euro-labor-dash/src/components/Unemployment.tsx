@@ -17,12 +17,16 @@ interface UnemploymentProps {
   selectedCountry: string;
   unemploymentData: any;
   isFetching: boolean;
+  mouseX: number; 
+   mouseY: number;
 }
 
 const Unemployment: React.FC<UnemploymentProps> = ({
   selectedCountry,
   unemploymentData,
   isFetching,
+  mouseX, 
+  mouseY
 }) => {
   let labels: Array<any> | any = [1, 2, 3];
   let values_unemp: Array<number> = [];
@@ -41,23 +45,24 @@ const Unemployment: React.FC<UnemploymentProps> = ({
 
 
 
-  const useMousePoz = () => {
-    const [mousePoz, setMousePoz] = useState({ mouseX: 0, mouseY: 0 });
 
-    const updateMousePoz = (ev: any) => {
-      setMousePoz({ mouseX: ev.clientX-window.scrollX, 
-        mouseY: ev.clientY-window.scrollY-chartDimensions.chartAreaHeight-chartDimensions.upwardAdjust });
-    };
+  // const useMousePoz = () => {
+  //   const [mousePoz, setMousePoz] = useState({ mouseX: 0, mouseY: 0 });
 
-    useEffect(() => {
-      window.addEventListener("mousemove", updateMousePoz);
+  //   const updateMousePoz = (ev: any) => {
+  //     setMousePoz({ mouseX: ev.clientX-window.scrollX, 
+  //       mouseY: ev.clientY-window.scrollY-chartDimensions.chartAreaHeight-chartDimensions.upwardAdjust });
+  //   };
 
-      return () => window.removeEventListener("mousemove", updateMousePoz);
-    }, []);
-    return mousePoz;
-  };
+  //   useEffect(() => {
+  //     window.addEventListener("mousemove", updateMousePoz);
 
-  const { mouseX, mouseY } = useMousePoz();
+  //     return () => window.removeEventListener("mousemove", updateMousePoz);
+  //   }, []);
+  //   return mousePoz;
+  // };
+
+  // const { mouseX, mouseY } = useMousePoz();
 
   
   labels = unemploymentData.labels;
@@ -122,7 +127,7 @@ values_unemp = consistentArrayLengths(labels, values_unemp)[1]
           width={chartDimensions.chartAreaWidth}
           height={chartDimensions.chartAreaHeight}
         >
-            {graphTitle}
+         {graphTitle}
           {errorMessage}
           {dots}
           {lineComponent}

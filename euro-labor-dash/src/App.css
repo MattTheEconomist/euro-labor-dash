@@ -27,3 +27,13 @@
 .missingDataMessage{
   fill: rgb(83, 83, 83)
 }
+
+.float-child{
+  float:left
+}
+
+table,
+td {
+    border: 1px solid #333;
+}
+
