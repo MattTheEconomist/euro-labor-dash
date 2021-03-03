@@ -12,7 +12,6 @@ isQuarterly: boolean;
 
 
 const HoverTableRow: React.FC<HoverTableRowProps> = ({
-
     mouseX, 
     values, 
     labels, 
@@ -23,7 +22,14 @@ const HoverTableRow: React.FC<HoverTableRowProps> = ({
 
     let yearHovered: number; 
     let yearQuarterHovered: string; 
-    let finalYearValue: string; 
+    let finalYearOutput: string; 
+
+
+    if(!fetchError){
+      labels= consistentArrayLengths(labels, values)[0]
+      values = consistentArrayLengths(labels, values)[1]
+    }
+  
 
     function returnQuarterFromMouseX(mouseX: number) {
         let quarterXDistance = chartDimensions.dataPoints.centerToCenter / 4;
@@ -68,18 +74,39 @@ const HoverTableRow: React.FC<HoverTableRowProps> = ({
 
 
       yearHovered = returnYearFromMouseX(mouseX)
-      yearQuarterHovered = returnQuarterFromMouseX(mouseX)
+
+      
+      // yearQuarterHovered = returnQuarterFromMouseX(mouseX)
+
+      console.log( ' error in row component', fetchError)
+
+      function hoverValueFromAnnualData(labelsArray:Array<any>, valuesArray: Array<any>){
+        if(fetchError){
+          return "No Data"
+        }
+
+        const indexPoz = labelsArray.indexOf(yearHovered) 
+        return valuesArray[indexPoz]
+    }
+
+    let valueHovered = isQuarterly? 'placeholder for quarterly ':hoverValueFromAnnualData(labels, values)
 
 
-      finalYearValue = isQuarterly? yearQuarterHovered:`${yearHovered }`
+      let finalValueOutput = fetchError? 'No Data': valueHovered
+
+      finalYearOutput = isQuarterly? returnQuarterFromMouseX(mouseX):`${returnYearFromMouseX(mouseX) }`
+
+
+
+      if (finalValueOutput===undefined){
+          finalValueOutput = 'No Data'
+      }
 
 
 
     return   <tr>
-    {/* vacancies row  */}
-    <td>{yearHovered}</td>
-    {/* <td>{mouseX}</td> */}
-    <td>{0}</td>
+    <td>{finalYearOutput}</td>
+    <td>{finalValueOutput}</td>
   </tr>
     
 
