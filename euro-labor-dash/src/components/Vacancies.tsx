@@ -86,7 +86,8 @@ const Vacancies: React.FC<VacancyProps> = ({
 
 
 
-  return(<>
+  return(
+  <>
   {/* <div>{JSON.stringify(vacanciesData)}</div> */}
 
   {/* <div style={{ backgroundColor: "grey", height: 350, width: 700 }}> */}

@@ -90,9 +90,22 @@ const DashContainer: React.FC = () => {
       );
   }
 
-  useEffect(fetchData_net, [selectedCountry]);
-  useEffect(fetchData_vacancies, [selectedCountry]);
-  useEffect(fetchData_unemployemnt, [selectedCountry]);
+  // useEffect(fetchData_net, [selectedCountry]);
+  // useEffect(fetchData_vacancies, [selectedCountry]);
+  // useEffect(fetchData_unemployemnt, [selectedCountry]);
+
+
+  useEffect(()=>{
+    fetchData_net()
+  }, [selectedCountry])
+
+  useEffect(()=>{
+    fetchData_vacancies()
+  }, [selectedCountry])
+
+  useEffect(()=>{
+    fetchData_unemployemnt()
+  }, [selectedCountry])
 
   function changeCountry(newCountry: string): void {
     setSelectedCountry(newCountry);
@@ -174,7 +187,9 @@ const DashContainer: React.FC = () => {
           selectedCountry={selectedCountry}
           mouseX = {mouseX}
           mouseY = {mouseY}
-          
+          netEarningsData = {netEarningsData.data}
+          unemploymentData ={unemploymentData.data }
+          vacanciesData = {vacanciesData.data}
           />
         </div>
       </div>
