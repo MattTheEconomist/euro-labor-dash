@@ -20,6 +20,8 @@ const HoverTableRow: React.FC<HoverTableRowProps> = ({
 
   }) => {
 
+    console.log("fetchError in Child", fetchError)
+
     let yearHovered: number; 
     let yearQuarterHovered: string; 
     let finalYearOutput: string; 
@@ -84,23 +86,28 @@ const HoverTableRow: React.FC<HoverTableRowProps> = ({
         if(fetchError){
           return "No Data"
         }
+        else{
 
-        const indexPoz = labelsArray.indexOf(yearHovered) 
-        return valuesArray[indexPoz]
+          const indexPoz = labelsArray.indexOf(yearHovered) 
+          const valueOutput = valuesArray[indexPoz]
+
+          if (valueOutput ===0|| valueOutput===undefined){
+
+            return "No Data"
+          }else{
+            return valueOutput
+          }
+        }
+
     }
 
     let valueHovered = isQuarterly? 'placeholder for quarterly ':hoverValueFromAnnualData(labels, values)
 
 
-      let finalValueOutput = fetchError? 'No Data': valueHovered
+      // let finalValueOutput = fetchError? 'No Data': valueHovered
+      let finalValueOutput = valueHovered
 
       finalYearOutput = isQuarterly? returnQuarterFromMouseX(mouseX):`${returnYearFromMouseX(mouseX) }`
-
-
-
-      if (finalValueOutput===undefined){
-          finalValueOutput = 'No Data'
-      }
 
 
 

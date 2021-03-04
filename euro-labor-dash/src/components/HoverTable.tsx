@@ -49,7 +49,7 @@ const HoverTable: React.FC<HoverTableProps> = ({
   labels_net = netEarningsData.labels;
 
 
-  if (Array.isArray(values_vac)||values_vac===null) {
+  if (!Array.isArray(values_vac)||values_vac===null) {
     fetchError_vac = true;
   } else {
     fetchError_vac = false;
@@ -77,13 +77,13 @@ const HoverTable: React.FC<HoverTableProps> = ({
 
           {/* net earnings row  */}
 
-          {/* <HoverTableRow
+          <HoverTableRow
           mouseX = {mouseX}
           fetchError = {fetchError_net}
           values = {values_net}
           labels ={labels_net}
           isQuarterly = {false}          
-          /> */}
+          />
 
           <tr>
             <th colSpan={2}>Unemployment</th>
