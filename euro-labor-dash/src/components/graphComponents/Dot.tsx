@@ -55,10 +55,10 @@ const Dot: React.FC<DotProps> = ({ x, dotHeight, mouseX, mouseY }) => {
     );
   }
 
-  if (mouseDistance > 150) {
+  if (mouseDistance > 75) {
     opacity = 0;
   } else {
-    opacity = 100 / Math.pow(mouseDistance, 1.3);
+    opacity = 100 / Math.pow(mouseDistance, 1.8);
   }
 
   return (

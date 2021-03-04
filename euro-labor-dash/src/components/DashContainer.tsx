@@ -15,6 +15,10 @@ import {chartDimensions} from "../services/graphUtilityFunctions"
 // import HoverTable from 'c:/Users/Admin/Documents/js/react/euro-labor-dash/euro-labor-dash/src/components/HoverTable'
 
 const DashContainer: React.FC = () => {
+
+  let mouseYear: number = 2005
+
+
   const [selectedCountry, setSelectedCountry] = useState<string>("Euro area");
   const [netEarningsData, setNetEarningsData] = useState({
     data: {},
@@ -112,24 +116,7 @@ const DashContainer: React.FC = () => {
   }
 
 
-  const useMousePoz = () => {
-    const [mousePoz, setMousePoz] = useState({ mouseX: 0, mouseY: 0 });
-
-    const updateMousePoz = (ev: any) => {
-      setMousePoz({ mouseX: ev.clientX-window.scrollX, 
-        mouseY: ev.clientY-window.scrollY-chartDimensions.chartAreaHeight-chartDimensions.upwardAdjust });
-    };
-
-    useEffect(() => {
-      window.addEventListener("mousemove", updateMousePoz);
-
-      return () => window.removeEventListener("mousemove", updateMousePoz);
-    }, []);
-    return mousePoz;
-  };
-
-  const { mouseX, mouseY } = useMousePoz();
-
+  
 
 
 
@@ -157,6 +144,46 @@ const DashContainer: React.FC = () => {
     return rez;
   }
 
+  
+  const useMousePoz = () => {
+    const [mousePoz, setMousePoz] = useState({ mouseX: 0, mouseY: 0 });
+
+    const updateMousePoz = (ev: any) => {
+      setMousePoz({ mouseX: ev.clientX-window.scrollX, 
+        mouseY: ev.clientY-window.scrollY-chartDimensions.chartAreaHeight-chartDimensions.upwardAdjust });
+    };
+
+    useEffect(() => {
+      window.addEventListener("mousemove", updateMousePoz);
+
+      return () => window.removeEventListener("mousemove", updateMousePoz);
+    }, []);
+    return mousePoz;
+  };
+
+  const { mouseX, mouseY } = useMousePoz();
+
+
+  function returnYearFromMouseX(mouseX:number){
+
+    let yearOutput :number;
+    let yearXDistance = chartDimensions.dataPoints.centerToCenter;
+    let yearXStart = 50;
+
+    yearOutput = Math.floor((mouseX - yearXStart) / yearXDistance + 2005);
+    if (yearOutput < 2005) {
+      yearOutput = 2005;
+    }
+    if (yearOutput > 2020) {
+      yearOutput = 2020;
+    }
+
+    return yearOutput;
+  }
+
+  mouseYear = returnYearFromMouseX(mouseX)
+
+
   return (
     <>
       <div>
@@ -170,6 +197,7 @@ const DashContainer: React.FC = () => {
           netEarningsData={netEarningsData.data}
           selectedCountry={selectedCountry}
           isFetching={netEarningsData.isFetching}
+          mouseYear = {mouseYear}
         />
       </div>
       <div className="float-container">
@@ -199,6 +227,7 @@ const DashContainer: React.FC = () => {
           selectedCountry={selectedCountry}
           vacanciesData={vacanciesData.data}
           isFetching={vacanciesData.isFetching}
+          mouseYear = {mouseYear}
         />
       </div>
     </>

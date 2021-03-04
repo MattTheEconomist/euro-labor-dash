@@ -40,7 +40,7 @@ const HoverTableRow: React.FC<HoverTableRowProps> = ({
     if (mouseX < 50) {
       closestQuarter = 1;
     }
-    if (mouseX > 700) {
+    if (mouseX > 690) {
       closestQuarter = 4;
     }
 
@@ -108,7 +108,7 @@ const HoverTableRow: React.FC<HoverTableRowProps> = ({
       mouseQuarters = 0;
     }
 
-    if (mouseQuarters > 62) {
+    if (mouseQuarters > 61) {
       // last element of values array 
       return valuesArray.slice(-1)[0]
     }
