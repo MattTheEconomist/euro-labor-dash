@@ -42,14 +42,24 @@ const Bar: React.FC<BarProps> = ({
 const animateBars = (rectRef: any, valueScaled: number) => {
     const rect = select(rectRef.current);
 
-    const y_net = chartDimensions.chartHeightInner - valueScaled- chartDimensions.margin.bottom
-  
+    let y_net :number=1; 
+
+    if (valueScaled===0){
+      valueScaled = 0
+      y_net=0
+    }else{
+
+      valueScaled = chartDimensions.chartHeightInner - valueScaled 
+      y_net = chartDimensions.chartHeightInner - valueScaled- chartDimensions.margin.bottom
+    }
+    // const y_net = chartDimensions.chartHeightInner - valueScaled- chartDimensions.margin.bottom
+
     rect
   
       .transition()
       .duration(1000)
       .attr("height", valueScaled)
-      .attr("y", y_net);
+      .attr("y", y_net?y_net:0);
       // .attr("y", 0);
   };
 
