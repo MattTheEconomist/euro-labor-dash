@@ -8,6 +8,7 @@ import {
   xScaleAnnual,
   generateYAxisFull,
   generateXaxisFull,
+  generateYaxisValues,
   consistentArrayLengths,
   generateGraphTitle,
   missingDataMessage,
@@ -42,32 +43,13 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   let graphTitle:any; 
 
 
-
-
-
-
-  // const useMousePoz = () => {
-  //   const [mousePoz, setMousePoz] = useState({ mouseX: 0, mouseY: 0 });
-
-  //   const updateMousePoz = (ev: any) => {
-  //     setMousePoz({ mouseX: ev.clientX-window.scrollX, 
-  //       mouseY: ev.clientY-window.scrollY-chartDimensions.chartAreaHeight-chartDimensions.upwardAdjust });
-  //   };
-
-  //   useEffect(() => {
-  //     window.addEventListener("mousemove", updateMousePoz);
-
-  //     return () => window.removeEventListener("mousemove", updateMousePoz);
-  //   }, []);
-  //   return mousePoz;
-  // };
-
-  // const { mouseX, mouseY } = useMousePoz();
-
   
   labels = unemploymentData.labels;
   values_unemp = unemploymentData.values;
-
+  
+  // console.log(selectedCountry)
+  // console.log('yAxis values', generateYaxisValues(values_unemp))
+  // console.log('raw', values_unemp)
 
   if(values_unemp=== null){
     fetchError=true 
@@ -76,12 +58,14 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   }
   
 
-  if(Array.isArray(values_unemp)) {
-
-labels = consistentArrayLengths(labels, values_unemp)[0]
-values_unemp = consistentArrayLengths(labels, values_unemp)[1]
+  if (!fetchError && values_unemp !== undefined && values_unemp !==null) {
+  // if(values_unemp!== undefined){
+    labels = consistentArrayLengths(labels, values_unemp)[0]
+    values_unemp = consistentArrayLengths(labels, values_unemp)[1]
 
   }
+
+
 
   if (Array.isArray(values_unemp)) {
 
@@ -116,6 +100,7 @@ values_unemp = consistentArrayLengths(labels, values_unemp)[1]
   }
 
   graphTitle = generateGraphTitle(seriesName, selectedCountry)
+  
 
 
   return (

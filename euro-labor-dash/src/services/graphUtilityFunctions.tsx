@@ -4,11 +4,17 @@ import { scaleLinear, max, min, mean } from "d3";
 export function generateYAxisFull(ar: Array<number>) {
   const yAxisValues = generateYaxisValues(ar);
 
+  if(yAxisValues===undefined){
+
+    return null
+  }
+
   const yAxisText = yAxisValues.map((el) => (
     <text
       key={`yaxis ${el}`}
       x={5}
-      y={chartDimensions.chartAreaHeight - yScale_imported(yAxisValues, el)- chartDimensions.margin.bottom-10 }
+      // y={chartDimensions.chartAreaHeight - yScale_imported(yAxisValues, el)- chartDimensions.margin.bottom-10 }
+      y={yScale_imported(yAxisValues, el) }
     >
       {el}
     </text>
@@ -73,14 +79,20 @@ export function generateXaxisFull(labels: Array<any>) {
 }
 
 export function generateYaxisValues(ar: Array<number>) {
-  const point1 = min(ar);
+  if(Array.isArray(ar)){
+
+      const point1 = min(ar);
   const point5 = max(ar);
   const point3 = mean([point1, point5]);
   const point2 = mean([point1, point3]);
   const point4 = mean([point5, point3]);
   let rez = [point5, point4, point3, point2, point1];
 
+  // return rez
+
   return rez.map((el: any) => parseFloat(el.toFixed(2)));
+  }
+
 }
 
 export function generateXaxisValues(labels: Array<any>) {
@@ -109,7 +121,11 @@ export function yScale_imported(
       chartDimensions.chartAreaHeight - chartDimensions.margin.top -40,
     ]);
 
-  return currentScale(currentValue);
+  const preScaled = currentScale( currentValue)
+
+  const scaledWithMargins = chartDimensions.chartHeightInner -preScaled - chartDimensions.margin.bottom
+
+  return scaledWithMargins;
 }
 
 

@@ -19,12 +19,12 @@ const HoverTableRow: React.FC<HoverTableRowProps> = ({
   fetchError,
   isQuarterly,
 }) => {
-
   let yearHovered: number;
   let yearQuarterHovered: string;
   let finalYearOutput: string;
 
-  if (!fetchError) {
+  if (!fetchError && values !== undefined && values!==null) {
+  // if ( values!==null ) {
     labels = consistentArrayLengths(labels, values)[0];
     values = consistentArrayLengths(labels, values)[1];
   }
@@ -67,12 +67,11 @@ const HoverTableRow: React.FC<HoverTableRowProps> = ({
 
   yearHovered = returnYearFromMouseX(mouseX);
 
-
   function hoverValueFromAnnualData(
     labelsArray: Array<any>,
     valuesArray: Array<any>
   ) {
-    if (fetchError || values=== undefined) {
+    if (fetchError || values === undefined) {
       return "No Data";
     } else {
       const indexPoz = labelsArray.indexOf(yearHovered);
@@ -86,43 +85,77 @@ const HoverTableRow: React.FC<HoverTableRowProps> = ({
     }
   }
 
-  function hoverValueFromQuarterlyData(    mouseX:number, 
-    valuesArray: Array<any>, labels:Array<any>){
+  function hoverValueFromQuarterlyData(
+    mouseX: number,
+    valuesArray: Array<any>,
+  ) {
 
-      let quarterXDistance = chartDimensions.dataPoints.centerToCenter / 4;
-      let mouseQuarters = Math.floor(mouseX / quarterXDistance)
-
-      mouseQuarters -=5
-
-      if(mouseQuarters<0){
-        mouseQuarters = 0
-      }
-
-      if(mouseQuarters>63){
-        mouseQuarters=63
-      }
-
-      const valueOutput = valuesArray[mouseQuarters];
-
-
-      // console.log(labels)
-
-
-
-      return valueOutput
+    if (fetchError || values === undefined || values ===null) {
+      return "No Data";
     }
 
+    valuesArray = consistentArrayLengths(labels, values)[1];
 
+    // console.log("values in hover component", valuesArray)
+    // console.log("labels in hover component", labels)
+
+    let quarterXDistance = chartDimensions.dataPoints.centerToCenter / 4;
+    let mouseQuarters = Math.floor(mouseX / quarterXDistance);
+
+    mouseQuarters -= 5;
+
+    if (mouseQuarters < 0) {
+      mouseQuarters = 0;
+    }
+
+    if (mouseQuarters > 62) {
+      // last element of values array 
+      return valuesArray.slice(-1)[0]
+    }
+
+    const valueOutput = valuesArray[mouseQuarters];
+
+    return valueOutput
+
+    // return mouseQuarters;
+  }
+
+
+
+
+
+
+  function formatFinalValue(valueOutput:any){
+    if(valueOutput==='No Data'){
+      return valueOutput
+    }
+    else{
+      valueOutput = parseFloat(valueOutput)
+    }
+
+    // console.log(valueOutput)
+
+    if(valueOutput>1000){
+
+      return (valueOutput/1000).toFixed(2)
+      // return valueOutput.toFixed(2)
+    }else{
+      return valueOutput.toFixed(2)
+    }
+
+  }
 
   let valueHovered = isQuarterly
-    ? hoverValueFromQuarterlyData(mouseX, values, labels)
+    ? hoverValueFromQuarterlyData(mouseX, values)
     : hoverValueFromAnnualData(labels, values);
 
-  let finalValueOutput = valueHovered;
+  let finalValueOutput = formatFinalValue(valueHovered);
 
   finalYearOutput = isQuarterly
     ? returnQuarterFromMouseX(mouseX)
     : `${returnYearFromMouseX(mouseX)}`;
+
+
 
   return (
     <tr>

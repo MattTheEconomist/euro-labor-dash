@@ -10,6 +10,7 @@ import {
   consistentArrayLengths,
   missingDataMessage,
   generateGraphTitle,
+  generateYaxisValues,
 } from "../services/graphUtilityFunctions";
 
 
@@ -40,6 +41,10 @@ const Earnings: React.FC<EarningsProps> = ({
   values_net = netEarningsData.values;
   labels = netEarningsData.labels
 
+
+  //   console.log(selectedCountry)
+  // console.log('yAxis values', generateYaxisValues(values_net))
+  // console.log('raw', values_net)
   
   if(values_net=== null){
     fetchError=true 

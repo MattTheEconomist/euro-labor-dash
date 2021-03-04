@@ -4,7 +4,7 @@ import {
     select,
   } from "d3";
 
-  import {xScaleQuarterly} from "../../services/graphUtilityFunctions";
+  import {xScaleQuarterly, chartDimensions} from "../../services/graphUtilityFunctions";
 
 
   interface LineProps {
@@ -16,8 +16,12 @@ import {
 
   const Linez: React.FC<LineProps>= (valuesScaled: any, labelsScaled: any) => {
 
+
     valuesScaled = valuesScaled.valuesScaled
     labelsScaled = labelsScaled.lablesScaled;
+
+
+    // valuesScaled = valuesScaled.map((el:number)=>chartDimensions.chartHeightInner - el- chartDimensions.margin.bottom)
 
 
     const [lineValues, setLineValues] = useState([1, 2, 3]);

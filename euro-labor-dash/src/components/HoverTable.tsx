@@ -2,6 +2,7 @@ import React from "react";
 import {
   chartDimensions,
   consistentArrayLengths,
+  generateYaxisValues,
 } from "../services/graphUtilityFunctions";
 import HoverTableRow from "./HoverTableRow";
 
@@ -46,6 +47,9 @@ const HoverTable: React.FC<HoverTableProps> = ({
 
   values_net = netEarningsData.values;
   labels_net = netEarningsData.labels;
+
+  // console.log('raw data', values_vac)
+  // console.log('formatted values', generateYaxisValues(values_vac))
 
 
   if (!Array.isArray(values_vac)||values_vac===null) {
