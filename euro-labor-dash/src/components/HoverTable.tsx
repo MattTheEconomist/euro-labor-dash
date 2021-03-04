@@ -37,7 +37,6 @@ const HoverTable: React.FC<HoverTableProps> = ({
   let fetchError_vac: boolean = false;
   let fetchError_unemp: boolean = false;
 
-  // console.log('before array extraction', netEarningsData)
 
   values_vac = vacanciesData.values;
   labels_vac = vacanciesData.labels;
@@ -55,8 +54,6 @@ const HoverTable: React.FC<HoverTableProps> = ({
     fetchError_vac = false;
   }
 
-  console.log("vac values", values_vac);
-  console.log(" error in parent", fetchError_vac);
 
   return (
     <>
@@ -88,14 +85,19 @@ const HoverTable: React.FC<HoverTableProps> = ({
           <tr>
             <th colSpan={2}>Unemployment</th>
           </tr>
-          {/* <tr>
-            unemp row
-            <td>{yearQuarterHovered}</td>
-            <td>unemp val</td>
-          </tr> */}
+          {/* unemp row */}
+          <HoverTableRow
+            mouseX={mouseX}
+            fetchError={fetchError_unemp}
+            values={values_unemp}
+            labels={labels_unemp}
+            isQuarterly={true}
+          />
+
           <tr>
             <th colSpan={2}>Vacancy Rate</th>
           </tr>
+          {/* vacancies row  */}
           <HoverTableRow
             mouseX={mouseX}
             fetchError={fetchError_vac}
@@ -103,13 +105,6 @@ const HoverTable: React.FC<HoverTableProps> = ({
             labels={labels_vac}
             isQuarterly={false}
           />
-
-          {/* <tr> */}
-          {/* vacancies row  */}
-          {/* <td>{yearHovered}</td> */}
-          {/* <td>{!fetchError_vac?hoverValue_vac:'No Data'}</td> */}
-          {/* <td>{'No Data'}</td> */}
-          {/* </tr> */}
         </tbody>
       </table>
     </>
