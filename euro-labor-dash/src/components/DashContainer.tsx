@@ -192,7 +192,8 @@ const DashContainer: React.FC = () => {
           defaultCountry="Euro area"
         />
       </div>
-      <div>
+      <div id="allGraphs">
+      <div id="earningsContainer">
         <Earnings
           netEarningsData={netEarningsData.data}
           selectedCountry={selectedCountry}
@@ -201,7 +202,7 @@ const DashContainer: React.FC = () => {
         />
       </div>
       <div className="float-container">
-        <div className="float-child">
+        <div className="float-child" id="unempContainer">
           <Unemployment
             isFetching={unemploymentData.isFetching}
             selectedCountry={selectedCountry}
@@ -229,6 +230,7 @@ const DashContainer: React.FC = () => {
           isFetching={vacanciesData.isFetching}
           mouseYear = {mouseYear}
         />
+      </div>
       </div>
     </>
   );

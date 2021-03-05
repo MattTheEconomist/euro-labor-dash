@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   chartDimensions,
   consistentArrayLengths,
@@ -23,8 +23,8 @@ const HoverTableRow: React.FC<HoverTableRowProps> = ({
   let yearQuarterHovered: string;
   let finalYearOutput: string;
 
-  if (!fetchError && values !== undefined && values!==null) {
-  // if ( values!==null ) {
+  if (!fetchError && values !== undefined && values !== null) {
+    // if ( values!==null ) {
     labels = consistentArrayLengths(labels, values)[0];
     values = consistentArrayLengths(labels, values)[1];
   }
@@ -50,7 +50,7 @@ const HoverTableRow: React.FC<HoverTableRowProps> = ({
   }
 
   function returnYearFromMouseX(mouseX: number) {
-    let yearOutput;
+    let yearOutput: number;
     let yearXDistance = chartDimensions.dataPoints.centerToCenter;
     let yearXStart = 50;
 
@@ -87,10 +87,9 @@ const HoverTableRow: React.FC<HoverTableRowProps> = ({
 
   function hoverValueFromQuarterlyData(
     mouseX: number,
-    valuesArray: Array<any>,
+    valuesArray: Array<any>
   ) {
-
-    if (fetchError || values === undefined || values ===null) {
+    if (fetchError || values === undefined || values === null) {
       return "No Data";
     }
 
@@ -109,40 +108,29 @@ const HoverTableRow: React.FC<HoverTableRowProps> = ({
     }
 
     if (mouseQuarters > 61) {
-      // last element of values array 
-      return valuesArray.slice(-1)[0]
+      // last element of values array
+      return valuesArray.slice(-1)[0];
     }
 
     const valueOutput = valuesArray[mouseQuarters];
 
-    return valueOutput
-
-    // return mouseQuarters;
+    return valueOutput;
   }
 
-
-
-
-
-
-  function formatFinalValue(valueOutput:any){
-    if(valueOutput==='No Data'){
-      return valueOutput
-    }
-    else{
-      valueOutput = parseFloat(valueOutput)
+  function formatFinalValue(valueOutput: any) {
+    if (valueOutput === "No Data") {
+      return valueOutput;
+    } else {
+      valueOutput = parseFloat(valueOutput);
     }
 
     // console.log(valueOutput)
 
-    if(valueOutput>1000){
-
-      return (valueOutput/1000).toFixed(2)
-      // return valueOutput.toFixed(2)
-    }else{
-      return valueOutput.toFixed(2)
+    if (valueOutput > 1000) {
+      return (valueOutput / 1000).toFixed(2);
+    } else {
+      return valueOutput.toFixed(2);
     }
-
   }
 
   let valueHovered = isQuarterly
@@ -155,12 +143,16 @@ const HoverTableRow: React.FC<HoverTableRowProps> = ({
     ? returnQuarterFromMouseX(mouseX)
     : `${returnYearFromMouseX(mouseX)}`;
 
-
-
   return (
     <tr>
-      <td>{finalYearOutput}</td>
-      <td>{finalValueOutput}</td>
+      <td className="tableCell">{finalYearOutput}</td>
+      <td
+        className={
+          finalValueOutput === "No Data" ? "tableCell noData" : "tableCell"
+        }
+      >
+        {finalValueOutput}
+      </td>
     </tr>
   );
 };

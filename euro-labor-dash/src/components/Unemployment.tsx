@@ -107,8 +107,9 @@ const Unemployment: React.FC<UnemploymentProps> = ({
     <>
       {/* <div>{JSON.stringify(unemploymentData)}</div> */}
 
-      <div className='graphContainer'>
-        <svg
+      {/* <div className='graphContainer'> */}
+      <div >
+        <svg id="unempGraph"
           width={chartDimensions.chartAreaWidth}
           height={chartDimensions.chartAreaHeight}
         >

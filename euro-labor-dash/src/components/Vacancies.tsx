@@ -94,8 +94,9 @@ const Vacancies: React.FC<VacancyProps> = ({
   {/* <div>{JSON.stringify(vacanciesData)}</div> */}
 
   {/* <div style={{ backgroundColor: "grey", height: 350, width: 700 }}> */}
-  <div className='graphContainer'>
-        <svg
+  {/* <div className='graphContainer' id="vacGraphContainer"> */}
+  <div >
+        <svg  id="vacGraph"
           width={chartDimensions.chartAreaWidth}
           height={chartDimensions.chartAreaHeight}
         > 

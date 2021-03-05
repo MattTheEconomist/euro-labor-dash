@@ -31,17 +31,13 @@ const Bar: React.FC<BarProps> = ({
       animateBars(rectRef, valueScaled, currentHover);
     });
 
-    // useEffect(()=>{
-
-    //   colorBars(rectRef, currentHover)
-    // })
   
     return (
       <g>
         <rect ref={rectRef} id={`${valueScaled}`}
         x={labelScaled}
         
-        width={barWidth} />
+        width={barWidth} fill={currentHover? "pink":"black"}/>
       </g>
     );
   };
@@ -81,7 +77,7 @@ const animateBars = (rectRef: any, valueScaled: number, currentHover: boolean) =
       .duration(500)
       .attr("height", valueScaled)
       .attr("y", y_net?y_net:0)
-      .attr("fill", fillValue)
+      // .attr("fill", fillValue)
       // .attr("y", 0);
   };
 
