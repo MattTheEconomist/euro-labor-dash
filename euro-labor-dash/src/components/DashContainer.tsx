@@ -149,8 +149,8 @@ const DashContainer: React.FC = () => {
     const [mousePoz, setMousePoz] = useState({ mouseX: 0, mouseY: 0 });
 
     const updateMousePoz = (ev: any) => {
-      setMousePoz({ mouseX: ev.clientX-window.scrollX, 
-        mouseY: ev.clientY-window.scrollY-chartDimensions.chartAreaHeight-chartDimensions.upwardAdjust });
+      setMousePoz({ mouseX: ev.clientX-window.scrollX - 15, 
+        mouseY: ev.clientY-window.scrollY-chartDimensions.chartAreaHeight-chartDimensions.upwardAdjust -15 });
     };
 
     useEffect(() => {
@@ -186,14 +186,14 @@ const DashContainer: React.FC = () => {
 
   return (
     <>
-      <div>
+      <div >
         <ControlPanel
           changeCountry={changeCountry}
           defaultCountry="Euro area"
         />
       </div>
       <div id="allGraphs">
-      <div id="earningsContainer">
+      <div id="earningsContainer" className="graphContainer">
         <Earnings
           netEarningsData={netEarningsData.data}
           selectedCountry={selectedCountry}
@@ -201,8 +201,10 @@ const DashContainer: React.FC = () => {
           mouseYear = {mouseYear}
         />
       </div>
-      <div className="float-container">
-        <div className="float-child" id="unempContainer">
+      {/* <div className="unempAndTableContainer"> */}
+        <div 
+        // className="float-child" 
+        id="unempContainer" className="graphContainer">
           <Unemployment
             isFetching={unemploymentData.isFetching}
             selectedCountry={selectedCountry}
@@ -211,7 +213,9 @@ const DashContainer: React.FC = () => {
             mouseY = {mouseY}
           />
         </div>
-        <div className="float-child">
+        <div
+        //  className="float-child"
+          id="tableContainer" >
           <HoverTable 
           selectedCountry={selectedCountry}
           mouseX = {mouseX}
@@ -221,9 +225,9 @@ const DashContainer: React.FC = () => {
           vacanciesData = {vacanciesData.data}
           />
         </div>
-      </div>
+      {/* </div> */}
 
-      <div>
+      <div id="vacContainer" className="graphContainer">
         <Vacancies
           selectedCountry={selectedCountry}
           vacanciesData={vacanciesData.data}
