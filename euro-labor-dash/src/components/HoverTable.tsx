@@ -73,7 +73,7 @@ const HoverTable: React.FC<HoverTableProps> = ({
             <td>Value</td>
           </tr> */}
           <tr>
-            <th colSpan={2}>Earnings (K) </th>
+            <th colSpan={2}>Net Earnings (K) </th>
           </tr>
 
           {/* net earnings row  */}
@@ -87,7 +87,7 @@ const HoverTable: React.FC<HoverTableProps> = ({
           />
 
           <tr>
-            <th colSpan={2}>Unemployment</th>
+            <th colSpan={2}>Unemployment Rate</th>
           </tr>
           {/* unemp row */}
           <HoverTableRow

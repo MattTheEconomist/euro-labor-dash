@@ -39,7 +39,7 @@ const Unemployment: React.FC<UnemploymentProps> = ({
   let dots: any;
   let fetchError : boolean = false; 
   let errorMessage: any; 
-  const seriesName: string = 'Unemployment';
+  const seriesName: string = 'Unemployment Rate';
   let graphTitle:any; 
 
 

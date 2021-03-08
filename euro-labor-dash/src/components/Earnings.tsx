@@ -35,7 +35,7 @@ const Earnings: React.FC<EarningsProps> = ({
   let xAxis: any;
   let fetchError : boolean = false; 
   let errorMessage: any; 
-  const seriesName: string = 'Earnings';
+  const seriesName: string = 'Net Earnings (K)';
   let graphTitle:any; 
 
   let bars: any;
