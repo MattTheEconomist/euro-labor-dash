@@ -1,6 +1,6 @@
 
 
-This project lets users pick a country in Europe and displays the unemployment rate, job vacancy rate, and net earnings for that country.
+This dashboard visualizes the european labor market in three graphs. It lets users pick a country in Europe and displays the unemployment rate, job vacancy rate, and net earnings for that country.
 
 
 Hovering over a particular year in any one graph will:
