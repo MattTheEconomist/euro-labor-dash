@@ -61,19 +61,19 @@ const HoverTable: React.FC<HoverTableProps> = ({
 
   return (
     <>
-      <table>
-        <thead>
+      <table id="fullHoverTable">
+        <thead >
           <tr>
-            <th colSpan={1}>Hover Data</th>
+            <th colSpan={2} id="hoverTableTitle">Hover Data</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
+          {/* <tr>
             <td>Period</td>
             <td>Value</td>
-          </tr>
+          </tr> */}
           <tr>
-            <th colSpan={2}>Earnings</th>
+            <th colSpan={2}>Earnings (K) </th>
           </tr>
 
           {/* net earnings row  */}
@@ -99,7 +99,7 @@ const HoverTable: React.FC<HoverTableProps> = ({
           />
 
           <tr>
-            <th colSpan={2}>Vacancy Rate</th>
+            <th colSpan={2} id="vacancyTableTitle">Vacancy Rate</th>
           </tr>
           {/* vacancies row  */}
           <HoverTableRow

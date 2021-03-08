@@ -15,11 +15,15 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
     let countryNames = Object.values(countryData[0]);
 
 
-    return (<div>
-
-        <select onChange={(e) => changeCountry(e.target.value)} defaultValue={defaultCountry}>
+    return (<div id="dropdownContainerOutside">
+      <div id="countrySelectTextContainer">
+      <p id="countrySelectText">Select a Country</p>
+      </div>
+      <div id="countrySelectContainer">
+        <select id="countrySelect" onChange={(e) => changeCountry(e.target.value)} defaultValue={defaultCountry}>
         {countryNames.map((country, ind)=> <option key={ind}>{country}</option> )}
         </select>
+        </div>
     </div>)  }
 
 export default ControlPanel;

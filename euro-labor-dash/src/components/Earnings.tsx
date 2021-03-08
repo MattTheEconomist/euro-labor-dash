@@ -19,6 +19,7 @@ interface EarningsProps {
   selectedCountry: string;
   netEarningsData: any;
   isFetching: boolean;
+  mouseYear:number; 
 }
 
 const Earnings: React.FC<EarningsProps> = ({
@@ -26,6 +27,7 @@ const Earnings: React.FC<EarningsProps> = ({
   netEarningsData,
   selectedCountry,
   isFetching,
+  mouseYear, 
 }) => {
   let labels: Array<any> = [];
   let values_net: Array<number> = [1, 2, 3];
@@ -76,11 +78,15 @@ const Earnings: React.FC<EarningsProps> = ({
     yAxis = generateYAxisFull(values_net);
     xAxis = generateXaxisFull(labels);
 
+    
+
 
     bars = values_net.map((row: any, ind: number) => (
 
       <Bar
         labelScaled={xScaleAnnual(ind)}
+        // labelsRaw = {labels[ind]}
+        currentHover = {mouseYear=== labels[ind]?true: false}
         valueScaled={yScale_imported(values_net, row)}
         valueRaw = {row}
         barWidth={chartDimensions.dataPoints.barWidth}
@@ -102,8 +108,9 @@ const Earnings: React.FC<EarningsProps> = ({
 
       {/* <div>{`${selectedCountry} Net Earnings`}</div> */}
 
-      <div className='graphContainer'>
-        <svg
+      {/* <div className='graphContainer'> */}
+      <div >
+        <svg id="earningsGraph"
           width={chartDimensions.chartAreaWidth}
           height={chartDimensions.chartAreaHeight}
         >

@@ -91,6 +91,7 @@ export function generateYaxisValues(ar: Array<number>) {
   // return rez
 
   return rez.map((el: any) => parseFloat(el.toFixed(2)));
+  // return rez.map((el: any) => el.toFixed(2));
   }
 
 }
@@ -240,6 +241,8 @@ return (
   
 
 }
+
+
 
 
 export const chartDimensions = {

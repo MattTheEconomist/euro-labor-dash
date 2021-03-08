@@ -23,6 +23,7 @@ interface VacancyProps {
   selectedCountry: string;
   vacanciesData: any;
   isFetching: boolean;
+  mouseYear: number; 
   // status:string; 
 }
 
@@ -30,6 +31,7 @@ const Vacancies: React.FC<VacancyProps> = ({
   vacanciesData,
   selectedCountry,
   isFetching,
+  mouseYear,
 }) => {
   let labels: Array<any> = [];
   let values_vac: Array<number> = [1, 2, 3];
@@ -66,6 +68,7 @@ const Vacancies: React.FC<VacancyProps> = ({
     bars =  values_vac.map((row: any, ind: number) => (
 
         <Bar
+        currentHover = {mouseYear=== labels[ind]?true: false}
           labelScaled={xScaleAnnual(ind)}
           valueScaled={yScale_imported( values_vac, row)}
           barWidth={chartDimensions.dataPoints.barWidth}
@@ -91,8 +94,9 @@ const Vacancies: React.FC<VacancyProps> = ({
   {/* <div>{JSON.stringify(vacanciesData)}</div> */}
 
   {/* <div style={{ backgroundColor: "grey", height: 350, width: 700 }}> */}
-  <div className='graphContainer'>
-        <svg
+  {/* <div className='graphContainer' id="vacGraphContainer"> */}
+  <div >
+        <svg  id="vacGraph"
           width={chartDimensions.chartAreaWidth}
           height={chartDimensions.chartAreaHeight}
         > 
