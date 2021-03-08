@@ -8,6 +8,8 @@ Hovering over a particular year in any one graph will:
     update the hover table to display all relavant values for that year
     
 
+data is fetched from the dbnomics server and transitions are extra smooth 
+
 it looks like this: 
 ![image](https://user-images.githubusercontent.com/19578788/110373373-6c0b0300-801d-11eb-85d0-7cd1bf69bb76.png)
 
